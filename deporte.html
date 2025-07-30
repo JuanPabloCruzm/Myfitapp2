@@ -60,19 +60,24 @@
     <select id="deporte" name="deporte" required>
       <option value="">-- Selecciona un deporte --</option>
       <option value="mtb">MTB (Ciclismo de montaña)</option>
+      <option value="ciclismo">Ciclismo</option>
       <option value="futbol">Fútbol</option>
       <option value="atletismo">Atletismo</option>
       <option value="natacion">Natación</option>
       <option value="rugby">Rugby</option>
       <option value="gimnasio">Gimnasio</option>
-      <option value="yoga">Yoga</option>
+      <option value="esqui">Esquí</option>
+      <option value="escalada">Escalada</option>
+      <option value="snowboard">Snowboard</option>
+      <option value="moto_agua">Moto de agua / Esquí acuático</option>
+      <option value="buceo">Buceo</option>
+      <option value="boxeo">Boxeo</option>
+      <option value="basquetbol">Básquetbol</option>
       <option value="sedentario">Sedentario</option>
     </select>
 
     <label for="disciplina" id="labelDisciplina" style="display:none;">Disciplina / Meta:</label>
-    <select id="disciplina" name="disciplina" style="display:none;" required>
-      <!-- opciones dinámicas -->
-    </select>
+    <select id="disciplina" name="disciplina" style="display:none;" required></select>
 
     <button type="submit">Guardar y continuar</button>
   </form>
@@ -84,24 +89,28 @@
     const disciplinaSelect = document.getElementById('disciplina');
     const labelDisciplina = document.getElementById('labelDisciplina');
 
-    // Opciones de disciplinas o metas para cada deporte
     const opciones = {
       mtb: ["Enduro", "XC", "Downhill", "All Mountain"],
+      ciclismo: ["Ruta", "Pista", "Gravel", "Contrarreloj"],
       futbol: ["Arquero", "Defensa", "Mediocampista", "Delantero"],
       atletismo: ["Pista", "Carrera", "Salto", "Fondo"],
       natacion: ["Estilo Libre", "Espalda", "Mariposa", "Pecho"],
       rugby: ["Delantero", "Medio Scrum", "Ala", "Fullback"],
       gimnasio: ["Fuerza", "Resistencia", "Estética", "Tonificación"],
-      yoga: ["Hatha", "Vinyasa", "Ashtanga", "Yin"],
+      esqui: ["Alpino", "Fondo", "Freestyle"],
+      escalada: ["Deportiva", "Boulder", "Tradicional"],
+      snowboard: ["Freeride", "Slopestyle", "Half-pipe"],
+      moto_agua: ["Slalom", "Wakeboard", "Jet Ski"],
+      buceo: ["Recreativo", "Técnico", "Libre"],
+      boxeo: ["Amateur", "Profesional"],
+      basquetbol: ["Base", "Ala", "Pívot"],
       sedentario: ["Ninguna"]
     };
 
-    // Cargar valores guardados si existen
     const deporteGuardado = localStorage.getItem('deporte');
     const disciplinaGuardada = localStorage.getItem('disciplina');
 
     function llenarDisciplinas(deporte) {
-      // Limpiar select
       disciplinaSelect.innerHTML = '';
 
       if (!deporte || !opciones[deporte]) {
@@ -111,14 +120,11 @@
         return;
       }
 
-      // Mostrar label y select
       labelDisciplina.style.display = 'block';
       disciplinaSelect.style.display = 'block';
       disciplinaSelect.setAttribute('required', 'required');
 
-      // Llenar opciones
       const arrayDisciplinas = opciones[deporte];
-      // Opción vacía
       const optionVacia = document.createElement('option');
       optionVacia.value = '';
       optionVacia.textContent = '-- Selecciona --';
@@ -126,12 +132,11 @@
 
       arrayDisciplinas.forEach(d => {
         const opt = document.createElement('option');
-        opt.value = d.toLowerCase().replace(/\s+/g, '_'); // valor en minúsculas y con _ en vez de espacios
+        opt.value = d.toLowerCase().replace(/\s+/g, '_');
         opt.textContent = d;
         disciplinaSelect.appendChild(opt);
       });
 
-      // Si hay disciplina guardada para este deporte, seleccionarla
       if (deporte === deporteGuardado && disciplinaGuardada) {
         disciplinaSelect.value = disciplinaGuardada;
       } else {
@@ -139,13 +144,11 @@
       }
     }
 
-    // Al cambiar el deporte, mostrar disciplinas
     deporteSelect.addEventListener('change', (e) => {
       const seleccionado = e.target.value;
       llenarDisciplinas(seleccionado);
     });
 
-    // Cargar selección inicial al cargar la página
     window.addEventListener('DOMContentLoaded', () => {
       if (deporteGuardado) {
         deporteSelect.value = deporteGuardado;
@@ -153,7 +156,6 @@
       }
     });
 
-    // Al enviar el formulario guardar y continuar
     document.getElementById('formDeporte').addEventListener('submit', function(e) {
       e.preventDefault();
 
@@ -172,7 +174,6 @@
       localStorage.setItem('deporte', deporte);
       localStorage.setItem('disciplina', disciplina);
 
-      // Redirigir a menú principal
       window.location.href = 'menu.html';
     });
   </script>
