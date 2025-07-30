@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Datos Físicos</title>
+  <link rel="icon" href="favicon.ico" />
+  <style>
+    body {
+      background-color: #121212;
+      color: #eee;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+    }
+    label, p {
+      margin-top: 20px;
+    }
+    input[type=number] {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: none;
+      margin-bottom: 10px;
+      background-color: #222;
+      color: #eee;
+      font-size: 1em;
+    }
+    button {
+      display: block;
+      width: 100%;
+      background-color: #1f1f1f;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      margin-top: 30px;
+      font-size: 1.1em;
+      cursor: pointer;
+    }
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 0.8em;
+      color: #aaa;
+    }
+
+    /* Contenedor de tipos de cuerpo */
+    .tipos-cuerpo {
+      display: flex;
+      gap: 12px;
+      margin-top: 15px;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .tipo-card {
+      flex: 1 1 30%;
+      background-color: #222;
+      padding: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.3s ease, background-color 0.3s ease;
+      user-select: none;
+    }
+    .tipo-card:hover {
+      background-color: #333;
+    }
+    .tipo-card.selected {
+      border-color: #4CAF50;
+      background-color: #2a5d2a;
+    }
+    .tipo-card h3 {
+      margin: 0 0 8px 0;
+      font-size: 1.2em;
+      text-align: center;
+    }
+    .tipo-card p {
+      font-size: 0.9em;
+      color: #ccc;
+      text-align: center;
+    }
+
+    /* Definicion larga */
+    #definicion-larga {
+      margin-top: 25px;
+      padding: 15px;
+      background-color: #222;
+      border-radius: 8px;
+      font-size: 0.95em;
+      line-height: 1.4;
+      min-height: 80px;
+      color: #ddd;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 id="saludo">Hola</h1>
+  <p>Por favor ingrese los siguientes datos:</p>
+
+  <form id="formDatos">
+    <label for="edad">Edad (años):</label>
+    <input type="number" id="edad" name="edad" required min="1">
+
+    <label for="peso">Peso (kg):</label>
+    <input type="number" id="peso" name="peso" required step="0.1" min="1">
+
+    <label for="altura">Altura (m): <small>Ej: 1.75</small></label>
+    <input type="number" id="altura" name="altura" required step="0.01" min="1">
+
+    <label>Tipo de cuerpo:</label>
+    <div class="tipos-cuerpo">
+      <div class="tipo-card" data-tipo="endomorfo" tabindex="0">
+        <h3>Endomorfo</h3>
+        <p>Tendencia a acumular grasa</p>
+      </div>
+      <div class="tipo-card" data-tipo="mesomorfo" tabindex="0">
+        <h3>Mesomorfo</h3>
+        <p>Cuerpo musculoso y atlético</p>
+      </div>
+      <div class="tipo-card" data-tipo="ectomorfo" tabindex="0">
+        <h3>Ectomorfo</h3>
+        <p>Delgado, metabolismo rápido</p>
+      </div>
+    </div>
+
+    <div id="definicion-larga">Selecciona un tipo de cuerpo para ver más información aquí.</div>
+
+    <input type="hidden" id="cuerpo" name="cuerpo" required>
+
+    <button type="submit">Calcular y continuar</button>
+  </form>
+
+  <footer>By: Juan Pablo Cruz</footer>
+
+  <script>
+    // Saludo personalizado
+    const sexo = localStorage.getItem('sexo');
+    const nombre = localStorage.getItem('nombre');
+    const saludo = document.getElementById('saludo');
+    if (sexo === 'masculino') {
+      saludo.textContent = `Hola Sr. ${nombre}`;
+    } else if (sexo === 'femenino') {
+      saludo.textContent = `Hola Srta. ${nombre}`;
+    } else {
+      saludo.textContent = 'Hola';
+    }
+
+    // Definiciones largas
+    const definicionesLargas = {
+      endomorfo: "Los endomorfos tienden a acumular grasa fácilmente, tienen un metabolismo más lento y pueden tener dificultad para perder peso. Requieren una alimentación balanceada y ejercicios cardiovasculares junto con fuerza.",
+      mesomorfo: "Los mesomorfos tienen un cuerpo naturalmente musculoso y atlético, responden muy bien al entrenamiento de fuerza y suelen ganar músculo con facilidad.",
+      ectomorfo: "Los ectomorfos son delgados, con un metabolismo rápido, lo que dificulta la ganancia de peso y masa muscular. Suelen necesitar una dieta hipercalórica y entrenamientos específicos para aumentar masa muscular."
+    };
+
+    const tipoCards = document.querySelectorAll('.tipo-card');
+    const definicionLargaDiv = document.getElementById('definicion-larga');
+    const inputCuerpo = document.getElementById('cuerpo');
+
+    // Función para marcar selección visual y actualizar input oculto
+    function seleccionarTipo(tipo) {
+      tipoCards.forEach(c => {
+        if (c.getAttribute('data-tipo') === tipo) {
+          c.classList.add('selected');
+        } else {
+          c.classList.remove('selected');
+        }
+      });
+      inputCuerpo.value = tipo;
+      definicionLargaDiv.textContent = definicionesLargas[tipo];
+    }
+
+    // Evento click en cards
+    tipoCards.forEach(card => {
+      card.addEventListener('click', () => {
+        seleccionarTipo(card.getAttribute('data-tipo'));
+      });
+      // Soporte teclado accesible
+      card.addEventListener('keypress', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          seleccionarTipo(card.getAttribute('data-tipo'));
+        }
+      });
+    });
+
+    // Al cargar la página, cargar selección guardada si existe
+    window.addEventListener('DOMContentLoaded', () => {
+      // Cargar campos previos si existen
+      const edad = localStorage.getItem('edad');
+      const peso = localStorage.getItem('peso');
+      const altura = localStorage.getItem('altura');
+      const cuerpo = localStorage.getItem('cuerpo');
+
+      if (edad) document.getElementById('edad').value = edad;
+      if (peso) document.getElementById('peso').value = peso;
+      if (altura) document.getElementById('altura').value = altura;
+      if (cuerpo) seleccionarTipo(cuerpo);
+    });
+
+    // Guardar y redirigir
+    document.getElementById('formDatos').addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (!inputCuerpo.value) {
+        alert('Por favor, selecciona un tipo de cuerpo.');
+        return;
+      }
+
+      // Guardar datos en localStorage
+      const edad = document.getElementById('edad').value;
+      const peso = document.getElementById('peso').value;
+      const altura = document.getElementById('altura').value;
+      const cuerpo = inputCuerpo.value;
+
+      localStorage.setItem('edad', edad);
+      localStorage.setItem('peso', peso);
+      localStorage.setItem('altura', altura);
+      localStorage.setItem('cuerpo', cuerpo);
+
+      // Calcular IMC y guardar
+      const imc = (peso / (altura * altura)).toFixed(2);
+      localStorage.setItem('imc', imc);
+
+      // Redirigir a deporte.html
+      window.location.href = 'deporte.html';
+    });
+  </script>
+</body>
+</html>
