@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Elección de Deporte</title>
+  <link rel="icon" href="favicon.ico" />
+  <style>
+    body {
+      background-color: #121212;
+      color: #eee;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: none;
+      margin-top: 5px;
+      background-color: #222;
+      color: #eee;
+      font-size: 1em;
+    }
+    button {
+      margin-top: 30px;
+      width: 100%;
+      padding: 12px;
+      font-size: 1.1em;
+      background-color: #1f1f1f;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: white;
+    }
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 0.8em;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Selecciona tu deporte y disciplina/meta</h1>
+
+  <form id="formDeporte">
+    <label for="deporte">Deporte:</label>
+    <select id="deporte" name="deporte" required>
+      <option value="">-- Selecciona un deporte --</option>
+      <option value="mtb">MTB (Ciclismo de montaña)</option>
+      <option value="futbol">Fútbol</option>
+      <option value="atletismo">Atletismo</option>
+      <option value="natacion">Natación</option>
+      <option value="rugby">Rugby</option>
+      <option value="gimnasio">Gimnasio</option>
+      <option value="yoga">Yoga</option>
+      <option value="sedentario">Sedentario</option>
+    </select>
+
+    <label for="disciplina" id="labelDisciplina" style="display:none;">Disciplina / Meta:</label>
+    <select id="disciplina" name="disciplina" style="display:none;" required>
+      <!-- opciones dinámicas -->
+    </select>
+
+    <button type="submit">Guardar y continuar</button>
+  </form>
+
+  <footer>By: Juan Pablo Cruz</footer>
+
+  <script>
+    const deporteSelect = document.getElementById('deporte');
+    const disciplinaSelect = document.getElementById('disciplina');
+    const labelDisciplina = document.getElementById('labelDisciplina');
+
+    // Opciones de disciplinas o metas para cada deporte
+    const opciones = {
+      mtb: ["Enduro", "XC", "Downhill", "All Mountain"],
+      futbol: ["Arquero", "Defensa", "Mediocampista", "Delantero"],
+      atletismo: ["Pista", "Carrera", "Salto", "Fondo"],
+      natacion: ["Estilo Libre", "Espalda", "Mariposa", "Pecho"],
+      rugby: ["Delantero", "Medio Scrum", "Ala", "Fullback"],
+      gimnasio: ["Fuerza", "Resistencia", "Estética", "Tonificación"],
+      yoga: ["Hatha", "Vinyasa", "Ashtanga", "Yin"],
+      sedentario: ["Ninguna"]
+    };
+
+    // Cargar valores guardados si existen
+    const deporteGuardado = localStorage.getItem('deporte');
+    const disciplinaGuardada = localStorage.getItem('disciplina');
+
+    function llenarDisciplinas(deporte) {
+      // Limpiar select
+      disciplinaSelect.innerHTML = '';
+
+      if (!deporte || !opciones[deporte]) {
+        disciplinaSelect.style.display = 'none';
+        labelDisciplina.style.display = 'none';
+        disciplinaSelect.removeAttribute('required');
+        return;
+      }
+
+      // Mostrar label y select
+      labelDisciplina.style.display = 'block';
+      disciplinaSelect.style.display = 'block';
+      disciplinaSelect.setAttribute('required', 'required');
+
+      // Llenar opciones
+      const arrayDisciplinas = opciones[deporte];
+      // Opción vacía
+      const optionVacia = document.createElement('option');
+      optionVacia.value = '';
+      optionVacia.textContent = '-- Selecciona --';
+      disciplinaSelect.appendChild(optionVacia);
+
+      arrayDisciplinas.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d.toLowerCase().replace(/\s+/g, '_'); // valor en minúsculas y con _ en vez de espacios
+        opt.textContent = d;
+        disciplinaSelect.appendChild(opt);
+      });
+
+      // Si hay disciplina guardada para este deporte, seleccionarla
+      if (deporte === deporteGuardado && disciplinaGuardada) {
+        disciplinaSelect.value = disciplinaGuardada;
+      } else {
+        disciplinaSelect.value = '';
+      }
+    }
+
+    // Al cambiar el deporte, mostrar disciplinas
+    deporteSelect.addEventListener('change', (e) => {
+      const seleccionado = e.target.value;
+      llenarDisciplinas(seleccionado);
+    });
+
+    // Cargar selección inicial al cargar la página
+    window.addEventListener('DOMContentLoaded', () => {
+      if (deporteGuardado) {
+        deporteSelect.value = deporteGuardado;
+        llenarDisciplinas(deporteGuardado);
+      }
+    });
+
+    // Al enviar el formulario guardar y continuar
+    document.getElementById('formDeporte').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const deporte = deporteSelect.value;
+      const disciplina = disciplinaSelect.value;
+
+      if (!deporte) {
+        alert('Por favor selecciona un deporte.');
+        return;
+      }
+      if (disciplinaSelect.style.display !== 'none' && !disciplina) {
+        alert('Por favor selecciona una disciplina o meta.');
+        return;
+      }
+
+      localStorage.setItem('deporte', deporte);
+      localStorage.setItem('disciplina', disciplina);
+
+      // Redirigir a menú principal
+      window.location.href = 'menu.html';
+    });
+  </script>
+</body>
+</html>
