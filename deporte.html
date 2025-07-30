@@ -1,181 +1,180 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Elección de Deporte</title>
-  <link rel="icon" href="favicon.ico" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Selecciona tu Deporte</title>
+  <link rel="icon" href="favicon.ico">
   <style>
     body {
       background-color: #121212;
-      color: #eee;
-      font-family: Arial, sans-serif;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
       padding: 20px;
-      max-width: 600px;
-      margin: 0 auto;
+      margin: 0;
     }
+
     h1 {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
-    label {
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+    }
+
+    label, select {
       display: block;
-      margin-top: 15px;
-      font-weight: bold;
+      margin-bottom: 15px;
+      font-size: 1.1em;
     }
+
     select {
       width: 100%;
-      padding: 8px;
-      border-radius: 6px;
-      border: none;
-      margin-top: 5px;
-      background-color: #222;
-      color: #eee;
-      font-size: 1em;
-    }
-    button {
-      margin-top: 30px;
-      width: 100%;
       padding: 12px;
-      font-size: 1.1em;
-      background-color: #1f1f1f;
-      border: none;
       border-radius: 8px;
-      cursor: pointer;
-      color: white;
+      border: none;
+      background-color: #1e1e1e;
+      color: #fff;
     }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+
+    button {
+      background-color: #03DAC6;
+      border: none;
+      padding: 15px 25px;
+      border-radius: 10px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #00b5a1;
+    }
+
     footer {
       text-align: center;
-      margin-top: 30px;
-      font-size: 0.8em;
-      color: #aaa;
+      margin-top: 40px;
+      color: #888;
+    }
+
+    .icon-container {
+      margin: 15px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-container img {
+      width: 30px;
+      height: 30px;
+    }
+
+    @media (max-width: 600px) {
+      select, button {
+        font-size: 1em;
+      }
+
+      .buttons {
+        flex-direction: column;
+        gap: 15px;
+      }
     }
   </style>
-</head>
-<body>
-
-  <h1>Selecciona tu deporte y disciplina/meta</h1>
-
-  <form id="formDeporte">
-    <label for="deporte">Deporte:</label>
-    <select id="deporte" name="deporte" required>
-      <option value="">-- Selecciona un deporte --</option>
-      <option value="mtb">MTB (Ciclismo de montaña)</option>
-      <option value="ciclismo">Ciclismo</option>
-      <option value="futbol">Fútbol</option>
-      <option value="atletismo">Atletismo</option>
-      <option value="natacion">Natación</option>
-      <option value="rugby">Rugby</option>
-      <option value="gimnasio">Gimnasio</option>
-      <option value="esqui">Esquí</option>
-      <option value="escalada">Escalada</option>
-      <option value="snowboard">Snowboard</option>
-      <option value="moto_agua">Moto de agua / Esquí acuático</option>
-      <option value="buceo">Buceo</option>
-      <option value="boxeo">Boxeo</option>
-      <option value="basquetbol">Básquetbol</option>
-      <option value="sedentario">Sedentario</option>
-    </select>
-
-    <label for="disciplina" id="labelDisciplina" style="display:none;">Disciplina / Meta:</label>
-    <select id="disciplina" name="disciplina" style="display:none;" required></select>
-
-    <button type="submit">Guardar y continuar</button>
-  </form>
-
-  <footer>By: Juan Pablo Cruz</footer>
-
   <script>
-    const deporteSelect = document.getElementById('deporte');
-    const disciplinaSelect = document.getElementById('disciplina');
-    const labelDisciplina = document.getElementById('labelDisciplina');
-
-    const opciones = {
-      mtb: ["Enduro", "XC", "Downhill", "All Mountain"],
-      ciclismo: ["Ruta", "Pista", "Gravel", "Contrarreloj"],
-      futbol: ["Arquero", "Defensa", "Mediocampista", "Delantero"],
-      atletismo: ["Pista", "Carrera", "Salto", "Fondo"],
-      natacion: ["Estilo Libre", "Espalda", "Mariposa", "Pecho"],
-      rugby: ["Delantero", "Medio Scrum", "Ala", "Fullback"],
-      gimnasio: ["Fuerza", "Resistencia", "Estética", "Tonificación"],
-      esqui: ["Alpino", "Fondo", "Freestyle"],
-      escalada: ["Deportiva", "Boulder", "Tradicional"],
-      snowboard: ["Freeride", "Slopestyle", "Half-pipe"],
-      moto_agua: ["Slalom", "Wakeboard", "Jet Ski"],
-      buceo: ["Recreativo", "Técnico", "Libre"],
-      boxeo: ["Amateur", "Profesional"],
-      basquetbol: ["Base", "Ala", "Pívot"],
-      sedentario: ["Ninguna"]
+    const disciplinas = {
+      "MTB": ["Enduro", "XC", "Downhill", "All Mountain"],
+      "Fútbol": ["Arquero", "Defensa", "Mediocampista", "Delantero"],
+      "Atletismo": ["Pista", "Salto", "Carrera", "Fondo"],
+      "Natación": ["Libre", "Espalda", "Mariposa", "Pecho"],
+      "Rugby": ["Delantero", "Back", "Medio Scrum"],
+      "Gimnasio": ["Fuerza", "Resistencia", "Estética"],
+      "Ciclismo": ["Ruta", "Pista", "Gravel", "Contrarreloj"],
+      "Esquí": ["Alpino", "Fondo", "Freestyle"],
+      "Escalada": ["Deportiva", "Boulder", "Tradicional"],
+      "Snowboard": ["Freeride", "Slopestyle", "Half-pipe"],
+      "Moto de agua / Esquí acuático": ["Slalom", "Wakeboard", "Jet Ski"],
+      "Buceo": ["Recreativo", "Técnico", "Libre"],
+      "Boxeo": ["Amateur", "Profesional"],
+      "Básquetbol": ["Base", "Ala", "Pívot"]
     };
 
-    const deporteGuardado = localStorage.getItem('deporte');
-    const disciplinaGuardada = localStorage.getItem('disciplina');
+    function actualizarDisciplinas() {
+      const deporte = document.getElementById("deporte").value;
+      const disciplinaSelect = document.getElementById("disciplina");
 
-    function llenarDisciplinas(deporte) {
-      disciplinaSelect.innerHTML = '';
+      // Limpiar opciones anteriores
+      disciplinaSelect.innerHTML = "";
 
-      if (!deporte || !opciones[deporte]) {
-        disciplinaSelect.style.display = 'none';
-        labelDisciplina.style.display = 'none';
-        disciplinaSelect.removeAttribute('required');
-        return;
-      }
-
-      labelDisciplina.style.display = 'block';
-      disciplinaSelect.style.display = 'block';
-      disciplinaSelect.setAttribute('required', 'required');
-
-      const arrayDisciplinas = opciones[deporte];
-      const optionVacia = document.createElement('option');
-      optionVacia.value = '';
-      optionVacia.textContent = '-- Selecciona --';
-      disciplinaSelect.appendChild(optionVacia);
-
-      arrayDisciplinas.forEach(d => {
-        const opt = document.createElement('option');
-        opt.value = d.toLowerCase().replace(/\s+/g, '_');
-        opt.textContent = d;
-        disciplinaSelect.appendChild(opt);
-      });
-
-      if (deporte === deporteGuardado && disciplinaGuardada) {
-        disciplinaSelect.value = disciplinaGuardada;
+      if (disciplinas[deporte]) {
+        disciplinas[deporte].forEach(function(opcion) {
+          const opt = document.createElement("option");
+          opt.value = opcion;
+          opt.text = opcion;
+          disciplinaSelect.appendChild(opt);
+        });
       } else {
-        disciplinaSelect.value = '';
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.text = "Seleccione un deporte primero";
+        disciplinaSelect.appendChild(opt);
       }
     }
 
-    deporteSelect.addEventListener('change', (e) => {
-      const seleccionado = e.target.value;
-      llenarDisciplinas(seleccionado);
-    });
+    function guardarDeporte() {
+      const deporte = document.getElementById("deporte").value;
+      const disciplina = document.getElementById("disciplina").value;
+      localStorage.setItem("deporte", deporte);
+      localStorage.setItem("disciplina", disciplina);
+      window.location.href = "menu.html";
+    }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      if (deporteGuardado) {
-        deporteSelect.value = deporteGuardado;
-        llenarDisciplinas(deporteGuardado);
-      }
-    });
-
-    document.getElementById('formDeporte').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const deporte = deporteSelect.value;
-      const disciplina = disciplinaSelect.value;
-
-      if (!deporte) {
-        alert('Por favor selecciona un deporte.');
-        return;
-      }
-      if (disciplinaSelect.style.display !== 'none' && !disciplina) {
-        alert('Por favor selecciona una disciplina o meta.');
-        return;
-      }
-
-      localStorage.setItem('deporte', deporte);
-      localStorage.setItem('disciplina', disciplina);
-
-      window.location.href = 'menu.html';
-    });
+    function volver() {
+      window.location.href = "datosFisicos.html";
+    }
   </script>
+</head>
+<body onload="actualizarDisciplinas()">
+  <div class="container">
+    <h1>Selecciona tu Deporte</h1>
+
+    <label for="deporte">Deporte:</label>
+    <select id="deporte" onchange="actualizarDisciplinas()">
+      <option value="">-- Selecciona un deporte --</option>
+      <option value="MTB">MTB</option>
+      <option value="Fútbol">Fútbol</option>
+      <option value="Atletismo">Atletismo</option>
+      <option value="Natación">Natación</option>
+      <option value="Rugby">Rugby</option>
+      <option value="Gimnasio">Gimnasio</option>
+      <option value="Ciclismo">Ciclismo</option>
+      <option value="Esquí">Esquí</option>
+      <option value="Escalada">Escalada</option>
+      <option value="Snowboard">Snowboard</option>
+      <option value="Moto de agua / Esquí acuático">Moto de agua / Esquí acuático</option>
+      <option value="Buceo">Buceo</option>
+      <option value="Boxeo">Boxeo</option>
+      <option value="Básquetbol">Básquetbol</option>
+    </select>
+
+    <label for="disciplina">Disciplina / Subcategoría:</label>
+    <select id="disciplina">
+      <option value="">Seleccione un deporte primero</option>
+    </select>
+
+    <div class="buttons">
+      <button onclick="volver()">← Volver</button>
+      <button onclick="guardarDeporte()">Siguiente →</button>
+    </div>
+
+    <footer>By: Juan Pablo Cruz</footer>
+  </div>
 </body>
 </html>
