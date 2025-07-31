@@ -61,7 +61,6 @@ function generarPlanesEntrenamiento() {
 
 const planesEntrenamiento = generarPlanesEntrenamiento();
 
-// Función para mostrar el plan en pantalla dentro de un div con id 'plan-container'
 function mostrarPlan(deporte, disciplina, imc, tipoCuerpo, edad, nivel, horas) {
   const plan = planesEntrenamiento[deporte]?.[disciplina]?.[imc]?.[tipoCuerpo]?.[edad]?.[nivel]?.[horas];
   const contenedor = document.getElementById('plan-container');
@@ -70,7 +69,7 @@ function mostrarPlan(deporte, disciplina, imc, tipoCuerpo, edad, nivel, horas) {
     return;
   }
   contenedor.innerHTML = '';
-  plan.forEach((dia, i) => {
+  plan.forEach((dia) => {
     const p = document.createElement('p');
     p.textContent = dia;
     contenedor.appendChild(p);
