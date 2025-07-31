@@ -7,100 +7,387 @@
   <style>
     body {
       background-color: #121212;
-      color: #fff;
+      color: #ffffff;
       font-family: Arial, sans-serif;
+      margin: 0;
       padding: 20px;
     }
-
     h1 {
       text-align: center;
+      color: #00d0ff;
+      margin-bottom: 30px;
     }
-
-    .entrenamiento-container {
-      margin-top: 30px;
-    }
-
     .dia {
-      background: #1e1e1e;
+      background-color: #1e1e1e;
       border-radius: 10px;
       padding: 15px;
       margin-bottom: 15px;
-      box-shadow: 0 0 8px rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
     }
-
-    .btn-volver {
+    h3 {
+      margin: 0 0 10px;
+      color: #00bfff;
+    }
+    .volver {
       display: block;
       margin: 30px auto;
-      padding: 10px 20px;
-      background-color: #333;
+      background-color: #005577;
       color: white;
-      border: none;
-      border-radius: 8px;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 10px;
+      width: fit-content;
+      font-weight: bold;
       cursor: pointer;
     }
-
-    .btn-volver:hover {
-      background-color: #555;
+    .volver:hover {
+      background-color: #0077bb;
+    }
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 0.9em;
+      color: #aaa;
     }
   </style>
 </head>
 <body>
-  <h1>Plan de Entrenamiento Personalizado</h1>
+  <h1>Tu Plan de Entrenamiento</h1>
+  <div id="entrenamiento"></div>
+  <a class="volver" href="menu.html">Volver al menú</a>
+  <footer>By: Juan Pablo Cruz</footer>
 
-  <div id="entrenamiento" class="entrenamiento-container">
-    <!-- Aquí se insertará el contenido dinámico -->
-  </div>
+  <script>
+    const planesEntrenamiento = {
+      // Ciclismo MTB
+      "MTB-Cross Country (XC)-Bajo peso-Endomorfo": [
+        "Día 1: Ruta suave 1h, técnica básica.",
+        "Día 2: Fuerza tren inferior y core.",
+        "Día 3: Descanso activo, estiramientos.",
+        "Día 4: Intervalos de subida en ruta.",
+        "Día 5: Técnica en curvas y bajadas.",
+        "Día 6: Resistencia 1.5h ritmo moderado.",
+        "Día 7: Descanso total."
+      ],
+      "MTB-Enduro-Peso normal-Mesomorfo": [
+        "Día 1: Técnica descenso avanzado.",
+        "Día 2: Entreno de fuerza y explosividad.",
+        "Día 3: Rodillo, intervalos alta intensidad.",
+        "Día 4: Salida larga 2h montaña.",
+        "Día 5: Core y movilidad.",
+        "Día 6: Técnica salto y manejo obstáculos.",
+        "Día 7: Yoga y recuperación activa."
+      ],
+      "MTB-Downhill-Sobrepeso-Ectomorfo": [
+        "Día 1: Calentamiento y técnica básica DH.",
+        "Día 2: Fuerza tren superior.",
+        "Día 3: Descanso activo.",
+        "Día 4: Práctica técnica bajadas cortas.",
+        "Día 5: Circuito fuerza explosiva.",
+        "Día 6: Rodillo ritmo suave 1h.",
+        "Día 7: Descanso completo."
+      ],
+      "MTB-All Mountain-Peso normal-Endomorfo": [
+        "Día 1: Salida técnica 1.5h.",
+        "Día 2: Gimnasio fuerza general.",
+        "Día 3: Descanso activo y estiramientos.",
+        "Día 4: Técnica subidas y descensos.",
+        "Día 5: Core y equilibrio.",
+        "Día 6: Rodillo intervalos 45 min.",
+        "Día 7: Salida larga relajada."
+      ],
+      
+      // Ciclismo Ruta
+      "Ruta-Competencia-Bajo peso-Mesomorfo": [
+        "Día 1: Intervalos alta intensidad 1h.",
+        "Día 2: Entreno fuerza tren inferior.",
+        "Día 3: Descanso activo.",
+        "Día 4: Ruta larga 2h resistencia.",
+        "Día 5: Core y movilidad.",
+        "Día 6: Técnica velocidad y cadencia.",
+        "Día 7: Recuperación activa."
+      ],
+      "Ruta-Resistencia-Peso normal-Endomorfo": [
+        "Día 1: Salida larga 3h ritmo constante.",
+        "Día 2: Gimnasio fuerza y estabilidad.",
+        "Día 3: Descanso activo.",
+        "Día 4: Intervalos subidas suaves.",
+        "Día 5: Core y estiramientos.",
+        "Día 6: Técnica y cadencia.",
+        "Día 7: Descanso."
+      ],
+      "Ruta-Contrarreloj-Sobrepeso-Ectomorfo": [
+        "Día 1: Intervalos potencia 45 min.",
+        "Día 2: Fuerza explosiva tren inferior.",
+        "Día 3: Descanso activo.",
+        "Día 4: Técnica contrarreloj.",
+        "Día 5: Rodillo ritmo constante.",
+        "Día 6: Core y movilidad.",
+        "Día 7: Recuperación activa."
+      ],
 
-  <button class="btn-volver" onclick="window.location.href='menu.html'">Volver al menú</button>
+      // Ciclismo Pista
+      "Pista-Velocidad-Bajo peso-Mesomorfo": [
+        "Día 1: Series cortas y explosivas.",
+        "Día 2: Fuerza y core.",
+        "Día 3: Descanso activo.",
+        "Día 4: Técnica de salida y arranques.",
+        "Día 5: Rodillo 1h.",
+        "Día 6: Entreno resistencia.",
+        "Día 7: Recuperación."
+      ],
+      "Pista-Persecución-Peso normal-Endomorfo": [
+        "Día 1: Entreno intervalos media distancia.",
+        "Día 2: Fuerza general y core.",
+        "Día 3: Descanso activo.",
+        "Día 4: Técnica de persecución.",
+        "Día 5: Rodillo ritmo variable.",
+        "Día 6: Resistencia 1.5h.",
+        "Día 7: Yoga y estiramientos."
+      ],
+      "Pista-Omnium-Sobrepeso-Ectomorfo": [
+        "Día 1: Técnica omnium y resistencia.",
+        "Día 2: Entreno fuerza explosiva.",
+        "Día 3: Descanso activo.",
+        "Día 4: Series y velocidad.",
+        "Día 5: Rodillo 1h.",
+        "Día 6: Core y movilidad.",
+        "Día 7: Recuperación activa."
+      ],
 
-  <script src="entrenamiento.js"></script> <script>
-  // Base de datos de entrenamientos por combinación
-  const planesEntrenamiento = {
-    "MTB-Enduro-sobrepeso-endomorfo": [
-      "Día 1: Cardio en bici 30 min + movilidad de cadera",
-      "Día 2: Técnica de descenso en curva + fuerza tren inferior",
-      "Día 3: Descanso activo (caminar o yoga)",
-      "Día 4: Circuito en cerro 45 min ritmo bajo",
-      "Día 5: Tren superior con peso corporal + core",
-      "Día 6: Bajadas técnicas controladas + visualización mental",
-      "Día 7: Salida larga en cerro ritmo constante"
-    ],
+      // Triatlón
+      "Triatlón-General-Bajo peso-Mesomorfo": [
+        "Día 1: Natación técnica y resistencia.",
+        "Día 2: Bicicleta 1h ritmo medio.",
+        "Día 3: Carrera suave 40 min.",
+        "Día 4: Gimnasio fuerza general.",
+        "Día 5: Natación velocidad.",
+        "Día 6: Bicicleta intervalos.",
+        "Día 7: Descanso activo."
+      ],
 
-    // Puedes seguir agregando más combinaciones aquí
-    // Ejemplo:
-    // "gimnasio-estética-normal-mesomorfo": [ ... ],
-    // "natación-mariposa-bajo-ectomorfo": [ ... ]
-  };
+      // Natación
+      "Natación-Libre-Peso normal-Endomorfo": [
+        "Día 1: Técnica crol + resistencia.",
+        "Día 2: Series de velocidad.",
+        "Día 3: Descanso activo.",
+        "Día 4: Técnica espalda y mariposa.",
+        "Día 5: Potencia piernas.",
+        "Día 6: Resistencia continua.",
+        "Día 7: Recuperación."
+      ],
+      "Natación-Espalda-Bajo peso-Ectomorfo": [
+        "Día 1: Técnica espalda.",
+        "Día 2: Resistencia larga.",
+        "Día 3: Descanso activo.",
+        "Día 4: Potencia brazos.",
+        "Día 5: Velocidad y técnica.",
+        "Día 6: Core y estiramientos.",
+        "Día 7: Descanso."
+      ],
+      "Natación-Mariposa-Sobrepeso-Mesomorfo": [
+        "Día 1: Técnica mariposa.",
+        "Día 2: Series intensas.",
+        "Día 3: Descanso activo.",
+        "Día 4: Potencia y resistencia.",
+        "Día 5: Técnica combinada.",
+        "Día 6: Recuperación activa.",
+        "Día 7: Descanso total."
+      ],
 
-  // Obtener datos guardados
-  const deporte = localStorage.getItem("deporte");
-  const disciplina = localStorage.getItem("disciplina");
-  const imc = localStorage.getItem("imc");
-  const cuerpo = localStorage.getItem("tipoCuerpo");
+      // Atletismo
+      "Atletismo-Pista-Bajo peso-Endomorfo": [
+        "Día 1: Series velocidad.",
+        "Día 2: Fuerza y core.",
+        "Día 3: Descanso activo.",
+        "Día 4: Técnica de salida.",
+        "Día 5: Resistencia media distancia.",
+        "Día 6: Entreno combinado.",
+        "Día 7: Recuperación."
+      ],
+      "Atletismo-Salto-Peso normal-Mesomorfo": [
+        "Día 1: Técnica salto largo.",
+        "Día 2: Fuerza explosiva.",
+        "Día 3: Descanso activo.",
+        "Día 4: Entreno pliometría.",
+        "Día 5: Core y movilidad.",
+        "Día 6: Técnica salto alto.",
+        "Día 7: Descanso."
+      ],
+      "Atletismo-Fondo-Sobrepeso-Ectomorfo": [
+        "Día 1: Rodaje largo.",
+        "Día 2: Técnica y ritmo.",
+        "Día 3: Descanso activo.",
+        "Día 4: Series de resistencia.",
+        "Día 5: Core y estiramientos.",
+        "Día 6: Entreno suave.",
+        "Día 7: Recuperación activa."
+      ],
 
-  // Armar la clave de búsqueda
-  const clave = `${deporte}-${disciplina}-${imc}-${cuerpo}`;
+      // Escalada
+      "Escalada-Boulder-Bajo peso-Mesomorfo": [
+        "Día 1: Técnica boulder.",
+        "Día 2: Fuerza agarre.",
+        "Día 3: Descanso activo.",
+        "Día 4: Resistencia en muro.",
+        "Día 5: Core y movilidad.",
+        "Día 6: Entreno velocidad.",
+        "Día 7: Recuperación."
+      ],
+      "Escalada-Deportiva-Peso normal-Endomorfo": [
+        "Día 1: Técnica deportiva.",
+        "Día 2: Fuerza general.",
+        "Día 3: Descanso activo.",
+        "Día 4: Entreno resistencia.",
+        "Día 5: Movilidad y core.",
+        "Día 6: Sesión técnica.",
+        "Día 7: Descanso."
+      ],
+      "Escalada-Velocidad-Sobrepeso-Ectomorfo": [
+        "Día 1: Técnica velocidad.",
+        "Día 2: Fuerza explosiva.",
+        "Día 3: Descanso activo.",
+        "Día 4: Entreno pliometría.",
+        "Día 5: Core y movilidad.",
+        "Día 6: Recuperación activa.",
+        "Día 7: Descanso."
+      ],
 
-  // Seleccionar el contenedor
-  const contenedor = document.getElementById("entrenamiento");
+      // Buceo
+      "Buceo-Profundo-Bajo peso-Endomorfo": [
+        "Día 1: Técnica respiración.",
+        "Día 2: Entreno fuerza general.",
+        "Día 3: Descanso activo.",
+        "Día 4: Sesión piscina.",
+        "Día 5: Core y movilidad.",
+        "Día 6: Simulacro profundidad.",
+        "Día 7: Recuperación."
+      ],
+      "Buceo-Técnico-Peso normal-Mesomorfo": [
+        "Día 1: Entreno técnico equipo.",
+        "Día 2: Fuerza y estabilidad.",
+        "Día 3: Descanso activo.",
+        "Día 4: Piscina y apnea.",
+        "Día 5: Core y movilidad.",
+        "Día 6: Sesión simulacro.",
+        "Día 7: Descanso."
+      ],
+      "Buceo-Recreativo-Sobrepeso-Ectomorfo": [
+        "Día 1: Técnicas básicas.",
+        "Día 2: Entreno resistencia.",
+        "Día 3: Descanso activo.",
+        "Día 4: Sesión piscina.",
+        "Día 5: Core y movilidad.",
+        "Día 6: Buceo suave.",
+        "Día 7: Recuperación activa."
+      ],
 
-  // Verificar si existe plan
-  if (planesEntrenamiento[clave]) {
-    const plan = planesEntrenamiento[clave];
-    plan.forEach((dia, index) => {
-      const div = document.createElement("div");
-      div.className = "dia";
-      div.innerHTML = `<h3>Día ${index + 1}</h3><p>${dia}</p>`;
-      contenedor.appendChild(div);
-    });
-  } else {
-    contenedor.innerHTML = `
-      <p>No hay un plan de entrenamiento aún para tu combinación:</p>
-      <p><strong>${deporte} → ${disciplina} → ${imc} → ${cuerpo}</strong></p>
-      <p>Por favor, vuelve pronto. Estamos trabajando en ello.</p>
-    `;
-  }
-</script>
+      // Rugby
+      "Rugby-Forward-Bajo peso-Endomorfo": [
+        "Día 1: Fuerza general y potencia.",
+        "Día 2: Técnica de tackle.",
+        "Día 3: Descanso activo.",
+        "Día 4: Resistencia y sprints.",
+        "Día 5: Movilidad y core.",
+        "Día 6: Entreno táctico.",
+        "Día 7: Descanso."
+      ],
+      "Rugby-Back-Peso normal-Mesomorfo": [
+        "Día 1: Velocidad y agilidad.",
+        "Día 2: Fuerza explosiva.",
+        "Día 3: Descanso activo.",
+        "Día 4: Entreno táctico.",
+        "Día 5: Core y movilidad.",
+        "Día 6: Resistencia aeróbica.",
+        "Día 7: Recuperación."
+      ],
 
+      // Básquetbol
+      "Básquetbol-Base-Bajo peso-Ectomorfo": [
+        "Día 1: Técnica manejo balón.",
+        "Día 2: Velocidad y agilidad.",
+        "Día 3: Descanso activo.",
+        "Día 4: Fuerza general.",
+        "Día 5: Core y movilidad.",
+        "Día 6: Entreno tiro y defensa.",
+        "Día 7: Recuperación activa."
+      ],
+      "Básquetbol-Alero-Peso normal-Endomorfo": [
+        "Día 1: Técnica tiro y pase.",
+        "Día 2: Fuerza tren inferior.",
+        "Día 3: Descanso activo.",
+        "Día 4: Resistencia y sprints.",
+        "Día 5: Core y movilidad.",
+        "Día 6: Entreno defensa.",
+        "Día 7: Descanso."
+      ],
+
+      // Gimnasio
+      "Gimnasio-Fuerza-Bajo peso-Mesomorfo": [
+        "Día 1: Tren superior, pesas pesadas.",
+        "Día 2: Tren inferior, fuerza máxima.",
+        "Día 3: Descanso activo.",
+        "Día 4: Core y estabilidad.",
+        "Día 5: Circuito fuerza e hipertrofia.",
+        "Día 6: Cardio ligero.",
+        "Día 7: Recuperación."
+      ],
+      "Gimnasio-Estética-Peso normal-Endomorfo": [
+        "Día 1: Pecho, bíceps y cardio.",
+        "Día 2: Piernas y abdominales.",
+        "Día 3: Descanso activo.",
+        "Día 4: Espalda y tríceps.",
+        "Día 5: Hombros y core.",
+        "Día 6: Full body circuito.",
+        "Día 7: Descanso."
+      ],
+
+      // Artes Marciales Mixtas
+      "ArtesMarciales-Jiu Jitsu-Bajo peso-Endomorfo": [
+        "Día 1: Técnica grappling.",
+        "Día 2: Fuerza y resistencia.",
+        "Día 3: Descanso activo.",
+        "Día 4: Sparring ligero.",
+        "Día 5: Movilidad y core.",
+        "Día 6: Entreno de técnica avanzada.",
+        "Día 7: Recuperación."
+      ],
+      "ArtesMarciales-Muay Thai-Peso normal-Mesomorfo": [
+        "Día 1: Técnica golpeo.",
+        "Día 2: Cardio y resistencia.",
+        "Día 3: Descanso activo.",
+        "Día 4: Sparring y defensa.",
+        "Día 5: Core y movilidad.",
+        "Día 6: Entreno combinado.",
+        "Día 7: Descanso."
+      ]
+    };
+
+    const deporte = localStorage.getItem("deporte") || "";
+    const disciplina = localStorage.getItem("disciplina") || "";
+    const imc = localStorage.getItem("imc") || "";
+    const cuerpo = localStorage.getItem("tipoCuerpo") || "";
+
+    const clave = `${deporte}-${disciplina}-${imc}-${cuerpo}`;
+
+    const contenedor = document.getElementById("entrenamiento");
+
+    if (planesEntrenamiento[clave]) {
+      const plan = planesEntrenamiento[clave];
+      plan.forEach((dia, i) => {
+        const div = document.createElement("div");
+        div.className = "dia";
+        div.innerHTML = `<h3>Día ${i + 1}</h3><p>${dia}</p>`;
+        contenedor.appendChild(div);
+      });
+    } else {
+      contenedor.innerHTML = `
+        <p>No hay un plan para tu combinación:</p>
+        <p><strong>${deporte} → ${disciplina} → ${imc} → ${cuerpo}</strong></p>
+        <p>Estamos trabajando para agregar más planes. Vuelve pronto.</p>
+      `;
+    }
+  </script>
 </body>
 </html>
