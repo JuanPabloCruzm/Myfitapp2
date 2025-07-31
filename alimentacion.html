@@ -1,128 +1,258 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plan de Alimentación Personalizado</title>
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <meta charset="UTF-8" />
+  <title>Plan de Alimentación</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <style>
     body {
       background-color: #121212;
-      color: #f0f0f0;
+      color: #eee;
       font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 900px;
-      margin: 40px auto;
       padding: 20px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #00d0ff;
+      margin-bottom: 30px;
+    }
+    .dia {
       background-color: #1e1e1e;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    }
-    h1, h2 {
-      text-align: center;
-      color: #00ffcc;
-    }
-    .plan {
-      margin-top: 30px;
-    }
-    .day {
-      margin-bottom: 25px;
       padding: 15px;
-      background-color: #2a2a2a;
-      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.05);
     }
-    .meal {
-      margin: 5px 0;
+    h3 {
+      margin: 0 0 10px;
+      color: #00bfff;
     }
-    .back-button {
+    .comida {
+      margin-left: 20px;
+      margin-bottom: 8px;
+    }
+    .volver {
       display: block;
-      width: 100%;
-      padding: 10px;
+      margin: 30px auto;
+      background-color: #005577;
+      color: white;
+      padding: 12px 24px;
       text-align: center;
-      background-color: #00ffcc;
-      color: #000;
-      font-weight: bold;
-      border: none;
-      border-radius: 8px;
       text-decoration: none;
-      margin-top: 30px;
+      border-radius: 10px;
+      width: fit-content;
+      font-weight: bold;
+      cursor: pointer;
     }
-    .branding {
+    .volver:hover {
+      background-color: #0077bb;
+    }
+    footer {
       text-align: center;
       margin-top: 30px;
       font-size: 0.9em;
-      color: #888;
+      color: #aaa;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Tu Plan de Alimentación</h1>
-    <div id="planAlimentacion" class="plan"></div>
-    <a href="menu.html" class="back-button">Volver al Menú</a>
-    <div class="branding">By: Juan Pablo Cruz</div>
-  </div>
+  <h1>Plan de Alimentación Semanal</h1>
+  <div id="planAlimentacion"></div>
+  <a class="volver" href="menu.html">Volver al menú</a>
+  <footer>By: Juan Pablo Cruz</footer>
 
   <script>
-    const planData = {
-      "MTB": {
-        "XC": {
-          "normal": {
-            "endomorfo": [
-              { desayuno: "Avena con frutas y yogurt griego", almuerzo: "Pollo a la plancha con arroz integral y ensalada", cena: "Sopa de verduras con huevo cocido y pan integral" },
-              { desayuno: "Tostadas integrales con palta y huevo", almuerzo: "Salmón al horno con papas cocidas y brócoli", cena: "Quinoa con verduras salteadas y tofu" },
-              // ... Día 3 al 7
-            ],
-            "mesomorfo": [/* ... */],
-            "ectomorfo": [/* ... */]
-          },
-          "sobrepeso": { /* ... */ },
-          "bajo": { /* ... */ }
+    // Planes de alimentación por combinación
+    // Cada día tiene desayuno, almuerzo y cena
+    const planesAlimentacion = {
+      "MTB-Cross Country (XC)-Bajo peso-Endomorfo": [
+        {
+          desayuno: "Avena con frutas y nueces",
+          almuerzo: "Pollo a la plancha con quinoa y verduras",
+          cena: "Sopa de verduras y tortilla de espinaca"
         },
-        "Downhill": {
-          // Similar estructura...
+        {
+          desayuno: "Batido de plátano, avena y leche de almendra",
+          almuerzo: "Ensalada de atún con arroz integral",
+          cena: "Pescado al horno con puré de calabaza"
+        },
+        {
+          desayuno: "Yogur natural con semillas y miel",
+          almuerzo: "Pasta integral con salsa de tomate natural y pollo",
+          cena: "Ensalada verde con huevo duro"
+        },
+        {
+          desayuno: "Pan integral con palta y tomate",
+          almuerzo: "Carne magra con batatas y brócoli",
+          cena: "Crema de zapallo y ensalada de quinoa"
+        },
+        {
+          desayuno: "Smoothie de frutos rojos con proteína",
+          almuerzo: "Pechuga de pavo con arroz y verduras al vapor",
+          cena: "Revuelto de verduras con queso fresco"
+        },
+        {
+          desayuno: "Huevos revueltos con espinaca y tomate",
+          almuerzo: "Ensalada de garbanzos con atún y vegetales",
+          cena: "Puré de papas con pescado a la plancha"
+        },
+        {
+          desayuno: "Cereal integral con leche y fruta",
+          almuerzo: "Lentejas guisadas con arroz y ensalada",
+          cena: "Sándwich integral de pollo y vegetales"
         }
-      },
-      "Gimnasio": {
-        "fuerza": {
-          "normal": {
-            "endomorfo": [
-              { desayuno: "Pan integral con atún y tomate", almuerzo: "Bistec con ensalada verde y arroz integral", cena: "Tortilla de vegetales con avena" },
-              { desayuno: "Smoothie de plátano con proteína vegetal", almuerzo: "Pollo salteado con fideos integrales", cena: "Ensalada de garbanzos con huevo duro" },
-              // ...
-            ]
-          }
+      ],
+
+      "MTB-Enduro-Peso normal-Mesomorfo": [
+        {
+          desayuno: "Tostadas integrales con mantequilla de maní y banana",
+          almuerzo: "Arroz con pollo y verduras salteadas",
+          cena: "Sopa de lentejas con verduras"
+        },
+        {
+          desayuno: "Yogur griego con frutos secos y miel",
+          almuerzo: "Pasta integral con salsa bolognesa ligera",
+          cena: "Ensalada de quinoa con vegetales y queso feta"
+        },
+        {
+          desayuno: "Batido de proteínas con leche y frutos rojos",
+          almuerzo: "Carne magra a la plancha con batatas y ensalada",
+          cena: "Tortilla de verduras y ensalada verde"
+        },
+        {
+          desayuno: "Avena con leche, nueces y miel",
+          almuerzo: "Pescado al horno con arroz integral y vegetales",
+          cena: "Crema de calabaza y sándwich integral"
+        },
+        {
+          desayuno: "Pan integral con palta y tomate",
+          almuerzo: "Ensalada de pollo con arroz y verduras",
+          cena: "Puré de papas y pescado al vapor"
+        },
+        {
+          desayuno: "Huevos revueltos con espinaca y tomate",
+          almuerzo: "Lentejas guisadas con ensalada",
+          cena: "Sopa minestrone con pan integral"
+        },
+        {
+          desayuno: "Cereal integral con leche y fruta",
+          almuerzo: "Carne magra con arroz y verduras",
+          cena: "Sándwich integral de pavo y vegetales"
         }
-      }
-      // Agregar más deportes y subdisciplinas
+      ],
+
+      "Natación-Libre-Peso normal-Endomorfo": [
+        {
+          desayuno: "Pan integral con huevo y palta",
+          almuerzo: "Pechuga de pollo con arroz y brócoli",
+          cena: "Sopa de verduras y ensalada verde"
+        },
+        {
+          desayuno: "Batido de frutas con yogur y avena",
+          almuerzo: "Pescado a la plancha con puré de zapallo",
+          cena: "Ensalada de lentejas con vegetales"
+        },
+        {
+          desayuno: "Yogur natural con semillas y miel",
+          almuerzo: "Pasta integral con salsa de tomate y pollo",
+          cena: "Tortilla de espinaca y ensalada"
+        },
+        {
+          desayuno: "Avena con frutas y nueces",
+          almuerzo: "Carne magra con batatas y ensalada",
+          cena: "Crema de zapallo y quinoa"
+        },
+        {
+          desayuno: "Smoothie de frutos rojos con proteína",
+          almuerzo: "Arroz integral con verduras y atún",
+          cena: "Revuelto de verduras con queso fresco"
+        },
+        {
+          desayuno: "Huevos revueltos con espinaca y tomate",
+          almuerzo: "Ensalada de garbanzos con pollo",
+          cena: "Puré de papas con pescado a la plancha"
+        },
+        {
+          desayuno: "Cereal integral con leche y fruta",
+          almuerzo: "Lentejas guisadas con arroz y ensalada",
+          cena: "Sándwich integral de pollo y vegetales"
+        }
+      ],
+
+      "Gimnasio-Estética-Peso normal-Endomorfo": [
+        {
+          desayuno: "Tostadas integrales con mantequilla de maní y banana",
+          almuerzo: "Ensalada de pollo con arroz y verduras",
+          cena: "Sopa minestrone con pan integral"
+        },
+        {
+          desayuno: "Yogur griego con frutos secos y miel",
+          almuerzo: "Pasta integral con salsa bolognesa ligera",
+          cena: "Tortilla de verduras y ensalada verde"
+        },
+        {
+          desayuno: "Batido de proteínas con leche y frutos rojos",
+          almuerzo: "Carne magra a la plancha con batatas y ensalada",
+          cena: "Crema de calabaza y sándwich integral"
+        },
+        {
+          desayuno: "Avena con leche, nueces y miel",
+          almuerzo: "Pescado al horno con arroz integral y vegetales",
+          cena: "Ensalada de quinoa con vegetales y queso feta"
+        },
+        {
+          desayuno: "Pan integral con palta y tomate",
+          almuerzo: "Lentejas guisadas con ensalada",
+          cena: "Puré de papas y pescado al vapor"
+        },
+        {
+          desayuno: "Huevos revueltos con espinaca y tomate",
+          almuerzo: "Arroz integral con verduras y atún",
+          cena: "Sándwich integral de pavo y vegetales"
+        },
+        {
+          desayuno: "Cereal integral con leche y fruta",
+          almuerzo: "Carne magra con arroz y verduras",
+          cena: "Revuelto de verduras con queso fresco"
+        }
+      ]
+
+      // Puedes seguir agregando más combinaciones aquí
     };
 
-    const deporte = localStorage.getItem("deporte");
-    const subdisciplina = localStorage.getItem("subdisciplina");
-    const imc = localStorage.getItem("imcCategoria");
-    const cuerpo = localStorage.getItem("tipoCuerpo");
+    // Obtener datos guardados
+    const deporte = localStorage.getItem("deporte") || "";
+    const disciplina = localStorage.getItem("disciplina") || "";
+    const imc = localStorage.getItem("imc") || "";
+    const tipoCuerpo = localStorage.getItem("tipoCuerpo") || "";
 
-    const planContainer = document.getElementById("planAlimentacion");
+    const clave = `${deporte}-${disciplina}-${imc}-${tipoCuerpo}`;
 
-    if (planData[deporte] && planData[deporte][subdisciplina] && planData[deporte][subdisciplina][imc] && planData[deporte][subdisciplina][imc][cuerpo]) {
-      const plan = planData[deporte][subdisciplina][imc][cuerpo];
+    const contenedor = document.getElementById("planAlimentacion");
 
-      plan.forEach((dia, index) => {
-        const dayDiv = document.createElement("div");
-        dayDiv.className = "day";
-        dayDiv.innerHTML = `
-          <h3>Día ${index + 1}</h3>
-          <div class="meal"><strong>Desayuno:</strong> ${dia.desayuno}</div>
-          <div class="meal"><strong>Almuerzo:</strong> ${dia.almuerzo}</div>
-          <div class="meal"><strong>Cena:</strong> ${dia.cena}</div>
+    if (planesAlimentacion[clave]) {
+      const plan = planesAlimentacion[clave];
+      plan.forEach((dia, i) => {
+        const div = document.createElement("div");
+        div.className = "dia";
+        div.innerHTML = `
+          <h3>Día ${i + 1}</h3>
+          <div class="comida"><strong>Desayuno:</strong> ${dia.desayuno}</div>
+          <div class="comida"><strong>Almuerzo:</strong> ${dia.almuerzo}</div>
+          <div class="comida"><strong>Cena:</strong> ${dia.cena}</div>
         `;
-        planContainer.appendChild(dayDiv);
+        contenedor.appendChild(div);
       });
     } else {
-      planContainer.innerHTML = "<p>No se encontró un plan adecuado para tus datos. Por favor, revisa tu configuración.</p>";
+      contenedor.innerHTML = `
+        <p>No hay un plan de alimentación para tu combinación:</p>
+        <p><strong>${deporte} → ${disciplina} → ${imc} → ${tipoCuerpo}</strong></p>
+        <p>Estamos trabajando para agregar más planes. Vuelve pronto.</p>
+      `;
     }
   </script>
 </body>
