@@ -1,180 +1,143 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Elección de Deporte</title>
-  <link rel="icon" href="favicon.ico" />
+  <meta charset="UTF-8">
+  <title>Plan de Entrenamiento</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <style>
     body {
       background-color: #121212;
       color: #eee;
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       padding: 20px;
-      max-width: 600px;
-      margin: 0 auto;
     }
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
+
+    h1, h2 {
+      color: #ffffff;
     }
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
+
+    .container {
+      max-width: 800px;
+      margin: auto;
     }
-    select {
-      width: 100%;
-      padding: 8px;
-      border-radius: 6px;
-      border: none;
-      margin-top: 5px;
-      background-color: #222;
+
+    .day {
+      background-color: #1e1e1e;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00000088;
+    }
+
+    .back-button {
+      margin-top: 20px;
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #333;
       color: #eee;
-      font-size: 1em;
-    }
-    button {
-      margin-top: 30px;
-      width: 100%;
-      padding: 12px;
-      font-size: 1.1em;
-      background-color: #1f1f1f;
-      border: none;
+      text-decoration: none;
       border-radius: 8px;
-      cursor: pointer;
-      color: white;
+      transition: background-color 0.3s ease;
     }
+
+    .back-button:hover {
+      background-color: #555;
+    }
+
     footer {
       text-align: center;
-      margin-top: 30px;
-      font-size: 0.8em;
+      margin-top: 40px;
+      font-size: 14px;
       color: #aaa;
     }
   </style>
 </head>
 <body>
-
-  <h1>Selecciona tu deporte y disciplina/meta</h1>
-
-  <form id="formDeporte">
-    <label for="deporte">Deporte:</label>
-    <select id="deporte" name="deporte" required>
-      <option value="">-- Selecciona un deporte --</option>
-      <option value="mtb">MTB (Ciclismo de montaña)</option>
-      <option value="futbol">Fútbol</option>
-      <option value="atletismo">Atletismo</option>
-      <option value="natacion">Natación</option>
-      <option value="rugby">Rugby</option>
-      <option value="gimnasio">Gimnasio</option>
-      <option value="yoga">Yoga</option>
-      <option value="sedentario">Sedentario</option>
-    </select>
-
-    <label for="disciplina" id="labelDisciplina" style="display:none;">Disciplina / Meta:</label>
-    <select id="disciplina" name="disciplina" style="display:none;" required>
-      <!-- opciones dinámicas -->
-    </select>
-
-    <button type="submit">Guardar y continuar</button>
-  </form>
-
-  <footer>By: Juan Pablo Cruz</footer>
+  <div class="container">
+    <h1 id="saludo"></h1>
+    <h2>Tu plan de entrenamiento personalizado (7 días)</h2>
+    <div id="rutinaContainer"></div>
+    <a href="menu.html" class="back-button">Volver al menú</a>
+    <footer>By: Juan Pablo Cruz</footer>
+  </div>
 
   <script>
-    const deporteSelect = document.getElementById('deporte');
-    const disciplinaSelect = document.getElementById('disciplina');
-    const labelDisciplina = document.getElementById('labelDisciplina');
+    const nombre = localStorage.getItem("nombre") || "";
+    const tipoCuerpo = localStorage.getItem("tipoCuerpo");
+    const imc = parseFloat(localStorage.getItem("imc"));
+    const deporte = localStorage.getItem("deporte");
+    const disciplina = localStorage.getItem("disciplina") || "";
+    const tiempo = localStorage.getItem("tiempo") || "";
 
-    // Opciones de disciplinas o metas para cada deporte
-    const opciones = {
-      mtb: ["Enduro", "XC", "Downhill", "All Mountain"],
-      futbol: ["Arquero", "Defensa", "Mediocampista", "Delantero"],
-      atletismo: ["Pista", "Carrera", "Salto", "Fondo"],
-      natacion: ["Estilo Libre", "Espalda", "Mariposa", "Pecho"],
-      rugby: ["Delantero", "Medio Scrum", "Ala", "Fullback"],
-      gimnasio: ["Fuerza", "Resistencia", "Estética", "Tonificación"],
-      yoga: ["Hatha", "Vinyasa", "Ashtanga", "Yin"],
-      sedentario: ["Ninguna"]
-    };
+    // Mostrar saludo
+    document.getElementById("saludo").textContent = `Hola ${nombre}, este es tu plan de entrenamiento para ${deporte} (${disciplina})`;
 
-    // Cargar valores guardados si existen
-    const deporteGuardado = localStorage.getItem('deporte');
-    const disciplinaGuardada = localStorage.getItem('disciplina');
+    const rutinaContainer = document.getElementById("rutinaContainer");
 
-    function llenarDisciplinas(deporte) {
-      // Limpiar select
-      disciplinaSelect.innerHTML = '';
+    function generarRutina() {
+      let rutina = [];
 
-      if (!deporte || !opciones[deporte]) {
-        disciplinaSelect.style.display = 'none';
-        labelDisciplina.style.display = 'none';
-        disciplinaSelect.removeAttribute('required');
-        return;
+      // EJEMPLO: Ciclismo → Ruta → Ectomorfo → IMC bajo
+      if (deporte === "Ciclismo" && disciplina === "Ruta") {
+        if (tipoCuerpo === "Ectomorfo") {
+          if (imc < 18.5) {
+            rutina = [
+              "Día 1: Rodaje suave 30 min + técnica de pedaleo",
+              "Día 2: Core + movilidad (30 min)",
+              "Día 3: Salida 45 min en terreno plano",
+              "Día 4: Descanso activo (caminar 20 min)",
+              "Día 5: Intervalos 3x3min a ritmo alto + 2 min recuperación",
+              "Día 6: Rodaje largo 1h a ritmo moderado",
+              "Día 7: Estiramientos profundos + rodillo suave 20 min"
+            ];
+          } else if (imc >= 18.5 && imc <= 24.9) {
+            rutina = [
+              "Día 1: Rodaje base 60 min + 5 sprints cortos",
+              "Día 2: Fuerza tren inferior (sentadillas, zancadas)",
+              "Día 3: Subidas cortas: 6x1min en cuesta",
+              "Día 4: Descanso total",
+              "Día 5: Series largas: 3x10 min tempo",
+              "Día 6: Rodaje grupal 90 min",
+              "Día 7: Estiramiento y yoga para ciclistas"
+            ];
+          } else {
+            rutina = [
+              "Día 1: 30 min rodillo + trabajo de cadencia alta",
+              "Día 2: Fuerza funcional (peso corporal)",
+              "Día 3: Rodaje 45 min + 5 aceleraciones",
+              "Día 4: Caminata ligera 30 min",
+              "Día 5: Intervalos 5x2min intenso",
+              "Día 6: Rodaje constante 1h15min",
+              "Día 7: Foam roller + movilidad"
+            ];
+          }
+        }
       }
 
-      // Mostrar label y select
-      labelDisciplina.style.display = 'block';
-      disciplinaSelect.style.display = 'block';
-      disciplinaSelect.setAttribute('required', 'required');
+      // Aquí puedes agregar más combinaciones: 
+      // if (deporte === "Boxeo" && disciplina === "Profesional" && tipoCuerpo === "Mesomorfo" && imc > 25)...
 
-      // Llenar opciones
-      const arrayDisciplinas = opciones[deporte];
-      // Opción vacía
-      const optionVacia = document.createElement('option');
-      optionVacia.value = '';
-      optionVacia.textContent = '-- Selecciona --';
-      disciplinaSelect.appendChild(optionVacia);
+      if (rutina.length === 0) {
+        rutina = [
+          "Día 1: Sesión de movilidad general (30 min)",
+          "Día 2: Caminata o bicicleta suave (30 min)",
+          "Día 3: Entrenamiento funcional ligero",
+          "Día 4: Descanso activo",
+          "Día 5: Cardio moderado (45 min)",
+          "Día 6: Estiramiento profundo",
+          "Día 7: Actividad libre a elección"
+        ];
+      }
 
-      arrayDisciplinas.forEach(d => {
-        const opt = document.createElement('option');
-        opt.value = d.toLowerCase().replace(/\s+/g, '_'); // valor en minúsculas y con _ en vez de espacios
-        opt.textContent = d;
-        disciplinaSelect.appendChild(opt);
+      rutina.forEach((item, index) => {
+        const dayDiv = document.createElement("div");
+        dayDiv.classList.add("day");
+        dayDiv.innerHTML = `<h3>Día ${index + 1}</h3><p>${item}</p>`;
+        rutinaContainer.appendChild(dayDiv);
       });
-
-      // Si hay disciplina guardada para este deporte, seleccionarla
-      if (deporte === deporteGuardado && disciplinaGuardada) {
-        disciplinaSelect.value = disciplinaGuardada;
-      } else {
-        disciplinaSelect.value = '';
-      }
     }
 
-    // Al cambiar el deporte, mostrar disciplinas
-    deporteSelect.addEventListener('change', (e) => {
-      const seleccionado = e.target.value;
-      llenarDisciplinas(seleccionado);
-    });
-
-    // Cargar selección inicial al cargar la página
-    window.addEventListener('DOMContentLoaded', () => {
-      if (deporteGuardado) {
-        deporteSelect.value = deporteGuardado;
-        llenarDisciplinas(deporteGuardado);
-      }
-    });
-
-    // Al enviar el formulario guardar y continuar
-    document.getElementById('formDeporte').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const deporte = deporteSelect.value;
-      const disciplina = disciplinaSelect.value;
-
-      if (!deporte) {
-        alert('Por favor selecciona un deporte.');
-        return;
-      }
-      if (disciplinaSelect.style.display !== 'none' && !disciplina) {
-        alert('Por favor selecciona una disciplina o meta.');
-        return;
-      }
-
-      localStorage.setItem('deporte', deporte);
-      localStorage.setItem('disciplina', disciplina);
-
-      // Redirigir a menú principal
-      window.location.href = 'menu.html';
-    });
+    generarRutina();
   </script>
 </body>
 </html>
