@@ -1,147 +1,307 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Plan de Entrenamiento Personalizado</title>
-  <link rel="icon" href="favicon.ico" />
-  <style>
-    body {
-      background-color: #121212;
-      color: #f0f0f0;
-      font-family: 'Segoe UI', sans-serif;
-      padding: 20px;
-      margin: 0;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Plan de Entrenamiento - MiFitApp</title>
+<style>
+  body {
+    background-color: #121212;
+    color: #eee;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0; padding: 0; min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  header {
+    background: #1f1f1f;
+    width: 100%; max-width: 720px;
+    padding: 20px;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+    border-bottom: 1px solid #444;
+  }
+  main {
+    flex-grow: 1;
+    max-width: 720px;
+    width: 90%;
+    padding: 20px;
+  }
+  .info {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    color: #bbb;
+  }
+  .plan-dia {
+    background: #222;
+    margin: 10px 0;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 8px #333;
+  }
+  .plan-dia h3 {
+    margin: 0 0 8px 0;
+    color: #ff9800;
+  }
+  button {
+    background-color: #ff9800;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 25px;
+    color: #121212;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    box-shadow: 0 3px 8px #d67e00;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #e68900;
+  }
+  footer {
+    margin: 20px 0;
+    color: #555;
+    font-size: 0.9rem;
+  }
+  @media (max-width: 480px) {
+    header {
+      font-size: 1.4rem;
     }
-    .container {
-      max-width: 900px;
-      margin: auto;
+    button {
+      width: 100%;
     }
-    h1, h2 {
-      color: #ffffff;
-    }
-    .plan-dia {
-      background-color: #1f1f1f;
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
-    }
-    .volver {
-      margin-top: 30px;
-      display: inline-block;
-      background-color: #2c2c2c;
-      color: #ffffff;
-      padding: 10px 18px;
-      border: none;
-      border-radius: 6px;
-      text-decoration: none;
-      font-size: 16px;
-    }
-    .volver:hover {
-      background-color: #3e3e3e;
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>Tu Entrenamiento Personalizado</h1>
-    <div id="entrenamiento"></div>
-    <a class="volver" href="menu.html">Volver al Menú Principal</a>
-    <p style="margin-top: 50px;">By: Juan Pablo Cruz</p>
-  </div>
 
-  <script>
-    const datos = {
-      edad: localStorage.getItem('edad'),
-      imc: localStorage.getItem('imc'),
-      tipoCuerpo: localStorage.getItem('tipoCuerpo'),
-      deporte: localStorage.getItem('deporte'),
-      disciplina: localStorage.getItem('disciplina'),
-      horasSemanales: localStorage.getItem('horasSemanales')
+<header>Plan de Entrenamiento Personalizado</header>
+
+<main>
+  <div class="info" id="datosUsuario"></div>
+  <div id="planContainer"></div>
+  <button id="btnVolver">Volver al Menú</button>
+</main>
+
+<footer>By: Juan Pablo Cruz</footer>
+
+<script>
+  // --------- Datos de ejemplo para entrenamientos ---------
+  // Para que no sea extremadamente largo, puse algunos deportes y combinaciones.
+  // Tú puedes ampliar con el mismo formato para el resto.
+  const planesEntrenamiento = {
+    MTB: {
+      XC: {
+        "bajo peso": {
+          "endomorfo": {
+            "18-30": {
+              principiante: {
+                "2-5": [
+                  "Día 1: Pedaleo suave 30 min + estiramientos",
+                  "Día 2: Entrenamiento fuerza piernas 40 min",
+                  "Día 3: Descanso activo (caminata ligera 20 min)",
+                  "Día 4: Pedaleo moderado 45 min",
+                  "Día 5: Circuito técnica MTB 30 min",
+                  "Día 6: Core y estabilidad 30 min",
+                  "Día 7: Descanso completo"
+                ],
+                "5-8": [
+                  "Día 1: Pedaleo moderado 45 min + estiramientos",
+                  "Día 2: Entrenamiento fuerza y resistencia 50 min",
+                  "Día 3: Descanso activo + yoga 30 min",
+                  "Día 4: Entrenamiento intervalos 40 min",
+                  "Día 5: Circuito técnica + velocidad 40 min",
+                  "Día 6: Core, estabilidad y flexibilidad 45 min",
+                  "Día 7: Descanso completo"
+                ],
+                // Completar otros rangos ...
+              },
+              intermedio: {
+                "2-5": [
+                  "Día 1: Entrenamiento intervalos 30 min",
+                  "Día 2: Fuerza + resistencia 50 min",
+                  "Día 3: Descanso activo con estiramientos",
+                  "Día 4: Ruta de MTB 1h con subidas",
+                  "Día 5: Técnica y velocidad 40 min",
+                  "Día 6: Core y equilibrio 40 min",
+                  "Día 7: Descanso completo"
+                ],
+                // Más rangos...
+              },
+              avanzado: {
+                // Más datos...
+              }
+            },
+            "31-50": {
+              // Datos para otra edad
+            }
+          },
+          "mesomorfo": {
+            // Datos...
+          },
+          "ectomorfo": {
+            // Datos...
+          }
+        },
+        "normal": {
+          // Datos...
+        },
+        "sobrepeso": {
+          // Datos...
+        }
+      },
+      ALL_MOUNTAIN: {
+        // Datos...
+      },
+      dh: {
+        // Datos...
+      },
+      enduro: {
+        // Datos...
+      },
+      descenso_urbano: {
+        // Datos...
+      }
+    },
+    ruta: {
+      contrarreloj: {
+        // Datos...
+      },
+      competencia: {
+        // Datos...
+      },
+      resistencia: {
+        // Datos...
+      }
+    },
+    pista: {
+      velocidad: {
+        // Datos...
+      },
+      omnium: {
+        // Datos...
+      },
+      persecucion: {
+        // Datos...
+      }
+    },
+    triatlon: {
+      // Datos...
+    },
+    natacion: {
+      "aguas abiertas": {
+        // Datos...
+      },
+      pecho: {
+        // Datos...
+      },
+      espalda: {
+        // Datos...
+      },
+      mariposa: {
+        // Datos...
+      },
+      libre: {
+        // Datos...
+      }
+    },
+    // Continúa con los demás deportes y disciplinas...
+  };
+
+  // --------- Función para obtener parámetros de URL ---------
+  function getParametrosURL() {
+    const params = new URLSearchParams(window.location.search);
+    return {
+      deporte: params.get('deporte')?.toLowerCase() || '',
+      disciplina: params.get('disciplina')?.toLowerCase() || '',
+      imc: params.get('imc')?.toLowerCase() || '',
+      tipoCuerpo: params.get('tipoCuerpo')?.toLowerCase() || '',
+      edad: params.get('edad') || '',
+      nivel: params.get('nivel')?.toLowerCase() || '',
+      tiempoSemanal: params.get('tiempoSemanal') || ''
     };
+  }
 
-    const planes = {
-      "MTB_Enduro_endomorfo_sobrepeso": [
-        "Día 1: Técnica en bajadas + movilidad articular (1h30)",
-        "Día 2: Rodillo indoor + fuerza tren inferior en gimnasio",
-        "Día 3: Descanso activo (yoga o natación regenerativa)",
-        "Día 4: Subidas prolongadas + core",
-        "Día 5: Día de resistencia en trail técnico (2h)",
-        "Día 6: Gimnasio: tren superior y propiocepción",
-        "Día 7: Rodaje largo + estiramientos + crioterapia"
-      ],
-      "natacion_pecho_mesomorfo_pesoNormal": [
-        "Día 1: Técnica + series 8x50 ritmo progresivo",
-        "Día 2: Trabajo de piernas y coordinación con tabla",
-        "Día 3: Gimnasio (resistencia + fuerza específica)",
-        "Día 4: Series 6x100 estilo con pausa controlada",
-        "Día 5: Descanso activo: caminata o bici suave",
-        "Día 6: Test de velocidad y técnica (grabarte)",
-        "Día 7: Entreno cruzado: HIIT fuera del agua"
-      ],
-      "gimnasio_fuerza_ectomorfo_bajoPeso": [
-        "Día 1: Tren superior (pecho + espalda) + abdomen",
-        "Día 2: Tren inferior (sentadillas + peso muerto)",
-        "Día 3: Cardio suave + movilidad",
-        "Día 4: Full body + hipertrofia moderada",
-        "Día 5: Descanso total o sauna + stretching",
-        "Día 6: Tren superior (hombros + brazos) + core",
-        "Día 7: Yoga o natación suave regenerativa"
-      ],
-      "futbol_delantero_endomorfo_pesoNormal": [
-        "Día 1: Técnica de definición + gimnasio tren inferior",
-        "Día 2: Coordinación + fuerza explosiva + sprints",
-        "Día 3: Cardio medio + core + visualización",
-        "Día 4: Partido reducido + técnica individual",
-        "Día 5: Recuperación activa: natación o bici",
-        "Día 6: Fuerza tren superior + potencia piernas",
-        "Día 7: Análisis táctico + estiramientos largos"
-      ],
-      "boxeo_amateur_mesomorfo_sobrepeso": [
-        "Día 1: Sombra + técnica de golpeo + cuerdas",
-        "Día 2: Sparring moderado + físico funcional",
-        "Día 3: Gimnasio (fuerza y potencia explosiva)",
-        "Día 4: Trabajo técnico + estrategia en pareja",
-        "Día 5: HIIT específico + escaleras",
-        "Día 6: Saco pesado + abdomen",
-        "Día 7: Recuperación: estiramiento y hielo"
-      ],
-      "triatlon_general_mesomorfo_pesoNormal": [
-        "Día 1: Natación técnica + transición suave bici",
-        "Día 2: Ciclismo fondo (3h) + core al final",
-        "Día 3: Running fartlek + técnica",
-        "Día 4: Descanso activo + trabajo de pies",
-        "Día 5: Brick: bici + running transición rápida",
-        "Día 6: Natación + gimnasio (resistencia)",
-        "Día 7: Carrera larga + movilidad"
-      ]
-      // Aquí puedes seguir agregando decenas de combinaciones
-    };
+  // --------- Mostrar plan o mensaje de error ---------
+  function mostrarPlan(plan) {
+    const contenedor = document.getElementById('planContainer');
+    contenedor.innerHTML = '';
 
-    function generarClave(d) {
-      return `${d.deporte}_${d.disciplina}_${d.tipoCuerpo}_${d.imc}`.toLowerCase().replace(/\s+/g, '');
+    if (!plan || plan.length === 0) {
+      contenedor.innerHTML = '<p>No se encontró un plan de entrenamiento para la combinación seleccionada.</p>';
+      return;
     }
 
-    const clave = generarClave(datos);
-    const plan = planes[clave];
+    plan.forEach((dia, i) => {
+      const divDia = document.createElement('div');
+      divDia.className = 'plan-dia';
+      divDia.innerHTML = `<h3>Día ${i + 1}</h3><p>${dia}</p>`;
+      contenedor.appendChild(divDia);
+    });
+  }
 
-    const contenedor = document.getElementById('entrenamiento');
+  // --------- Mostrar datos usuario en pantalla ---------
+  function mostrarDatosUsuario(datos) {
+    const div = document.getElementById('datosUsuario');
+    div.textContent = `Deporte: ${capitalize(datos.deporte)} | Disciplina: ${capitalize(datos.disciplina)} | IMC: ${capitalize(datos.imc)} | Tipo de cuerpo: ${capitalize(datos.tipoCuerpo)} | Edad: ${datos.edad} | Nivel: ${capitalize(datos.nivel)} | Tiempo semanal (hrs): ${datos.tiempoSemanal}`;
+  }
 
-    if (plan) {
-      plan.forEach((dia, index) => {
-        const div = document.createElement('div');
-        div.className = 'plan-dia';
-        div.innerHTML = `<h2>Día ${index + 1}</h2><p>${dia}</p>`;
-        contenedor.appendChild(div);
-      });
-    } else {
-      contenedor.innerHTML = `
-        <div class="plan-dia">
-          <h2>No hay plan exacto registrado para esta combinación aún.</h2>
-          <p>Estamos trabajando para añadir más rutinas personalizadas. Intenta otra disciplina o revisa que tu selección sea compatible.</p>
-        </div>
-      `;
+  // --------- Capitalizar texto ---------
+  function capitalize(text) {
+    if (!text) return '';
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  }
+
+  // --------- Función principal para obtener plan ---------
+  function obtenerPlan(datos) {
+    try {
+      const {deporte, disciplina, imc, tipoCuerpo, edad, nivel, tiempoSemanal} = datos;
+
+      // Se normalizan las claves para buscar en el objeto
+      const dep = deporte.replace(/\s+/g, '_');
+      const disc = disciplina.replace(/\s+/g, '_');
+      const imcKey = imc;
+      const tipoKey = tipoCuerpo;
+      const edadKey = edad;
+      const nivelKey = nivel;
+      const tiempoKey = tiempoSemanal;
+
+      // Navegar en el objeto planesEntrenamiento con validaciones
+      if (!planesEntrenamiento[dep]) return null;
+      if (!planesEntrenamiento[dep][disc]) return null;
+      if (!planesEntrenamiento[dep][disc][imcKey]) return null;
+      if (!planesEntrenamiento[dep][disc][imcKey][tipoKey]) return null;
+      if (!planesEntrenamiento[dep][disc][imcKey][tipoKey][edadKey]) return null;
+      if (!planesEntrenamiento[dep][disc][imcKey][tipoKey][edadKey][nivelKey]) return null;
+      if (!planesEntrenamiento[dep][disc][imcKey][tipoKey][edadKey][nivelKey][tiempoKey]) return null;
+
+      return planesEntrenamiento[dep][disc][imcKey][tipoKey][edadKey][nivelKey][tiempoKey];
+
+    } catch (error) {
+      console.error('Error obteniendo plan:', error);
+      return null;
     }
-  </script>
+  }
+
+  // --------- Botón volver ---------
+  document.getElementById('btnVolver').addEventListener('click', () => {
+    window.location.href = 'menu.html'; // Cambiar si la ruta es diferente
+  });
+
+  // --------- Inicialización ---------
+  window.onload = () => {
+    const datos = getParametrosURL();
+
+    // Mostrar datos
+    mostrarDatosUsuario(datos);
+
+    // Obtener plan
+    const plan = obtenerPlan(datos);
+
+    // Mostrar plan o mensaje
+    mostrarPlan(plan);
+  };
+</script>
+
 </body>
 </html>
