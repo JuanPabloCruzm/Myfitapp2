@@ -48,10 +48,9 @@
     <option value="">-- Selecciona --</option>
     <option value="mtb">MTB</option>
     <option value="ciclismo">Ciclismo</option>
-    <option value="esqui_acuatico">Esquí acuático</option>
     <option value="escalada">Escalada</option>
     <option value="snowboard">Snowboard</option>
-    <option value="moto_agua">Moto de agua / Ski acuático</option>
+    <option value="moto_agua">Moto de agua</option>
     <option value="buceo">Buceo</option>
     <option value="boxeo">Boxeo</option>
     <option value="basquetbol">Básquetbol</option>
@@ -83,16 +82,15 @@
   <script>
     const disciplinasPorDeporte = {
       mtb: ["Enduro", "Cross Country", "Downhill", "All Mountain"],
-      ciclismo: ["Ruta", "Pista", "BMX", "Gravel"],
-      esqui_acuatico: ["Slalom", "Trick", "Salto"],
+      ciclismo: ["Ruta", "Pista", "Gravel", "Contrarreloj"],
       escalada: ["Búlder", "Deportiva", "Tradicional"],
-      snowboard: ["Freestyle", "Alpino", "Boardercross"],
-      moto_agua: ["Carrera", "Freestyle"],
-      buceo: ["Libre", "Con tanque", "Profundo"],
+      snowboard: ["Freeride", "Slopestyle", "Half-pipe"],
+      moto_agua: ["Free ride", "Freestyle", "Rally Jet", "Raid", "Resistencia", "Carreras de circuito", "Carreras de velocidad"],
+      buceo: ["Recreativo", "Técnico", "Libre"],
       boxeo: ["Amateur", "Profesional"],
-      basquetbol: ["Base", "Escolta", "Alero", "Ala-pívot", "Pívot"],
+      basquetbol: ["Base", "Ala", "Pívot"],
       futbol: ["Arquero", "Defensa", "Mediocampista", "Delantero"],
-      atletismo: ["Carrera", "Salto", "Lanzamiento", "Fondo"],
+      atletismo: ["Velocidad", "Fondo", "Saltos", "Lanzamientos"],
       rugby: ["Pilar", "Hooker", "Segunda línea", "Ala", "Centro", "Apertura", "Fullback"],
       gym: ["Fuerza", "Resistencia", "Estética"],
       artes_marciales: ["Jiu-Jitsu", "Kickboxing", "MMA", "Karate"]
@@ -126,13 +124,8 @@
       location.href = "menu.html";
     }
 
-    // Mostrar IMC guardado
     const imc = localStorage.getItem("imc");
-    if (imc) {
-      document.getElementById("valorIMC").textContent = parseFloat(imc).toFixed(1);
-    } else {
-      document.getElementById("valorIMC").textContent = "No calculado";
-    }
+    document.getElementById("valorIMC").textContent = imc ? parseFloat(imc).toFixed(1) : "No calculado";
   </script>
 </body>
 </html>
