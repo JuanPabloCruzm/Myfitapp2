@@ -86,17 +86,22 @@
 <footer>By: Juan Pablo Cruz</footer>
 
 <script>
-  // --------- Datos de ejemplo para entrenamientos ---------
-  // Para que no sea extremadamente largo, puse algunos deportes y combinaciones.
-  // Tú puedes ampliar con el mismo formato para el resto.
+  // Aquí normalizamos claves para manejar espacios y mayúsculas
+  function normalizarClave(texto) {
+    return texto.trim().toLowerCase().replace(/\s+/g, '_').replace(/[áàäâ]/g,'a').replace(/[éèëê]/g,'e').replace(/[íìïî]/g,'i').replace(/[óòöô]/g,'o').replace(/[úùüû]/g,'u').replace(/[ñ]/g,'n');
+  }
+
+  // Datos completos de entrenamiento resumidos (7 días) para cada combinación
+  // Para no hacer un objeto gigantesco, aquí definimos ejemplos por deporte + disciplina + imc + tipo cuerpo + edad + nivel + tiempo
+  // Se puede expandir agregando más combinaciones siguiendo este formato
   const planesEntrenamiento = {
-    MTB: {
-      XC: {
-        "bajo peso": {
-          "endomorfo": {
-            "18-30": {
+    mtb: {
+      xc: {
+        bajo_peso: {
+          endomorfo: {
+            '18-30': {
               principiante: {
-                "2-5": [
+                '2-5': [
                   "Día 1: Pedaleo suave 30 min + estiramientos",
                   "Día 2: Entrenamiento fuerza piernas 40 min",
                   "Día 3: Descanso activo (caminata ligera 20 min)",
@@ -105,7 +110,7 @@
                   "Día 6: Core y estabilidad 30 min",
                   "Día 7: Descanso completo"
                 ],
-                "5-8": [
+                '5-8': [
                   "Día 1: Pedaleo moderado 45 min + estiramientos",
                   "Día 2: Entrenamiento fuerza y resistencia 50 min",
                   "Día 3: Descanso activo + yoga 30 min",
@@ -114,191 +119,303 @@
                   "Día 6: Core, estabilidad y flexibilidad 45 min",
                   "Día 7: Descanso completo"
                 ],
-                // Completar otros rangos ...
+                '10-15': [
+                  "Día 1: Entrenamiento intervalos 60 min",
+                  "Día 2: Fuerza + resistencia 60 min",
+                  "Día 3: Descanso activo y movilidad 45 min",
+                  "Día 4: Ruta larga MTB 90 min",
+                  "Día 5: Técnica y velocidad 60 min",
+                  "Día 6: Core y estabilidad 50 min",
+                  "Día 7: Descanso completo"
+                ],
+                '15+': [
+                  "Día 1: Entrenamiento intervalos intensos 75 min",
+                  "Día 2: Fuerza avanzada + resistencia 75 min",
+                  "Día 3: Recuperación activa y estiramientos 60 min",
+                  "Día 4: Ruta larga y técnica 120 min",
+                  "Día 5: Técnica y velocidad avanzada 70 min",
+                  "Día 6: Core, estabilidad y movilidad 60 min",
+                  "Día 7: Descanso completo"
+                ]
               },
               intermedio: {
-                "2-5": [
-                  "Día 1: Entrenamiento intervalos 30 min",
-                  "Día 2: Fuerza + resistencia 50 min",
+                '2-5': [
+                  "Día 1: Intervalos moderados 40 min",
+                  "Día 2: Fuerza y resistencia 50 min",
                   "Día 3: Descanso activo con estiramientos",
-                  "Día 4: Ruta de MTB 1h con subidas",
-                  "Día 5: Técnica y velocidad 40 min",
+                  "Día 4: Ruta de MTB con subidas 60 min",
+                  "Día 5: Técnica y velocidad 45 min",
                   "Día 6: Core y equilibrio 40 min",
                   "Día 7: Descanso completo"
                 ],
-                // Más rangos...
+                '5-8': [
+                  "Día 1: Intervalos avanzados 60 min",
+                  "Día 2: Fuerza y resistencia 65 min",
+                  "Día 3: Descanso activo + yoga 45 min",
+                  "Día 4: Ruta larga MTB 90 min",
+                  "Día 5: Técnica, velocidad y saltos 60 min",
+                  "Día 6: Core y movilidad 55 min",
+                  "Día 7: Descanso completo"
+                ],
+                '10-15': [
+                  "Día 1: Intervalos intensos 75 min",
+                  "Día 2: Fuerza avanzada y resistencia 75 min",
+                  "Día 3: Recuperación activa 60 min",
+                  "Día 4: Ruta larga técnica 120 min",
+                  "Día 5: Técnica, velocidad y salto 75 min",
+                  "Día 6: Core, movilidad y equilibrio 60 min",
+                  "Día 7: Descanso completo"
+                ],
+                '15+': [
+                  "Día 1: Intervalos máximos 90 min",
+                  "Día 2: Fuerza máxima + resistencia 90 min",
+                  "Día 3: Recuperación activa y estiramientos 70 min",
+                  "Día 4: Ruta muy larga técnica 150 min",
+                  "Día 5: Técnica, velocidad avanzada y saltos 90 min",
+                  "Día 6: Core, movilidad y equilibrio 70 min",
+                  "Día 7: Descanso completo"
+                ]
               },
               avanzado: {
-                // Más datos...
+                '2-5': [
+                  "Día 1: Intervalos explosivos 50 min",
+                  "Día 2: Fuerza máxima y resistencia 60 min",
+                  "Día 3: Recuperación activa 45 min",
+                  "Día 4: Ruta técnica y rápida 75 min",
+                  "Día 5: Técnica avanzada y saltos 60 min",
+                  "Día 6: Core, movilidad y equilibrio 50 min",
+                  "Día 7: Descanso completo"
+                ],
+                '5-8': [
+                  "Día 1: Intervalos de alta intensidad 75 min",
+                  "Día 2: Fuerza máxima y resistencia 80 min",
+                  "Día 3: Recuperación activa con yoga 60 min",
+                  "Día 4: Ruta larga técnica y rápida 120 min",
+                  "Día 5: Técnica avanzada, velocidad y salto 75 min",
+                  "Día 6: Core, movilidad y equilibrio 60 min",
+                  "Día 7: Descanso completo"
+                ],
+                '10-15': [
+                  "Día 1: Intervalos explosivos intensos 90 min",
+                  "Día 2: Fuerza máxima y resistencia 90 min",
+                  "Día 3: Recuperación activa y estiramientos 70 min",
+                  "Día 4: Ruta larga y muy técnica 150 min",
+                  "Día 5: Técnica avanzada, velocidad y salto 90 min",
+                  "Día 6: Core, movilidad y equilibrio 70 min",
+                  "Día 7: Descanso completo"
+                ],
+                '15+': [
+                  "Día 1: Entrenamiento máximo explosivo 120 min",
+                  "Día 2: Fuerza máxima y resistencia 120 min",
+                  "Día 3: Recuperación activa y yoga 90 min",
+                  "Día 4: Ruta ultra larga y técnica 180 min",
+                  "Día 5: Técnica máxima, velocidad y salto 120 min",
+                  "Día 6: Core, movilidad y equilibrio 90 min",
+                  "Día 7: Descanso completo"
+                ]
               }
             },
-            "31-50": {
-              // Datos para otra edad
-            }
+            // Puedes agregar más edades o tipos de cuerpo siguiendo este patrón
           },
-          "mesomorfo": {
-            // Datos...
+          mesomorfo: {
+            '18-30': {
+              principiante: {
+                '2-5': [
+                  "Día 1: Pedaleo suave 35 min + estiramientos",
+                  "Día 2: Fuerza piernas 45 min",
+                  "Día 3: Descanso activo",
+                  "Día 4: Pedaleo moderado 50 min",
+                  "Día 5: Técnica MTB 35 min",
+                  "Día 6: Core y estabilidad 35 min",
+                  "Día 7: Descanso completo"
+                ],
+                // Resto igual que endomorfo o adaptar
+              },
+              // Resto niveles...
+            },
+            // Más edades...
           },
-          "ectomorfo": {
-            // Datos...
+          ectomorfo: {
+            // Datos similares
           }
         },
-        "normal": {
-          // Datos...
+        normal: {
+          // Datos similares
         },
-        "sobrepeso": {
-          // Datos...
+        sobrepeso: {
+          // Datos similares adaptados
         }
       },
-      ALL_MOUNTAIN: {
-        // Datos...
+      all_mountain: {
+        // Puedes copiar y adaptar los planes de XC con cambios
       },
-      dh: {
-        // Datos...
-      },
-      enduro: {
-        // Datos...
-      },
-      descenso_urbano: {
-        // Datos...
-      }
+      dh: {},
+      enduro: {},
+      descenso_urbano: {}
     },
     ruta: {
-      contrarreloj: {
-        // Datos...
-      },
-      competencia: {
-        // Datos...
-      },
-      resistencia: {
-        // Datos...
-      }
+      contrarreloj: {},
+      competencia: {},
+      resistencia: {}
     },
     pista: {
-      velocidad: {
-        // Datos...
-      },
-      omnium: {
-        // Datos...
-      },
-      persecucion: {
-        // Datos...
-      }
+      velocidad: {},
+      omnium: {},
+      persecucion: {}
     },
-    triatlon: {
-      // Datos...
-    },
+    triatlon: {},
     natacion: {
-      "aguas abiertas": {
-        // Datos...
+      aguas_abiertas: {
+        bajo_peso: {
+          endomorfo: {
+            '18-30': {
+              principiante: {
+                '2-5': [
+                  "Día 1: Técnica de respiración y calentamiento 30 min",
+                  "Día 2: Nado libre suave 40 min",
+                  "Día 3: Descanso activo",
+                  "Día 4: Ejercicios de patada 30 min",
+                  "Día 5: Series de nado estilo libre 40 min",
+                  "Día 6: Entrenamiento de resistencia 45 min",
+                  "Día 7: Descanso completo"
+                ],
+                // Resto rangos de tiempo...
+              }
+            }
+          }
+        }
       },
-      pecho: {
-        // Datos...
-      },
-      espalda: {
-        // Datos...
-      },
-      mariposa: {
-        // Datos...
-      },
-      libre: {
-        // Datos...
-      }
+      pecho: {},
+      espalda: {},
+      mariposa: {},
+      libre: {}
     },
-    // Continúa con los demás deportes y disciplinas...
+    esqui_en_nieve: {
+      alpino_freestyle: {},
+      fondo: {}
+    },
+    snowboard: {
+      freestyle: {},
+      slalom: {},
+      halfpipe: {}
+    },
+    esqui_acuatico: {
+      slalom: {},
+      saltos: {},
+      trucos: {}
+    },
+    atletismo: {
+      pista: {},
+      salto: {},
+      lanzamiento: {},
+      fondo: {},
+      velocidad: {}
+    },
+    boxeo: {
+      amateur: {},
+      profesional: {},
+      entrenamiento: {}
+    },
+    escalada: {
+      boulder: {},
+      deportiva: {},
+      velocidad: {}
+    },
+    buceo: {
+      profundo: {},
+      tecnico: {},
+      recreativo: {}
+    },
+    rugby: {
+      back: {},
+      forward: {}
+    },
+    basquet: {
+      base: {},
+      escolta: {},
+      alero: {},
+      ala_pivot: {},
+      pivot: {}
+    },
+    gym: {
+      fuerza: {},
+      resistencia: {},
+      estetica: {},
+      rehabilitacion: {},
+      hipertrofia: {},
+      movilidad: {}
+    },
+    artes_marciales_mixtas: {
+      jiu_jitsu: {},
+      muay_thai: {},
+      boxeo: {},
+      lucha: {},
+      mma: {}
+    }
   };
 
-  // --------- Función para obtener parámetros de URL ---------
+  // Funcion para obtener parámetros URL
   function getParametrosURL() {
     const params = new URLSearchParams(window.location.search);
     return {
-      deporte: params.get('deporte')?.toLowerCase() || '',
-      disciplina: params.get('disciplina')?.toLowerCase() || '',
-      imc: params.get('imc')?.toLowerCase() || '',
-      tipoCuerpo: params.get('tipoCuerpo')?.toLowerCase() || '',
+      deporte: params.get('deporte') ? normalizarClave(params.get('deporte')) : '',
+      disciplina: params.get('disciplina') ? normalizarClave(params.get('disciplina')) : '',
+      imc: params.get('imc') ? normalizarClave(params.get('imc')) : '',
+      tipoCuerpo: params.get('tipoCuerpo') ? normalizarClave(params.get('tipoCuerpo')) : '',
       edad: params.get('edad') || '',
-      nivel: params.get('nivel')?.toLowerCase() || '',
+      nivel: params.get('nivel') ? normalizarClave(params.get('nivel')) : '',
       tiempoSemanal: params.get('tiempoSemanal') || ''
     };
   }
 
-  // --------- Mostrar plan o mensaje de error ---------
+  // Mostrar datos usuario
+  function mostrarDatosUsuario(datos) {
+    const div = document.getElementById('datosUsuario');
+    div.textContent = `Deporte: ${datos.deporte.replace(/_/g, ' ')} | Disciplina: ${datos.disciplina.replace(/_/g, ' ')} | IMC: ${datos.imc.replace(/_/g, ' ')} | Tipo cuerpo: ${datos.tipoCuerpo.replace(/_/g, ' ')} | Edad: ${datos.edad} | Nivel: ${datos.nivel.replace(/_/g, ' ')} | Tiempo semanal (hrs): ${datos.tiempoSemanal}`;
+  }
+
+  // Mostrar plan o mensaje error
   function mostrarPlan(plan) {
     const contenedor = document.getElementById('planContainer');
     contenedor.innerHTML = '';
-
     if (!plan || plan.length === 0) {
-      contenedor.innerHTML = '<p>No se encontró un plan de entrenamiento para la combinación seleccionada.</p>';
+      contenedor.innerHTML = '<p>No se encontró un plan para esta combinación.</p>';
       return;
     }
-
     plan.forEach((dia, i) => {
-      const divDia = document.createElement('div');
-      divDia.className = 'plan-dia';
-      divDia.innerHTML = `<h3>Día ${i + 1}</h3><p>${dia}</p>`;
-      contenedor.appendChild(divDia);
+      const div = document.createElement('div');
+      div.className = 'plan-dia';
+      div.innerHTML = `<h3>Día ${i+1}</h3><p>${dia}</p>`;
+      contenedor.appendChild(div);
     });
   }
 
-  // --------- Mostrar datos usuario en pantalla ---------
-  function mostrarDatosUsuario(datos) {
-    const div = document.getElementById('datosUsuario');
-    div.textContent = `Deporte: ${capitalize(datos.deporte)} | Disciplina: ${capitalize(datos.disciplina)} | IMC: ${capitalize(datos.imc)} | Tipo de cuerpo: ${capitalize(datos.tipoCuerpo)} | Edad: ${datos.edad} | Nivel: ${capitalize(datos.nivel)} | Tiempo semanal (hrs): ${datos.tiempoSemanal}`;
-  }
-
-  // --------- Capitalizar texto ---------
-  function capitalize(text) {
-    if (!text) return '';
-    return text.charAt(0).toUpperCase() + text.slice(1);
-  }
-
-  // --------- Función principal para obtener plan ---------
+  // Obtener plan
   function obtenerPlan(datos) {
     try {
-      const {deporte, disciplina, imc, tipoCuerpo, edad, nivel, tiempoSemanal} = datos;
-
-      // Se normalizan las claves para buscar en el objeto
-      const dep = deporte.replace(/\s+/g, '_');
-      const disc = disciplina.replace(/\s+/g, '_');
-      const imcKey = imc;
-      const tipoKey = tipoCuerpo;
-      const edadKey = edad;
-      const nivelKey = nivel;
-      const tiempoKey = tiempoSemanal;
-
-      // Navegar en el objeto planesEntrenamiento con validaciones
-      if (!planesEntrenamiento[dep]) return null;
-      if (!planesEntrenamiento[dep][disc]) return null;
-      if (!planesEntrenamiento[dep][disc][imcKey]) return null;
-      if (!planesEntrenamiento[dep][disc][imcKey][tipoKey]) return null;
-      if (!planesEntrenamiento[dep][disc][imcKey][tipoKey][edadKey]) return null;
-      if (!planesEntrenamiento[dep][disc][imcKey][tipoKey][edadKey][nivelKey]) return null;
-      if (!planesEntrenamiento[dep][disc][imcKey][tipoKey][edadKey][nivelKey][tiempoKey]) return null;
-
-      return planesEntrenamiento[dep][disc][imcKey][tipoKey][edadKey][nivelKey][tiempoKey];
-
-    } catch (error) {
-      console.error('Error obteniendo plan:', error);
+      if(!planesEntrenamiento[datos.deporte]) return null;
+      if(!planesEntrenamiento[datos.deporte][datos.disciplina]) return null;
+      if(!planesEntrenamiento[datos.deporte][datos.disciplina][datos.imc]) return null;
+      if(!planesEntrenamiento[datos.deporte][datos.disciplina][datos.imc][datos.tipoCuerpo]) return null;
+      if(!planesEntrenamiento[datos.deporte][datos.disciplina][datos.imc][datos.tipoCuerpo][datos.edad]) return null;
+      if(!planesEntrenamiento[datos.deporte][datos.disciplina][datos.imc][datos.tipoCuerpo][datos.edad][datos.nivel]) return null;
+      if(!planesEntrenamiento[datos.deporte][datos.disciplina][datos.imc][datos.tipoCuerpo][datos.edad][datos.nivel][datos.tiempoSemanal]) return null;
+      return planesEntrenamiento[datos.deporte][datos.disciplina][datos.imc][datos.tipoCuerpo][datos.edad][datos.nivel][datos.tiempoSemanal];
+    } catch(e) {
+      console.error(e);
       return null;
     }
   }
 
-  // --------- Botón volver ---------
+  // Boton volver
   document.getElementById('btnVolver').addEventListener('click', () => {
-    window.location.href = 'menu.html'; // Cambiar si la ruta es diferente
+    window.location.href = 'menu.html';
   });
 
-  // --------- Inicialización ---------
   window.onload = () => {
     const datos = getParametrosURL();
-
-    // Mostrar datos
     mostrarDatosUsuario(datos);
-
-    // Obtener plan
     const plan = obtenerPlan(datos);
-
-    // Mostrar plan o mensaje
     mostrarPlan(plan);
   };
 </script>
