@@ -2,170 +2,164 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Plan de Alimentación - Mi FitApp</title>
-  <link rel="icon" href="favicon.ico" />
+  <title>Plan de Alimentación Personalizado</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
-      background-color: #121212;
-      color: #eee;
       font-family: Arial, sans-serif;
+      background-color: var(--bg-color, #121212);
+      color: var(--text-color, #fff);
       margin: 0;
       padding: 20px;
-      min-height: 100vh;
+      transition: background-color 0.5s, color 0.5s;
     }
-    h1, h2 {
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h1 {
       text-align: center;
-    }
-    #subtitulo {
       margin-bottom: 20px;
-      text-align: center;
-      font-size: 1.2em;
-      color: #aaa;
     }
-    .dia {
-      background-color: #1e1e1e;
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 15px;
-      box-shadow: 0 0 10px #222;
+
+    .section {
+      background-color: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      animation: fadeIn 1s ease;
     }
-    .dia h3 {
-      margin-top: 0;
-      color: #ffd700;
-    }
-    p {
-      margin: 5px 0;
-    }
-    strong {
-      color: #ffcc00;
-    }
-    button {
-      display: block;
-      margin: 30px auto 0;
-      padding: 10px 25px;
-      font-size: 1.1em;
-      background-color: #222;
-      border: none;
-      border-radius: 5px;
-      color: #ffd700;
+
+    .toggle-theme {
+      float: right;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      background: none;
+      border: 1px solid #ccc;
+      padding: 6px 12px;
+      border-radius: 6px;
+      color: inherit;
     }
-    button:hover {
-      background-color: #444;
+
+    .btn {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background-color: #1e88e5;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #1565c0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-  <h1>Plan de Alimentación</h1>
-  <h2 id="subtitulo">Cargando datos...</h2>
+  <div class="container">
+    <button class="toggle-theme" onclick="toggleTheme()">Cambiar tema</button>
+    <h1>Tu Plan de Alimentación</h1>
+    
+    <div class="section" id="infoUsuario"></div>
+    <div class="section" id="planAlimentacion"></div>
+    <div class="section" id="tipsSalud"></div>
 
-  <div id="plan"></div>
-
-  <button id="volverMenu">Volver al Menú</button>
+    <button class="btn" onclick="window.location.href='menu.html'">Volver al menú</button>
+  </div>
 
   <script>
-    const imc = parseFloat(localStorage.getItem('imc'));
-    const deporte = localStorage.getItem('deporte');
-    const nombre = localStorage.getItem('nombre');
-
-    let clasificacion = '';
-    if (imc < 18.5) clasificacion = 'bajo peso';
-    else if (imc <= 24.9) clasificacion = 'peso normal';
-    else clasificacion = 'sobrepeso';
-
-    document.getElementById('subtitulo').textContent =
-      `Hola ${nombre}, tienes ${clasificacion} y practicas ${deporte}`;
-
-    // Planes de alimentación
-    const planes = {
-      mtb: { /* Aquí puedes mantener tus datos actuales como ya los tienes */ },
-      gimnasio: { /* También puedes mantener esta parte */ },
-      atletismo: { /* Esta también se conserva */ },
-
-      boxeo: {
-        "bajo peso": [
-          ["Avena y huevos", "Arroz con pollo y verduras", "Tortilla de verduras"],
-          ["Smoothie con avena", "Pasta integral con carne", "Ensalada de garbanzos"],
-          ["Tostadas con palta", "Carne magra con arroz", "Sopa de zapallo"],
-          ["Batido proteico", "Quinoa con vegetales", "Wrap de pollo"],
-          ["Fruta con yogur", "Pechuga de pollo con ensalada", "Verduras al vapor"],
-          ["Pan integral con huevo", "Arroz con atún", "Sopa liviana"],
-          ["Cereal integral con leche", "Carne con puré", "Tortilla de espinaca"]
-        ],
-        "peso normal": [
-          ["Huevos con tostadas", "Pollo a la plancha con arroz", "Sopa de verduras"],
-          ["Avena con frutas", "Carne con papas", "Ensalada de legumbres"],
-          ["Smoothie verde", "Quinoa con vegetales", "Tortilla"],
-          ["Fruta con yogur", "Arroz integral con pollo", "Wrap vegetal"],
-          ["Pan integral con queso", "Pasta integral", "Sopa de lentejas"],
-          ["Tostadas con huevo", "Carne con ensalada", "Sopa suave"],
-          ["Batido proteico", "Ensalada de atún", "Wrap de pollo"]
-        ],
-        "sobrepeso": [
-          ["Yogur bajo en grasa", "Pollo con ensalada", "Sopa ligera"],
-          ["Pan integral con palta", "Pescado con verduras", "Wrap vegetal"],
-          ["Fruta con semillas", "Tortilla vegetal", "Sopa de zapallo"],
-          ["Batido verde", "Legumbres con arroz", "Ensalada fresca"],
-          ["Infusión con tostadas", "Pechuga a la plancha", "Sopa liviana"],
-          ["Frutas", "Wrap con vegetales", "Sopa suave"],
-          ["Ensalada completa", "Puré con carne magra", "Sopa de vegetales"]
-        ]
+    const planAlimentacion = {
+      "Básquetbol": {
+        "Base": {
+          "normal": {
+            "endomorfo": [
+              "Desayuno: Avena con plátano y canela",
+              "Almuerzo: Pollo a la plancha con quinoa",
+              "Cena: Ensalada de atún con garbanzos",
+              // + más comidas variadas
+            ]
+          }
+          // + otros IMC/tipos de cuerpo
+        }
+        // + otras subdisciplinas
       },
-      "básquetbol": {
-        "bajo peso": [
-          ["Tostadas con mantequilla de maní", "Pasta con pollo", "Batido proteico"],
-          ["Avena con plátano", "Arroz con carne", "Ensalada de garbanzos"],
-          ["Smoothie con yogur", "Wrap de pollo", "Tortilla con verduras"],
-          ["Frutas con yogur", "Carne con ensalada", "Sopa de verduras"],
-          ["Cereal integral", "Pechuga grillada", "Wrap vegetal"],
-          ["Huevos con pan integral", "Quinoa con pollo", "Sopa suave"],
-          ["Batido verde", "Pasta con salsa", "Ensalada fresca"]
-        ],
-        "peso normal": [
-          ["Avena y fruta", "Pollo a la plancha", "Sopa de zapallo"],
-          ["Tostadas con aguacate", "Ensalada de atún", "Tortilla"],
-          ["Smoothie de frutas", "Carne magra con arroz", "Sopa de verduras"],
-          ["Frutas con yogur", "Pasta integral", "Wrap vegetal"],
-          ["Huevos con tostadas", "Quinoa con pollo", "Sopa liviana"],
-          ["Pan integral", "Arroz con legumbres", "Sopa de lentejas"],
-          ["Ensalada completa", "Pechuga grillada", "Sopa de verduras"]
-        ],
-        "sobrepeso": [
-          ["Yogur bajo en grasa", "Ensalada de pollo", "Sopa de vegetales"],
-          ["Pan integral", "Pescado al vapor", "Wrap vegetal"],
-          ["Fruta y semillas", "Tortilla de espinaca", "Sopa liviana"],
-          ["Batido detox", "Ensalada de garbanzos", "Sopa suave"],
-          ["Infusión con tostadas", "Pechuga con ensalada", "Wrap ligero"],
-          ["Fruta fresca", "Arroz integral", "Sopa de lentejas"],
-          ["Ensalada completa", "Sopa cremosa liviana", "Wrap de pollo"]
-        ]
-      }
+      // + otros deportes: MTB, Natación, Boxeo, Ciclismo, etc.
     };
 
-    const plan = planes[deporte] && planes[deporte][clasificacion];
-    const planDiv = document.getElementById('plan');
+    const tips = {
+      "sobrepeso": "Reduce azúcares, come más fibras, toma 2-3 litros de agua al día.",
+      "normal": "Mantén una dieta equilibrada y cuida la hidratación constante.",
+      "bajo peso": "Agrega snacks saludables entre comidas, aumenta calorías de forma nutritiva.",
+      "Ciclismo": "Consume carbohidratos antes de entrenar y electrolitos post-entreno.",
+      "Boxeo": "Alta proteína para recuperación, mucha hidratación tras los rounds.",
+      "Buceo": "Evita comidas pesadas antes de bucear, hidrátate antes y después.",
+      // Más según deporte
+    };
 
-    if (plan) {
-      for (let i = 0; i < 7; i++) {
-        const dia = document.createElement('div');
-        dia.className = 'dia';
-        dia.innerHTML = `
-          <h3>Día ${i + 1}</h3>
-          <p><strong>Desayuno:</strong> ${plan[i][0]}</p>
-          <p><strong>Almuerzo:</strong> ${plan[i][1]}</p>
-          <p><strong>Cena:</strong> ${plan[i][2]}</p>
-        `;
-        planDiv.appendChild(dia);
-      }
-    } else {
-      planDiv.innerHTML = `<p>No hay plan alimenticio aún para el deporte seleccionado: <strong>${deporte}</strong>. Estamos trabajando para incluirlo.</p>`;
+    function getDatos() {
+      const deporte = localStorage.getItem("deporte");
+      const disciplina = localStorage.getItem("disciplina");
+      const imcCategoria = localStorage.getItem("imcCategoria"); // bajo peso, normal, sobrepeso
+      const tipoCuerpo = localStorage.getItem("tipoCuerpo");     // endomorfo, etc.
+      const nombre = localStorage.getItem("nombre");
+
+      return { deporte, disciplina, imcCategoria, tipoCuerpo, nombre };
     }
 
-    document.getElementById('volverMenu').addEventListener('click', () => {
-      window.location.href = 'menu.html';
-    });
+    function mostrarPlan() {
+      const { deporte, disciplina, imcCategoria, tipoCuerpo, nombre } = getDatos();
+
+      const info = `
+        <h2>Hola ${nombre},</h2>
+        <p>Deporte: <strong>${deporte} (${disciplina})</strong></p>
+        <p>IMC: <strong>${imcCategoria}</strong></p>
+        <p>Tipo de cuerpo: <strong>${tipoCuerpo}</strong></p>
+      `;
+      document.getElementById("infoUsuario").innerHTML = info;
+
+      const comidas = (planAlimentacion[deporte] &&
+                      planAlimentacion[deporte][disciplina] &&
+                      planAlimentacion[deporte][disciplina][imcCategoria] &&
+                      planAlimentacion[deporte][disciplina][imcCategoria][tipoCuerpo]) || [];
+
+      const comidasHtml = comidas.length
+        ? comidas.map((c, i) => `<p><strong>Día ${Math.floor(i/3)+1}</strong> – ${c}</p>`).join("")
+        : "<p>Estamos generando tu plan. Vuelve pronto para verlo completo.</p>";
+
+      document.getElementById("planAlimentacion").innerHTML = `
+        <h3>Plan de alimentación personalizado</h3>
+        ${comidasHtml}
+      `;
+
+      const tipsFinal = [
+        tips[imcCategoria] || "",
+        tips[deporte] || "",
+      ].filter(Boolean).join("<br>");
+
+      document.getElementById("tipsSalud").innerHTML = `
+        <h3>Tips de salud</h3>
+        <p>${tipsFinal}</p>
+      `;
+    }
+
+    function toggleTheme() {
+      const isDark = document.body.style.getPropertyValue('--bg-color') !== "#ffffff";
+      document.body.style.setProperty('--bg-color', isDark ? '#ffffff' : '#121212');
+      document.body.style.setProperty('--text-color', isDark ? '#000' : '#fff');
+    }
+
+    mostrarPlan();
   </script>
 </body>
 </html>
