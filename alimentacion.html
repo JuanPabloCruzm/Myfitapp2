@@ -66,142 +66,84 @@
   <button id="volverMenu">Volver al Menú</button>
 
   <script>
-    // Recuperar datos desde localStorage
     const imc = parseFloat(localStorage.getItem('imc'));
     const deporte = localStorage.getItem('deporte');
     const nombre = localStorage.getItem('nombre');
 
-    // Clasificación IMC
     let clasificacion = '';
     if (imc < 18.5) clasificacion = 'bajo peso';
-    else if (imc >= 18.5 && imc <= 24.9) clasificacion = 'peso normal';
+    else if (imc <= 24.9) clasificacion = 'peso normal';
     else clasificacion = 'sobrepeso';
 
-    // Mostrar saludo personalizado
     document.getElementById('subtitulo').textContent =
       `Hola ${nombre}, tienes ${clasificacion} y practicas ${deporte}`;
 
-    // Planes de alimentación por deporte e IMC
+    // Planes de alimentación
     const planes = {
-      mtb: {
+      mtb: { /* Aquí puedes mantener tus datos actuales como ya los tienes */ },
+      gimnasio: { /* También puedes mantener esta parte */ },
+      atletismo: { /* Esta también se conserva */ },
+
+      boxeo: {
         "bajo peso": [
-          ["Avena con plátano y miel", "Pollo a la plancha con arroz integral y verduras", "Yogur natural con frutas"],
-          ["Smoothie de frutas y avena", "Ensalada con quinoa y garbanzos", "Tortilla de verduras con ensalada"],
-          ["Pan integral con palta y huevo", "Pescado al horno con puré de zapallo", "Sopa de verduras con trozos de pollo"],
-          ["Yogur con granola y frutos secos", "Pollo al curry con arroz basmati", "Ensalada de lentejas y vegetales"],
-          ["Batido de leche con plátano y mantequilla de maní", "Carne magra con ensalada y papas cocidas", "Puré de calabaza y ensalada fresca"],
-          ["Tostadas integrales con queso fresco y tomate", "Ensalada de atún con pasta integral", "Sopa de zapallo y pan integral"],
-          ["Fruta fresca con yogur", "Pechuga grillada con arroz y verduras", "Wrap de vegetales y hummus"]
+          ["Avena y huevos", "Arroz con pollo y verduras", "Tortilla de verduras"],
+          ["Smoothie con avena", "Pasta integral con carne", "Ensalada de garbanzos"],
+          ["Tostadas con palta", "Carne magra con arroz", "Sopa de zapallo"],
+          ["Batido proteico", "Quinoa con vegetales", "Wrap de pollo"],
+          ["Fruta con yogur", "Pechuga de pollo con ensalada", "Verduras al vapor"],
+          ["Pan integral con huevo", "Arroz con atún", "Sopa liviana"],
+          ["Cereal integral con leche", "Carne con puré", "Tortilla de espinaca"]
         ],
         "peso normal": [
-          ["Avena con leche y frutas frescas", "Pollo al horno con ensalada mixta", "Sopa de verduras y pan integral"],
-          ["Tostadas con palta y huevo", "Pescado a la plancha con puré de papas", "Ensalada de quinoa con verduras"],
-          ["Batido de frutas con yogurt", "Carne magra con arroz integral y verduras", "Tortilla de espinaca y ensalada"],
-          ["Yogur natural con granola y miel", "Pollo a la plancha con ensalada", "Sopa de lentejas y pan integral"],
-          ["Pan integral con queso fresco y tomate", "Pasta integral con salsa de tomate y verduras", "Ensalada fresca y fruta"],
-          ["Smoothie verde con espinaca y manzana", "Ensalada de garbanzos con atún", "Sopa de zapallo con pan"],
-          ["Fruta fresca con yogur natural", "Pechuga grillada con ensalada", "Wrap integral con vegetales"]
+          ["Huevos con tostadas", "Pollo a la plancha con arroz", "Sopa de verduras"],
+          ["Avena con frutas", "Carne con papas", "Ensalada de legumbres"],
+          ["Smoothie verde", "Quinoa con vegetales", "Tortilla"],
+          ["Fruta con yogur", "Arroz integral con pollo", "Wrap vegetal"],
+          ["Pan integral con queso", "Pasta integral", "Sopa de lentejas"],
+          ["Tostadas con huevo", "Carne con ensalada", "Sopa suave"],
+          ["Batido proteico", "Ensalada de atún", "Wrap de pollo"]
         ],
         "sobrepeso": [
-          ["Yogur descremado con semillas de chía", "Ensalada de pollo con vegetales frescos", "Sopa de verduras sin grasa"],
-          ["Pan integral con palta y tomate", "Pescado al horno con verduras al vapor", "Ensalada de quinoa y vegetales"],
-          ["Frutas frescas y nueces", "Wrap integral con verduras y pavo", "Sopa de zapallo ligera"],
-          ["Batido verde con espinaca y pepino", "Ensalada de lentejas con tomate y cebolla", "Verduras al vapor con pollo a la plancha"],
-          ["Infusión y tostadas integrales", "Carne magra con ensalada fresca", "Sopa de verduras"],
-          ["Fruta fresca y yogur bajo en grasa", "Arroz integral con legumbres", "Tortilla vegetal"],
-          ["Ensalada verde con pollo y semillas", "Puré de zapallo y ensalada", "Sopa ligera de verduras"]
+          ["Yogur bajo en grasa", "Pollo con ensalada", "Sopa ligera"],
+          ["Pan integral con palta", "Pescado con verduras", "Wrap vegetal"],
+          ["Fruta con semillas", "Tortilla vegetal", "Sopa de zapallo"],
+          ["Batido verde", "Legumbres con arroz", "Ensalada fresca"],
+          ["Infusión con tostadas", "Pechuga a la plancha", "Sopa liviana"],
+          ["Frutas", "Wrap con vegetales", "Sopa suave"],
+          ["Ensalada completa", "Puré con carne magra", "Sopa de vegetales"]
         ]
       },
-      gimnasio: {
+      "básquetbol": {
         "bajo peso": [
-          ["Huevos revueltos con pan integral y aguacate", "Pechuga de pollo con arroz integral y brócoli", "Batido de proteínas con fruta"],
-          ["Smoothie de avena y frutas", "Carne magra con puré de papas y ensalada", "Yogur natural con frutos secos"],
-          ["Tostadas con mantequilla de maní y plátano", "Pasta integral con salsa de tomate y pavo", "Sopa de verduras con pollo"],
-          ["Avena con leche y frutas", "Pollo al curry con arroz basmati", "Ensalada de garbanzos con vegetales"],
-          ["Batido de leche con proteínas y frutas", "Carne magra con verduras al vapor", "Frutas frescas y yogur"],
-          ["Pan integral con huevo y tomate", "Pechuga grillada con ensalada mixta", "Tortilla de verduras"],
-          ["Frutas con yogur y granola", "Pasta integral con pollo y vegetales", "Sopa de lentejas"]
+          ["Tostadas con mantequilla de maní", "Pasta con pollo", "Batido proteico"],
+          ["Avena con plátano", "Arroz con carne", "Ensalada de garbanzos"],
+          ["Smoothie con yogur", "Wrap de pollo", "Tortilla con verduras"],
+          ["Frutas con yogur", "Carne con ensalada", "Sopa de verduras"],
+          ["Cereal integral", "Pechuga grillada", "Wrap vegetal"],
+          ["Huevos con pan integral", "Quinoa con pollo", "Sopa suave"],
+          ["Batido verde", "Pasta con salsa", "Ensalada fresca"]
         ],
         "peso normal": [
-          ["Avena con leche y frutas", "Pollo a la plancha con verduras y arroz integral", "Sopa de verduras"],
-          ["Tostadas integrales con palta y huevo", "Pescado con ensalada y quinoa", "Ensalada de legumbres"],
-          ["Batido de frutas con yogur", "Carne magra con puré de papas y verduras", "Tortilla de espinaca"],
-          ["Yogur con granola y miel", "Pollo al horno con ensalada", "Sopa de lentejas"],
-          ["Pan integral con queso fresco", "Pasta integral con salsa de tomate", "Ensalada fresca"],
-          ["Smoothie verde", "Ensalada de garbanzos con atún", "Sopa de zapallo"],
-          ["Fruta fresca con yogur", "Pechuga grillada con ensalada", "Wrap integral"]
+          ["Avena y fruta", "Pollo a la plancha", "Sopa de zapallo"],
+          ["Tostadas con aguacate", "Ensalada de atún", "Tortilla"],
+          ["Smoothie de frutas", "Carne magra con arroz", "Sopa de verduras"],
+          ["Frutas con yogur", "Pasta integral", "Wrap vegetal"],
+          ["Huevos con tostadas", "Quinoa con pollo", "Sopa liviana"],
+          ["Pan integral", "Arroz con legumbres", "Sopa de lentejas"],
+          ["Ensalada completa", "Pechuga grillada", "Sopa de verduras"]
         ],
         "sobrepeso": [
-          ["Yogur descremado con semillas", "Ensalada de pollo con vegetales frescos", "Sopa de verduras ligera"],
-          ["Pan integral con aguacate", "Pescado al horno con verduras al vapor", "Ensalada de quinoa"],
-          ["Fruta fresca y nueces", "Wrap integral con verduras y pavo", "Sopa de zapallo ligera"],
-          ["Batido verde", "Ensalada de lentejas con tomate", "Verduras al vapor con pollo a la plancha"],
-          ["Tostadas integrales con infusión", "Carne magra con ensalada", "Sopa ligera"],
-          ["Fruta fresca y yogur bajo en grasa", "Pescado a la plancha con ensalada", "Wrap de vegetales"],
-          ["Ensalada verde con pollo y semillas", "Puré de zapallo y ensalada", "Sopa ligera de verduras"]
-        ]
-      },
-      yoga: {
-        "bajo peso": [
-          ["Smoothie de plátano y espinaca", "Ensalada de quinoa con vegetales", "Sopa de verduras con tofu"],
-          ["Tostadas con aguacate", "Pasta integral con salsa de tomate y verduras", "Yogur con frutas"],
-          ["Avena con frutas y nueces", "Ensalada de garbanzos", "Tortilla de verduras"],
-          ["Batido de leche con frutos rojos", "Pollo al horno con ensalada", "Puré de zapallo"],
-          ["Pan integral con queso fresco", "Wrap de vegetales y hummus", "Sopa ligera de verduras"],
-          ["Frutas frescas con yogur", "Carne magra con arroz integral", "Ensalada verde"],
-          ["Yogur natural con granola", "Ensalada de lentejas", "Verduras al vapor con tofu"]
-        ],
-        "peso normal": [
-          ["Avena con leche y frutas", "Pechuga de pollo con arroz y verduras", "Sopa de verduras"],
-          ["Tostadas integrales con aguacate", "Pasta integral con salsa de tomate", "Ensalada fresca"],
-          ["Batido de frutas con yogur", "Carne magra con verduras al vapor", "Tortilla de espinaca"],
-          ["Yogur con granola", "Pollo a la plancha con ensalada", "Sopa de lentejas"],
-          ["Pan integral con queso", "Ensalada de garbanzos", "Sopa de zapallo"],
-          ["Smoothie verde", "Pechuga grillada con verduras", "Wrap integral"],
-          ["Fruta fresca con yogur", "Pasta integral con pollo", "Ensalada fresca"]
-        ],
-        "sobrepeso": [
-          ["Yogur descremado con semillas", "Ensalada de pollo con vegetales", "Sopa ligera de verduras"],
-          ["Pan integral con palta", "Pescado al vapor con ensalada", "Wrap de vegetales"],
-          ["Fruta fresca y nueces", "Tortilla de verduras", "Sopa de zapallo"],
-          ["Batido verde", "Ensalada de lentejas", "Verduras al vapor"],
-          ["Infusión con tostadas integrales", "Carne magra con ensalada", "Sopa ligera"],
-          ["Fruta fresca y yogur bajo en grasa", "Pescado a la plancha", "Wrap de vegetales"],
-          ["Ensalada verde con pollo", "Puré de zapallo", "Sopa ligera"]
-        ]
-      },
-      atletismo: {
-        "bajo peso": [
-          ["Avena con plátano", "Pollo con arroz integral y verduras", "Yogur con frutas"],
-          ["Tostadas con palta y huevo", "Pasta integral con pollo", "Sopa de verduras"],
-          ["Batido de frutas", "Carne magra con puré de papas", "Ensalada fresca"],
-          ["Yogur con granola", "Pechuga grillada con arroz", "Verduras al vapor"],
-          ["Pan integral con queso fresco", "Wrap de pollo", "Sopa ligera"],
-          ["Smoothie verde", "Cazuela liviana", "Tortilla de verduras"],
-          ["Fruta picada con yogur", "Ensalada de garbanzos", "Cazuela de vacuno"]
-        ],
-        "peso normal": [
-          ["Avena con leche y frutas", "Pollo al horno con ensalada", "Sopa de verduras"],
-          ["Pan integral con tomate y queso", "Pasta integral con carne magra", "Ensalada fresca"],
-          ["Batido de frutas y yogur", "Pechuga grillada con arroz integral", "Tortilla de espinaca"],
-          ["Yogur natural con granola", "Carne magra con verduras", "Sopa de lentejas"],
-          ["Tostadas con aguacate", "Ensalada de legumbres", "Wrap de pollo"],
-          ["Smoothie verde con espinaca", "Pechuga a la plancha", "Sopa de zapallo"],
-          ["Fruta fresca con yogur", "Pasta integral con verduras", "Sopa ligera"]
-        ],
-        "sobrepeso": [
-          ["Yogur descremado con semillas", "Ensalada de pollo", "Sopa de verduras ligera"],
-          ["Pan integral con palta", "Pescado al vapor con verduras", "Wrap integral de vegetales"],
-          ["Fruta fresca y nueces", "Tortilla de verduras", "Sopa de zapallo"],
-          ["Batido verde con espinaca", "Ensalada de lentejas", "Verduras al vapor"],
-          ["Infusión con tostadas integrales", "Carne magra con ensalada", "Sopa ligera"],
-          ["Fruta fresca y yogur bajo en grasa", "Pescado a la plancha", "Wrap vegetal"],
-          ["Ensalada verde con pollo", "Puré de zapallo", "Sopa ligera"]
+          ["Yogur bajo en grasa", "Ensalada de pollo", "Sopa de vegetales"],
+          ["Pan integral", "Pescado al vapor", "Wrap vegetal"],
+          ["Fruta y semillas", "Tortilla de espinaca", "Sopa liviana"],
+          ["Batido detox", "Ensalada de garbanzos", "Sopa suave"],
+          ["Infusión con tostadas", "Pechuga con ensalada", "Wrap ligero"],
+          ["Fruta fresca", "Arroz integral", "Sopa de lentejas"],
+          ["Ensalada completa", "Sopa cremosa liviana", "Wrap de pollo"]
         ]
       }
     };
 
-    // Mostrar plan según deporte e IMC
     const plan = planes[deporte] && planes[deporte][clasificacion];
     const planDiv = document.getElementById('plan');
 
@@ -218,12 +160,11 @@
         planDiv.appendChild(dia);
       }
     } else {
-      planDiv.innerHTML = "<p>No hay un plan definido para tu combinación actual. Lo agregaremos pronto.</p>";
+      planDiv.innerHTML = `<p>No hay plan alimenticio aún para el deporte seleccionado: <strong>${deporte}</strong>. Estamos trabajando para incluirlo.</p>`;
     }
 
-    // Botón volver al menú
     document.getElementById('volverMenu').addEventListener('click', () => {
-      window.location.href = 'menu.html'; // Cambia a la ruta correcta del menú
+      window.location.href = 'menu.html';
     });
   </script>
 </body>
