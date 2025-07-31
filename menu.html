@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -16,18 +16,18 @@
     }
 
     h1 {
-      color: #1e88e5; /* azul marino */
+      color: #e0e0e0;
       font-weight: 700;
       margin-bottom: 40px;
-      text-shadow: 0 0 10px #1565c0;
+      text-shadow: 0 0 10px #222;
     }
 
     .info {
-      background-color: #1e1e2f; /* azul muy oscuro */
+      background-color: #1a1a1a;
       border-radius: 12px;
       padding: 25px 20px;
       margin-bottom: 30px;
-      box-shadow: 0 0 15px rgba(30, 40, 63, 0.7);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
       max-width: 600px;
       margin-left: auto;
       margin-right: auto;
@@ -43,7 +43,7 @@
     .tipo-cuerpo-desc {
       margin-top: 10px;
       font-style: italic;
-      color: #a0b0d0;
+      color: #bbb;
       font-size: 0.95em;
       min-height: 50px;
     }
@@ -58,23 +58,23 @@
       font-weight: 700;
       border: none;
       border-radius: 10px;
-      background-color: #607d8b; /* gris azulado neutro */
+      background-color: #2e2e2e; /* gris oscuro elegante */
       color: #f0f0f0;
       cursor: pointer;
-      box-shadow: 0 0 10px #455a64;
+      box-shadow: 0 0 10px #1a1a1a;
       transition: background-color 0.3s, box-shadow 0.3s;
       user-select: none;
     }
 
     .button:hover {
-      background-color: #455a64; /* más oscuro en hover */
-      box-shadow: 0 0 20px #2c3e50;
+      background-color: #3c3c3c;
+      box-shadow: 0 0 20px #000000;
     }
 
     .footer {
       margin-top: 40px;
       font-size: 14px;
-      color: #888ea8;
+      color: #777;
       user-select: none;
     }
   </style>
@@ -118,10 +118,8 @@
       "ectomorfo": "Cuerpo delgado, metabolismo rápido y dificultad para ganar peso o músculo."
     };
 
-    // Normalizamos la cadena para buscar (minúsculas y sin espacios extras)
     const tipoCuerpoKey = tipoCuerpoRaw.trim().toLowerCase();
     const descripcion = descripciones[tipoCuerpoKey] || "Tipo de cuerpo no especificado.";
-
     document.getElementById("descTipoCuerpo").textContent = descripcion;
   </script>
 </body>
