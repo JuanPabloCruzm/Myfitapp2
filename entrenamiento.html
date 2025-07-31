@@ -2,167 +2,100 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Plan de Entrenamiento</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuración de Entrenamiento</title>
+  <link rel="icon" href="favicon.ico">
   <style>
     body {
       background-color: #121212;
       color: #eee;
       font-family: 'Segoe UI', sans-serif;
+      margin: 0;
       padding: 20px;
     }
-
     h1, h2 {
-      color: #ffffff;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: auto;
-    }
-
-    .day {
-      background-color: #1e1e1e;
-      padding: 15px;
-      margin: 15px 0;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #00000088;
-    }
-
-    .back-button {
-      margin-top: 20px;
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #333;
-      color: #eee;
-      text-decoration: none;
-      border-radius: 8px;
-      transition: background-color 0.3s ease;
-    }
-
-    .back-button:hover {
-      background-color: #555;
-    }
-
-    footer {
       text-align: center;
-      margin-top: 40px;
-      font-size: 14px;
+    }
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #1e1e1e;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+    }
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: bold;
+    }
+    select, input[type="radio"] {
+      margin-bottom: 15px;
+    }
+    .radio-group {
+      margin-bottom: 20px;
+    }
+    .radio-group label {
+      font-weight: normal;
+      margin-right: 20px;
+    }
+    button {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      background-color: #03DAC5;
+      color: #000;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #00bfa5;
+    }
+    .branding {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.9em;
       color: #aaa;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1 id="saludo"></h1>
-    <h2>Tu plan de entrenamiento personalizado (7 días)</h2>
-    <div id="rutinaContainer"></div>
-    <a href="menu.html" class="back-button">Volver al menú</a>
-    <footer>By: Juan Pablo Cruz</footer>
+    <h1>Entrenamiento Personalizado</h1>
+
+    <h2>Juan Pablo – MTB / Downhill</h2>
+
+    <form action="entrenamiento.html">
+      <label>¿Cuántas horas entrenas a la semana?</label>
+      <div class="radio-group">
+        <label><input type="radio" name="horas" value="<1"> Menos de 1 hora</label>
+        <label><input type="radio" name="horas" value="1-3"> 1 a 3 horas</label>
+        <label><input type="radio" name="horas" value="3-6"> 3 a 6 horas</label>
+        <label><input type="radio" name="horas" value=">6"> Más de 6 horas</label>
+      </div>
+
+      <label>Nivel en la disciplina</label>
+      <div class="radio-group">
+        <label><input type="radio" name="nivel" value="principiante"> Principiante</label>
+        <label><input type="radio" name="nivel" value="intermedio"> Intermedio</label>
+        <label><input type="radio" name="nivel" value="avanzado"> Avanzado</label>
+      </div>
+
+      <label>Objetivo principal</label>
+      <select name="objetivo">
+        <option value="">Selecciona un objetivo (opcional)</option>
+        <option value="bajar_peso">Bajar de peso</option>
+        <option value="resistencia">Ganar resistencia</option>
+        <option value="tecnica">Mejorar técnica</option>
+        <option value="musculo">Ganar masa muscular</option>
+        <option value="mantener">Recuperación / Mantenimiento</option>
+      </select>
+
+      <button type="submit">Generar rutina semanal personalizada</button>
+    </form>
+
+    <div class="branding">By: Juan Pablo Cruz</div>
   </div>
-
-  <script>
-    const nombre = localStorage.getItem("nombre") || "";
-    const tipoCuerpo = localStorage.getItem("tipoCuerpo");
-    const imc = parseFloat(localStorage.getItem("imc"));
-    const deporte = localStorage.getItem("deporte");
-    const disciplina = localStorage.getItem("disciplina") || "";
-
-    // Saludo
-    const saludo = document.getElementById("saludo");
-    saludo.textContent = `Hola ${nombre}, este es tu plan para ${deporte} (${disciplina})`;
-
-    const rutinaContainer = document.getElementById("rutinaContainer");
-
-    function generarRutina() {
-      let rutina = [];
-
-      // 🚴‍♂️ Ciclismo - Ruta (Ejemplo completo)
-      if (deporte === "Ciclismo" && disciplina === "Ruta") {
-        if (tipoCuerpo === "Ectomorfo" && imc < 18.5) {
-          rutina = [
-            "Día 1: Rodaje suave 30 min + técnica de pedaleo",
-            "Día 2: Core + movilidad (30 min)",
-            "Día 3: Salida 45 min en terreno plano",
-            "Día 4: Descanso activo (caminar 20 min)",
-            "Día 5: Intervalos 3x3min a ritmo alto + 2 min recuperación",
-            "Día 6: Rodaje largo 1h a ritmo moderado",
-            "Día 7: Estiramientos + rodillo suave"
-          ];
-        } else {
-          rutina = [
-            "Día 1: Rodaje base 60 min",
-            "Día 2: Fuerza tren inferior",
-            "Día 3: Subidas cortas y sprints",
-            "Día 4: Descanso",
-            "Día 5: Series largas 3x10 min",
-            "Día 6: Rodaje 90 min",
-            "Día 7: Estiramiento"
-          ];
-        }
-      }
-
-      // 🥊 Boxeo
-      if (deporte === "Boxeo") {
-        rutina = [
-          "Día 1: Técnica de golpeo + sombra 30 min",
-          "Día 2: Saltar la cuerda + abdominales",
-          "Día 3: Sparring suave + movilidad",
-          "Día 4: Descanso activo",
-          "Día 5: Circuito de resistencia",
-          "Día 6: Trabajo de reflejos + saco",
-          "Día 7: Estiramientos y recuperación"
-        ];
-      }
-
-      // 🏀 Básquetbol
-      if (deporte === "Básquetbol") {
-        rutina = [
-          "Día 1: Tiros y dribbling",
-          "Día 2: Tren inferior + saltos",
-          "Día 3: Juego de pies + táctica",
-          "Día 4: Descanso activo",
-          "Día 5: Sprint y reacción",
-          "Día 6: Partido amistoso o práctica intensa",
-          "Día 7: Estiramientos + foam roller"
-        ];
-      }
-
-      // ⚽ Fútbol
-      if (deporte === "Fútbol") {
-        rutina = [
-          "Día 1: Técnica de pase y control",
-          "Día 2: Velocidad + coordinación",
-          "Día 3: Simulación de partido",
-          "Día 4: Recuperación activa",
-          "Día 5: Potencia + tiros",
-          "Día 6: Entrenamiento táctico",
-          "Día 7: Estiramiento y análisis"
-        ];
-      }
-
-      // Si no se encuentra rutina específica
-      if (rutina.length === 0) {
-        rutina = [
-          "Día 1: Movilidad general (30 min)",
-          "Día 2: Cardio moderado (45 min)",
-          "Día 3: Entrenamiento funcional",
-          "Día 4: Descanso activo (caminar, bici)",
-          "Día 5: Core y elasticidad",
-          "Día 6: Cardio largo (60 min)",
-          "Día 7: Estiramiento total"
-        ];
-      }
-
-      rutina.forEach((item, index) => {
-        const dayDiv = document.createElement("div");
-        dayDiv.classList.add("day");
-        dayDiv.innerHTML = `<h3>Día ${index + 1}</h3><p>${item}</p>`;
-        rutinaContainer.appendChild(dayDiv);
-      });
-    }
-
-    generarRutina();
-  </script>
 </body>
 </html>
