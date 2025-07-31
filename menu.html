@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -102,25 +102,27 @@
     const edad = localStorage.getItem("edad") || "";
     const peso = localStorage.getItem("peso") || "";
     const altura = localStorage.getItem("altura") || "";
-    const tipoCuerpo = localStorage.getItem("tipoCuerpo") || "";
+    const tipoCuerpoRaw = localStorage.getItem("tipoCuerpo") || "";
     const imc = localStorage.getItem("imc") || "";
 
     document.getElementById("edad").textContent = edad;
     document.getElementById("peso").textContent = peso;
     document.getElementById("altura").textContent = altura;
-    document.getElementById("tipoCuerpo").textContent = tipoCuerpo;
+    document.getElementById("tipoCuerpo").textContent = tipoCuerpoRaw;
     document.getElementById("imc").textContent = imc;
 
-    // Descripciones breves para cada tipo de cuerpo
+    // Descripciones breves para cada tipo de cuerpo (claves en minúsculas)
     const descripciones = {
-      "Endomorfo": "Cuerpo con tendencia a acumular grasa, metabolismo lento y estructura más ancha.",
-      "Mesomorfo": "Cuerpo atlético, musculoso y con facilidad para ganar masa muscular.",
-      "Ectomorfo": "Cuerpo delgado, metabolismo rápido y dificultad para ganar peso o músculo."
+      "endomorfo": "Cuerpo con tendencia a acumular grasa, metabolismo lento y estructura más ancha.",
+      "mesomorfo": "Cuerpo atlético, musculoso y con facilidad para ganar masa muscular.",
+      "ectomorfo": "Cuerpo delgado, metabolismo rápido y dificultad para ganar peso o músculo."
     };
 
-    const descTipoCuerpo = descripciones[tipoCuerpo] || "Tipo de cuerpo no especificado.";
+    // Normalizamos la cadena para buscar (minúsculas y sin espacios extras)
+    const tipoCuerpoKey = tipoCuerpoRaw.trim().toLowerCase();
+    const descripcion = descripciones[tipoCuerpoKey] || "Tipo de cuerpo no especificado.";
 
-    document.getElementById("descTipoCuerpo").textContent = descTipoCuerpo;
+    document.getElementById("descTipoCuerpo").textContent = descripcion;
   </script>
 </body>
 </html>
