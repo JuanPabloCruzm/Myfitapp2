@@ -2,55 +2,83 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Bienvenido a Mi FitApp</title>
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menú Principal</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <style>
     body {
-      margin: 0;
-      padding: 0;
       background-color: #121212;
       color: #ffffff;
       font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      text-align: center;
+      padding: 20px;
     }
+
     h1 {
-      font-size: 2.5em;
-      margin-bottom: 40px;
+      color: #00ffff;
     }
-    button {
-      padding: 15px 30px;
-      font-size: 1.2em;
-      background-color: #1f1f1f;
-      color: #fff;
-      border: 2px solid #fff;
+
+    .info {
+      background-color: #1e1e1e;
       border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .button {
+      display: block;
+      width: 80%;
+      max-width: 300px;
+      margin: 10px auto;
+      padding: 15px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background-color: #00ffff;
+      color: #000;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: background 0.3s;
     }
-    button:hover {
-      background-color: #333;
+
+    .button:hover {
+      background-color: #00cccc;
     }
+
     .footer {
-      position: absolute;
-      bottom: 20px;
-      font-size: 0.9em;
-      color: #aaa;
+      margin-top: 30px;
+      font-size: 14px;
+      color: #999;
     }
   </style>
 </head>
 <body>
+  <h1>Menú Principal</h1>
 
-  <h1>Bienvenido/a a Mi FitApp</h1>
+  <div class="info">
+    <p><strong>Edad:</strong> <span id="edad"></span> años</p>
+    <p><strong>Peso:</strong> <span id="peso"></span> kg</p>
+    <p><strong>Altura:</strong> <span id="altura"></span> m</p>
+    <p><strong>Tipo de cuerpo:</strong> <span id="tipoCuerpo"></span></p>
+    <p><strong>IMC:</strong> <span id="imc"></span></p>
+  </div>
 
-  <a href="nombreSexo.html">
-    <button>Comenzar</button>
-  </a>
+  <button class="button" onclick="window.location.href='alimentacion.html'">Plan de Alimentación</button>
+  <button class="button" onclick="window.location.href='entrenamiento.html'">Plan de Entrenamiento</button>
+  <button class="button" onclick="window.location.href='deporte.html'">Volver a Selección de Deporte</button>
 
   <div class="footer">By: Juan Pablo Cruz</div>
 
+  <script>
+    // Recuperar datos del localStorage
+    document.getElementById("edad").textContent = localStorage.getItem("edad") || "";
+    document.getElementById("peso").textContent = localStorage.getItem("peso") || "";
+    document.getElementById("altura").textContent = localStorage.getItem("altura") || "";
+    document.getElementById("tipoCuerpo").textContent = localStorage.getItem("tipoCuerpo") || "";
+    document.getElementById("imc").textContent = localStorage.getItem("imc") || "";
+  </script>
 </body>
 </html>
