@@ -6,140 +6,142 @@
   <link rel="icon" href="favicon.ico" />
   <style>
     body {
-      background-color: #0e0e0e;
-      color: #f1f1f1;
+      background-color: #121212;
+      color: #f0f0f0;
       font-family: 'Segoe UI', sans-serif;
-      margin: 0;
       padding: 20px;
+      margin: 0;
     }
-
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
     h1, h2 {
       color: #ffffff;
     }
-
-    .container {
-      max-width: 800px;
-      margin: auto;
-      padding: 20px;
-      background-color: #1a1a1a;
-      border-radius: 8px;
-      box-shadow: 0 0 10px #000;
-    }
-
     .plan-dia {
-      background-color: #2a2a2a;
-      border: 1px solid #444;
+      background-color: #1f1f1f;
       padding: 15px;
-      border-radius: 5px;
-      margin-bottom: 20px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
     }
-
-    .plan-dia h3 {
-      margin-top: 0;
-      color: #ccc;
-    }
-
-    button {
-      background-color: #333;
-      color: #eee;
-      padding: 12px 20px;
+    .volver {
+      margin-top: 30px;
+      display: inline-block;
+      background-color: #2c2c2c;
+      color: #ffffff;
+      padding: 10px 18px;
       border: none;
-      border-radius: 5px;
-      cursor: pointer;
+      border-radius: 6px;
+      text-decoration: none;
       font-size: 16px;
-      margin-top: 20px;
     }
-
-    button:hover {
-      background-color: #555;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 40px;
-      color: #777;
-      font-size: 14px;
-    }
-
-    @media (max-width: 600px) {
-      .container {
-        padding: 10px;
-      }
-
-      button {
-        width: 100%;
-      }
+    .volver:hover {
+      background-color: #3e3e3e;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Entrenamiento Personalizado</h1>
-    <div id="planEntrenamiento">
-      <!-- Aquí se insertará el plan generado por JS -->
-    </div>
-
-    <button onclick="window.location.href='menu.html'">Volver al Menú</button>
-
-    <footer>By: Juan Pablo Cruz</footer>
+    <h1>Tu Entrenamiento Personalizado</h1>
+    <div id="entrenamiento"></div>
+    <a class="volver" href="menu.html">Volver al Menú Principal</a>
+    <p style="margin-top: 50px;">By: Juan Pablo Cruz</p>
   </div>
 
   <script>
-    // Obtener datos almacenados
-    const datosUsuario = JSON.parse(localStorage.getItem("usuario")) || {};
-    const deporte = localStorage.getItem("deporte") || "No especificado";
-    const subdisciplina = localStorage.getItem("disciplina") || "No especificado";
-    const imc = parseFloat(localStorage.getItem("imc")) || 0;
-    const tipoCuerpo = localStorage.getItem("tipoCuerpo") || "ectomorfo";
-    const edad = parseInt(datosUsuario.edad || 25);
-    const sexo = datosUsuario.sexo || "masculino";
-    const horas = localStorage.getItem("horasPorSemana") || "2-5";
-    const dias = parseInt(localStorage.getItem("diasEntrenamiento")) || 4;
+    const datos = {
+      edad: localStorage.getItem('edad'),
+      imc: localStorage.getItem('imc'),
+      tipoCuerpo: localStorage.getItem('tipoCuerpo'),
+      deporte: localStorage.getItem('deporte'),
+      disciplina: localStorage.getItem('disciplina'),
+      horasSemanales: localStorage.getItem('horasSemanales')
+    };
 
-    function generarEntrenamiento(dia) {
-      // Puedes expandir esta función para generar rutinas aún más detalladas
-      const base = `${deporte} - ${subdisciplina}`;
-      const intensidad = (imc > 25) ? "enfocado en pérdida de grasa y técnica" :
-                        (imc < 18.5) ? "orientado a ganar masa y coordinación" :
-                        "balanceado con énfasis en rendimiento";
+    const planes = {
+      "MTB_Enduro_endomorfo_sobrepeso": [
+        "Día 1: Técnica en bajadas + movilidad articular (1h30)",
+        "Día 2: Rodillo indoor + fuerza tren inferior en gimnasio",
+        "Día 3: Descanso activo (yoga o natación regenerativa)",
+        "Día 4: Subidas prolongadas + core",
+        "Día 5: Día de resistencia en trail técnico (2h)",
+        "Día 6: Gimnasio: tren superior y propiocepción",
+        "Día 7: Rodaje largo + estiramientos + crioterapia"
+      ],
+      "natacion_pecho_mesomorfo_pesoNormal": [
+        "Día 1: Técnica + series 8x50 ritmo progresivo",
+        "Día 2: Trabajo de piernas y coordinación con tabla",
+        "Día 3: Gimnasio (resistencia + fuerza específica)",
+        "Día 4: Series 6x100 estilo con pausa controlada",
+        "Día 5: Descanso activo: caminata o bici suave",
+        "Día 6: Test de velocidad y técnica (grabarte)",
+        "Día 7: Entreno cruzado: HIIT fuera del agua"
+      ],
+      "gimnasio_fuerza_ectomorfo_bajoPeso": [
+        "Día 1: Tren superior (pecho + espalda) + abdomen",
+        "Día 2: Tren inferior (sentadillas + peso muerto)",
+        "Día 3: Cardio suave + movilidad",
+        "Día 4: Full body + hipertrofia moderada",
+        "Día 5: Descanso total o sauna + stretching",
+        "Día 6: Tren superior (hombros + brazos) + core",
+        "Día 7: Yoga o natación suave regenerativa"
+      ],
+      "futbol_delantero_endomorfo_pesoNormal": [
+        "Día 1: Técnica de definición + gimnasio tren inferior",
+        "Día 2: Coordinación + fuerza explosiva + sprints",
+        "Día 3: Cardio medio + core + visualización",
+        "Día 4: Partido reducido + técnica individual",
+        "Día 5: Recuperación activa: natación o bici",
+        "Día 6: Fuerza tren superior + potencia piernas",
+        "Día 7: Análisis táctico + estiramientos largos"
+      ],
+      "boxeo_amateur_mesomorfo_sobrepeso": [
+        "Día 1: Sombra + técnica de golpeo + cuerdas",
+        "Día 2: Sparring moderado + físico funcional",
+        "Día 3: Gimnasio (fuerza y potencia explosiva)",
+        "Día 4: Trabajo técnico + estrategia en pareja",
+        "Día 5: HIIT específico + escaleras",
+        "Día 6: Saco pesado + abdomen",
+        "Día 7: Recuperación: estiramiento y hielo"
+      ],
+      "triatlon_general_mesomorfo_pesoNormal": [
+        "Día 1: Natación técnica + transición suave bici",
+        "Día 2: Ciclismo fondo (3h) + core al final",
+        "Día 3: Running fartlek + técnica",
+        "Día 4: Descanso activo + trabajo de pies",
+        "Día 5: Brick: bici + running transición rápida",
+        "Día 6: Natación + gimnasio (resistencia)",
+        "Día 7: Carrera larga + movilidad"
+      ]
+      // Aquí puedes seguir agregando decenas de combinaciones
+    };
 
-      const cuerpo = tipoCuerpo === "endomorfo" ? "con bloques de cardio"
-                    : tipoCuerpo === "ectomorfo" ? "con ejercicios de fuerza"
-                    : "con entrenamientos mixtos";
+    function generarClave(d) {
+      return `${d.deporte}_${d.disciplina}_${d.tipoCuerpo}_${d.imc}`.toLowerCase().replace(/\s+/g, '');
+    }
 
-      const nivel = edad < 30 ? "alta intensidad" :
-                    edad < 50 ? "media intensidad" : "baja intensidad";
+    const clave = generarClave(datos);
+    const plan = planes[clave];
 
-      return `
+    const contenedor = document.getElementById('entrenamiento');
+
+    if (plan) {
+      plan.forEach((dia, index) => {
+        const div = document.createElement('div');
+        div.className = 'plan-dia';
+        div.innerHTML = `<h2>Día ${index + 1}</h2><p>${dia}</p>`;
+        contenedor.appendChild(div);
+      });
+    } else {
+      contenedor.innerHTML = `
         <div class="plan-dia">
-          <h3>Día ${dia}</h3>
-          <p><strong>Disciplina:</strong> ${base}</p>
-          <p><strong>Objetivo del día:</strong> Entrenamiento ${intensidad}, adaptado para ${tipoCuerpo}.</p>
-          <p><strong>Bloques sugeridos:</strong></p>
-          <ul>
-            <li>Calentamiento dinámico (10-15 min)</li>
-            <li>Ejercicios principales según técnica de ${subdisciplina} (${nivel})</li>
-            <li>Refuerzo cruzado con ${
-              deporte === "ciclismo" ? "core y zona lumbar" :
-              deporte === "natación" ? "piernas y movilidad de hombros" :
-              deporte === "escalada" ? "fuerza de agarre y antebrazos" :
-              "ejercicios funcionales"
-            }</li>
-            <li>${cuerpo}</li>
-            <li>Estiramientos o recuperación activa (10 min)</li>
-          </ul>
+          <h2>No hay plan exacto registrado para esta combinación aún.</h2>
+          <p>Estamos trabajando para añadir más rutinas personalizadas. Intenta otra disciplina o revisa que tu selección sea compatible.</p>
         </div>
       `;
     }
-
-    const contenedor = document.getElementById("planEntrenamiento");
-    let contenido = "";
-
-    for (let i = 1; i <= dias; i++) {
-      contenido += generarEntrenamiento(i);
-    }
-
-    contenedor.innerHTML = contenido;
   </script>
 </body>
 </html>
