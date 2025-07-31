@@ -80,15 +80,6 @@
 
     <div id="disciplinaContainer"></div>
 
-    <label for="tiempo">¿Cuántas horas entrenas por semana?</label>
-    <select id="tiempo">
-      <option value="">-- Selecciona un rango --</option>
-      <option value="2-5">2 a 5 horas</option>
-      <option value="5-8">5 a 8 horas</option>
-      <option value="10-15">10 a 15 horas</option>
-      <option value="15+">Más de 15 horas</option>
-    </select>
-
     <label for="nivel">Nivel de experiencia</label>
     <select id="nivel">
       <option value="">-- Selecciona tu nivel --</option>
@@ -107,7 +98,6 @@
     const contenedor = document.getElementById("disciplinaContainer");
     let html = "";
 
-    // Definir disciplinas por deporte
     const disciplinas = {
       Ciclismo: [
         "MTB - Cross Country (XC)",
@@ -163,20 +153,17 @@
   function continuar() {
     const deporte = document.getElementById("deporte").value;
     const disciplina = document.getElementById("disciplina")?.value || "";
-    const tiempo = document.getElementById("tiempo").value;
     const nivel = document.getElementById("nivel").value;
 
-    if (!deporte || !disciplina || !tiempo || !nivel) {
+    if (!deporte || !disciplina || !nivel) {
       alert("Por favor, completa todos los campos.");
       return;
     }
 
     localStorage.setItem("deporte", deporte);
     localStorage.setItem("disciplina", disciplina);
-    localStorage.setItem("tiempo", tiempo);
     localStorage.setItem("nivel", nivel);
 
-    // Aquí rediriges a la página que quieras
     window.location.href = "menu.html";
   }
 </script>
