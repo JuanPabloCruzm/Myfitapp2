@@ -3,15 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <title>Planes de Entrenamiento</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #eee;
+      padding: 20px;
+    }
+    #plan-container {
+      background: #222;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      max-width: 600px;
+    }
+    button {
+      background: #1db954;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #1ed760;
+    }
+  </style>
 </head>
 <body>
 
-  <h1>Plan de Entrenamiento Ejemplo</h1>
+  <h1>Plan de Entrenamiento</h1>
 
-  <!-- Contenedor donde se mostrará el plan -->
-  <div id="plan-container" style="background:#eee; padding:10px; margin-bottom:20px;"></div>
+  <div id="plan-container">Aquí se mostrará el plan.</div>
 
-  <!-- Botón para mostrar un plan ejemplo -->
   <button onclick="mostrarPlan('mtb', 'xc', 'bajo_peso', 'endomorfo', '18-30', 'principiante', '5-8')">
     Mostrar Plan MTB XC Bajo Peso Endomorfo 18-30 Principiante 5-8h
   </button>
