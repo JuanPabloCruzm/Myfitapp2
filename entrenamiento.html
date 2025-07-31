@@ -2,38 +2,98 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Entrenamiento Personalizado</title>
+  <title>Plan de Entrenamiento</title>
   <link rel="icon" href="favicon.ico" />
-  <script defer src="entrenamiento.js"></script>
   <style>
     body {
       background-color: #121212;
-      color: #eee;
+      color: #ffffff;
       font-family: Arial, sans-serif;
       padding: 20px;
     }
-    h1, h2 {
-      text-align: center;
+    h1 {
+      color: #ffffff;
     }
-    .dia {
-      margin-bottom: 20px;
-      padding: 10px;
-      background-color: #1e1e1e;
+    .entrenamiento {
+      margin-bottom: 30px;
+      border: 1px solid #444;
+      padding: 15px;
       border-radius: 10px;
+      background-color: #1e1e1e;
     }
-    .volver {
-      display: block;
-      text-align: center;
-      margin-top: 30px;
+    button {
+      padding: 10px 20px;
+      background-color: #444;
       color: #fff;
-      text-decoration: underline;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #666;
+    }
+    footer {
+      margin-top: 30px;
+      font-size: 0.9em;
+      text-align: center;
+      color: #aaa;
     }
   </style>
 </head>
 <body>
-  <h1>Plan de Entrenamiento Semanal</h1>
-  <h2 id="tituloPlan"></h2>
-  <div id="planEntrenamiento"></div>
-  <a href="menu.html" class="volver">Volver al menú</a>
+  <h1>Plan de Entrenamiento Personalizado</h1>
+
+  <div id="resultadoEntrenamiento" class="entrenamiento">
+    <p>Cargando plan de entrenamiento...</p>
+  </div>
+
+  <button onclick="window.location.href='menu.html'">Volver al Menú</button>
+
+  <footer>By: Juan Pablo Cruz</footer>
+
+  <script>
+    // Simula datos recibidos del usuario
+    const deporte = localStorage.getItem("deporte") || "MTB";
+    const disciplina = localStorage.getItem("disciplina") || "Enduro";
+    const tipoCuerpo = localStorage.getItem("tipoCuerpo") || "Endomorfo";
+    const imc = localStorage.getItem("imc") || "Sobrepeso";
+
+    const rutinaBase = {
+      "MTB": {
+        "Enduro": {
+          "Endomorfo": {
+            "Bajo peso": "Rutina para Enduro - Endomorfo - Bajo peso",
+            "Peso normal": "Rutina para Enduro - Endomorfo - Peso normal",
+            "Sobrepeso": "Rutina para Enduro - Endomorfo - Sobrepeso"
+          },
+          "Ectomorfo": {
+            "Bajo peso": "Rutina para Enduro - Ectomorfo - Bajo peso",
+            "Peso normal": "Rutina para Enduro - Ectomorfo - Peso normal",
+            "Sobrepeso": "Rutina para Enduro - Ectomorfo - Sobrepeso"
+          },
+          "Mesomorfo": {
+            "Bajo peso": "Rutina para Enduro - Mesomorfo - Bajo peso",
+            "Peso normal": "Rutina para Enduro - Mesomorfo - Peso normal",
+            "Sobrepeso": "Rutina para Enduro - Mesomorfo - Sobrepeso"
+          }
+        }
+        // Agrega aquí más disciplinas...
+      },
+      // Agrega más deportes...
+    };
+
+    function mostrarRutina() {
+      const resultado = document.getElementById("resultadoEntrenamiento");
+      try {
+        const texto = rutinaBase[deporte][disciplina][tipoCuerpo][imc];
+        resultado.innerHTML = `<h2>${deporte} - ${disciplina}</h2><p>${texto}</p>`;
+      } catch (error) {
+        resultado.innerHTML = `<p>No se encontró una rutina para: ${deporte} / ${disciplina} / ${tipoCuerpo} / ${imc}</p>`;
+      }
+    }
+
+    mostrarRutina();
+  </script>
 </body>
 </html>
