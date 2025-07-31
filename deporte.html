@@ -2,16 +2,15 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Selecciona tu Deporte y Disciplina</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <style>
     body {
       background-color: #121212;
-      color: #ffffff;
+      color: #fff;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
     }
     .container {
       max-width: 900px;
@@ -63,13 +62,32 @@
   <div class="container">
     <h1>Selecciona tu Deporte y Disciplina</h1>
 
-    <!-- Solo ciclismo como deporte -->
     <label for="deporte">Deporte</label>
-    <select id="deporte" disabled>
-      <option value="Ciclismo" selected>Ciclismo</option>
+    <select id="deporte" onchange="mostrarDisciplinas()">
+      <option value="">-- Selecciona un deporte --</option>
+      <option value="Ciclismo">Ciclismo</option>
+      <option value="Natación">Natación</option>
+      <option value="Atletismo">Atletismo</option>
+      <option value="Escalada">Escalada</option>
+      <option value="Buceo">Buceo</option>
+      <option value="Fútbol">Fútbol</option>
+      <option value="Rugby">Rugby</option>
+      <option value="Básquetbol">Básquetbol</option>
+      <option value="Gym">Gym</option>
+      <option value="ArtesMarciales">Artes Marciales Mixtas</option>
+      <option value="Otro">Otro</option>
     </select>
 
     <div id="disciplinaContainer"></div>
+
+    <label for="tiempo">¿Cuántas horas entrenas por semana?</label>
+    <select id="tiempo">
+      <option value="">-- Selecciona un rango --</option>
+      <option value="2-5">2 a 5 horas</option>
+      <option value="5-8">5 a 8 horas</option>
+      <option value="10-15">10 a 15 horas</option>
+      <option value="15+">Más de 15 horas</option>
+    </select>
 
     <label for="nivel">Nivel de experiencia</label>
     <select id="nivel">
@@ -83,10 +101,15 @@
     <footer>By: Juan Pablo Cruz</footer>
   </div>
 
-  <script>
-    function mostrarDisciplinas() {
-      const contenedor = document.getElementById("disciplinaContainer");
-      const disciplinas = [
+<script>
+  function mostrarDisciplinas() {
+    const deporte = document.getElementById("deporte").value;
+    const contenedor = document.getElementById("disciplinaContainer");
+    let html = "";
+
+    // Definir disciplinas por deporte
+    const disciplinas = {
+      Ciclismo: [
         "MTB - Cross Country (XC)",
         "MTB - Enduro",
         "MTB - Downhill",
@@ -98,44 +121,64 @@
         "Pista - Persecución",
         "Pista - Omnium",
         "Triatlón"
-      ];
+      ],
+      Natación: ["Libre", "Espalda", "Mariposa", "Pecho", "Aguas abiertas"],
+      Atletismo: ["Pista", "Salto", "Lanzamiento", "Fondo", "Velocidad"],
+      Escalada: ["Boulder", "Deportiva", "Velocidad"],
+      Buceo: ["Recreativo", "Profundo", "Técnico"],
+      Fútbol: ["Arquero", "Defensa", "Mediocampo", "Delantero"],
+      Rugby: ["Forward", "Back"],
+      Básquetbol: ["Base", "Escolta", "Alero", "Ala-Pívot", "Pívot"],
+      Gym: ["Fuerza", "Resistencia", "Estética", "Rehabilitación", "Hipertrofia", "Movilidad"],
+      ArtesMarciales: ["Jiu Jitsu", "Muay Thai", "Boxeo", "Lucha", "MMA"],
+      Otro: ["General", "Competencia", "Recreativo"]
+    };
 
-      let html = `<label for="disciplina">Disciplina</label>`;
-      html += `<select id="disciplina"><option value="">-- Selecciona una disciplina --</option>`;
+    if (disciplinas[deporte]) {
+      let labelTexto = "Disciplina";
+      if (deporte === "Fútbol" || deporte === "Rugby" || deporte === "Básquetbol") {
+        labelTexto = "Posición/Destreza";
+      } else if (deporte === "Gym") {
+        labelTexto = "Meta";
+      } else if (deporte === "Natación") {
+        labelTexto = "Tipo de nado";
+      }
 
-      disciplinas.forEach(d => {
+      html += `<label for="disciplina">${labelTexto}</label>`;
+      html += `<select id="disciplina"><option value="">-- Selecciona una --</option>`;
+
+      disciplinas[deporte].forEach(d => {
         html += `<option value="${d}">${d}</option>`;
       });
+
       html += `</select>`;
-
-      contenedor.innerHTML = html;
+    } else {
+      contenedor.innerHTML = "";
+      return;
     }
 
-    // Mostrar disciplinas al cargar la página
-    window.onload = mostrarDisciplinas;
+    contenedor.innerHTML = html;
+  }
 
-    function continuar() {
-      const deporte = document.getElementById("deporte").value; // Será siempre "Ciclismo"
-      const disciplina = document.getElementById("disciplina")?.value || "";
-      const nivel = document.getElementById("nivel").value;
+  function continuar() {
+    const deporte = document.getElementById("deporte").value;
+    const disciplina = document.getElementById("disciplina")?.value || "";
+    const tiempo = document.getElementById("tiempo").value;
+    const nivel = document.getElementById("nivel").value;
 
-      if (!disciplina) {
-        alert("Por favor, selecciona una disciplina.");
-        return;
-      }
-      if (!nivel) {
-        alert("Por favor, selecciona tu nivel de experiencia.");
-        return;
-      }
-
-      // Guardar datos para usar en la siguiente pantalla
-      localStorage.setItem("deporte", deporte);
-      localStorage.setItem("disciplina", disciplina);
-      localStorage.setItem("nivel", nivel);
-
-      // Redirigir al menú o siguiente paso (ajusta la url si es necesario)
-      window.location.href = "menu.html";
+    if (!deporte || !disciplina || !tiempo || !nivel) {
+      alert("Por favor, completa todos los campos.");
+      return;
     }
-  </script>
+
+    localStorage.setItem("deporte", deporte);
+    localStorage.setItem("disciplina", disciplina);
+    localStorage.setItem("tiempo", tiempo);
+    localStorage.setItem("nivel", nivel);
+
+    // Aquí rediriges a la página que quieras
+    window.location.href = "menu.html";
+  }
+</script>
 </body>
 </html>
