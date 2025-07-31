@@ -1,10 +1,9 @@
-<!-- inicio.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Mi FitApp - Inicio</title>
-  <link rel="icon" href="favicon.ico" />
+  <title>Bienvenido a Mi FitApp</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <style>
     body {
       margin: 0;
@@ -17,40 +16,41 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      text-align: center;
     }
-
     h1 {
-      font-size: 2em;
-      margin-bottom: 30px;
+      font-size: 2.5em;
+      margin-bottom: 40px;
     }
-
-    .boton {
-      background-color: #333;
-      color: #fff;
+    button {
       padding: 15px 30px;
-      border: none;
+      font-size: 1.2em;
+      background-color: #1f1f1f;
+      color: #fff;
+      border: 2px solid #fff;
       border-radius: 12px;
-      font-size: 1.1em;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s ease;
     }
-
-    .boton:hover {
-      background-color: #555;
+    button:hover {
+      background-color: #333;
     }
-
-    .branding {
+    .footer {
       position: absolute;
       bottom: 20px;
       font-size: 0.9em;
-      color: #bbb;
+      color: #aaa;
     }
   </style>
 </head>
 <body>
-  <h1>Bienvenido/a A Tu Asistente Deportivo /h1>
-  <button class="boton" onclick="window.location.href='nombreSexo.html'">Comenzar</button>
-  <div class="branding">By: Juan Pablo Cruz</div>
+
+  <h1>Bienvenido/a A tu Asistente Deportivo</h1>
+
+  <a href="nombreSexo.html">
+    <button>Comenzar</button>
+  </a>
+
+  <div class="footer">By: Juan Pablo Cruz</div>
+
 </body>
 </html>
