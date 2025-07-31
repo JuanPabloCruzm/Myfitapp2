@@ -2,56 +2,80 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Menú Principal</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <style>
     body {
       background-color: #121212;
-      color: #ffffff;
+      color: #f0f0f0;
       font-family: Arial, sans-serif;
       text-align: center;
       padding: 20px;
+      margin: 0;
     }
 
     h1 {
-      color: #00ffff;
+      color: #1e88e5; /* azul marino */
+      font-weight: 700;
+      margin-bottom: 40px;
+      text-shadow: 0 0 10px #1565c0;
     }
 
     .info {
-      background-color: #1e1e1e;
+      background-color: #1e1e2f; /* azul muy oscuro */
       border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+      padding: 25px 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 15px rgba(30, 40, 63, 0.7);
       max-width: 600px;
       margin-left: auto;
       margin-right: auto;
+      font-size: 1.1em;
+      line-height: 1.5;
+      color: #ddd;
+    }
+
+    .info p {
+      margin: 10px 0;
+    }
+
+    .tipo-cuerpo-desc {
+      margin-top: 10px;
+      font-style: italic;
+      color: #a0b0d0;
+      font-size: 0.95em;
+      min-height: 50px;
     }
 
     .button {
       display: block;
       width: 80%;
-      max-width: 300px;
-      margin: 10px auto;
-      padding: 15px;
+      max-width: 320px;
+      margin: 12px auto;
+      padding: 16px 0;
       font-size: 18px;
+      font-weight: 700;
       border: none;
       border-radius: 10px;
-      background-color: #00ffff;
-      color: #000;
+      background-color: #1e88e5;
+      color: #f0f0f0;
       cursor: pointer;
-      transition: background 0.3s;
+      box-shadow: 0 0 15px #1565c0;
+      transition: background-color 0.3s, box-shadow 0.3s;
+      user-select: none;
     }
 
     .button:hover {
-      background-color: #00cccc;
+      background-color: #1565c0;
+      box-shadow: 0 0 25px #82b1ff;
     }
 
     .footer {
-      margin-top: 30px;
+      margin-top: 40px;
       font-size: 14px;
-      color: #999;
+      color: #888ea8;
+      user-select: none;
     }
   </style>
 </head>
@@ -63,6 +87,7 @@
     <p><strong>Peso:</strong> <span id="peso"></span> kg</p>
     <p><strong>Altura:</strong> <span id="altura"></span> m</p>
     <p><strong>Tipo de cuerpo:</strong> <span id="tipoCuerpo"></span></p>
+    <div class="tipo-cuerpo-desc" id="descTipoCuerpo"></div>
     <p><strong>IMC:</strong> <span id="imc"></span></p>
   </div>
 
@@ -73,12 +98,29 @@
   <div class="footer">By: Juan Pablo Cruz</div>
 
   <script>
-    // Recuperar datos del localStorage
-    document.getElementById("edad").textContent = localStorage.getItem("edad") || "";
-    document.getElementById("peso").textContent = localStorage.getItem("peso") || "";
-    document.getElementById("altura").textContent = localStorage.getItem("altura") || "";
-    document.getElementById("tipoCuerpo").textContent = localStorage.getItem("tipoCuerpo") || "";
-    document.getElementById("imc").textContent = localStorage.getItem("imc") || "";
+    // Cargar datos desde localStorage
+    const edad = localStorage.getItem("edad") || "";
+    const peso = localStorage.getItem("peso") || "";
+    const altura = localStorage.getItem("altura") || "";
+    const tipoCuerpo = localStorage.getItem("tipoCuerpo") || "";
+    const imc = localStorage.getItem("imc") || "";
+
+    document.getElementById("edad").textContent = edad;
+    document.getElementById("peso").textContent = peso;
+    document.getElementById("altura").textContent = altura;
+    document.getElementById("tipoCuerpo").textContent = tipoCuerpo;
+    document.getElementById("imc").textContent = imc;
+
+    // Descripciones breves para cada tipo de cuerpo
+    const descripciones = {
+      "Endomorfo": "Cuerpo con tendencia a acumular grasa, metabolismo lento y estructura más ancha.",
+      "Mesomorfo": "Cuerpo atlético, musculoso y con facilidad para ganar masa muscular.",
+      "Ectomorfo": "Cuerpo delgado, metabolismo rápido y dificultad para ganar peso o músculo."
+    };
+
+    const descTipoCuerpo = descripciones[tipoCuerpo] || "Tipo de cuerpo no especificado.";
+
+    document.getElementById("descTipoCuerpo").textContent = descTipoCuerpo;
   </script>
 </body>
 </html>
