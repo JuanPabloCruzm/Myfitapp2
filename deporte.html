@@ -1,125 +1,138 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Selecciona tu deporte</title>
-  <link rel="icon" href="favicon.ico" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <title>Selecciona tu Deporte</title>
   <style>
     body {
       background-color: #121212;
       color: #ffffff;
       font-family: Arial, sans-serif;
       margin: 0;
-      padding: 20px;
+      padding: 0;
     }
-    h1, h2 {
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: #1e1e1e;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+    h2 {
       text-align: center;
     }
-    select, button {
+    label, select, input {
       display: block;
-      margin: 20px auto;
-      padding: 10px;
+      margin: 15px 0;
+      width: 100%;
       font-size: 16px;
     }
-    .disciplina-container {
-      display: none;
-      text-align: center;
+    button {
+      background-color: #03dac5;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 18px;
     }
-    .botones {
+    button:hover {
+      background-color: #00bfa5;
+    }
+    footer {
       text-align: center;
       margin-top: 30px;
-    }
-    .footer {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 14px;
       color: #aaa;
     }
   </style>
 </head>
 <body>
-  <h1>Selecciona tu Deporte</h1>
+  <div class="container">
+    <h2>Selecciona tu Deporte</h2>
+    <form id="formDeporte">
+      <label for="deporte">Deporte:</label>
+      <select id="deporte" name="deporte" required onchange="mostrarDisciplinas()">
+        <option value="">-- Selecciona un deporte --</option>
+        <option value="MTB">MTB</option>
+        <option value="Ciclismo">Ciclismo</option>
+        <option value="Esquí Acuático">Esquí Acuático</option>
+        <option value="Escalada">Escalada</option>
+        <option value="Snowboard">Snowboard</option>
+        <option value="Moto de Agua">Moto de Agua</option>
+        <option value="Buceo">Buceo</option>
+        <option value="Boxeo">Boxeo</option>
+        <option value="Básquetbol">Básquetbol</option>
+        <option value="Fútbol">Fútbol</option>
+        <option value="Atletismo">Atletismo</option>
+        <option value="Rugby">Rugby</option>
+        <option value="Gimnasio">Gimnasio</option>
+        <option value="Artes Marciales Mixtas">Artes Marciales Mixtas</option>
+        <option value="Natación">Natación</option>
+      </select>
 
-  <label for="deporte">Deporte:</label>
-  <select id="deporte" onchange="mostrarDisciplinas()">
-    <option value="">-- Selecciona --</option>
-    <option value="mtb">MTB</option>
-    <option value="ciclismo">Ciclismo</option>
-    <option value="escalada">Escalada</option>
-    <option value="snowboard">Snowboard</option>
-    <option value="moto_agua">Moto de agua</option>
-    <option value="buceo">Buceo</option>
-    <option value="boxeo">Boxeo</option>
-    <option value="basquetbol">Básquetbol</option>
-    <option value="futbol">Fútbol</option>
-    <option value="atletismo">Atletismo</option>
-    <option value="rugby">Rugby</option>
-    <option value="gym">Gimnasio</option>
-    <option value="artes_marciales">Artes marciales mixtas</option>
-  </select>
+      <div id="disciplinaContainer" style="display: none;">
+        <label for="disciplina">Disciplina:</label>
+        <select id="disciplina" name="disciplina"></select>
+      </div>
 
-  <div class="disciplina-container" id="disciplina-container">
-    <label for="disciplina">Disciplina / Subcategoría:</label>
-    <select id="disciplina">
-      <option value="">-- Selecciona disciplina --</option>
-    </select>
+      <label for="horas">Horas de entrenamiento semanal:</label>
+      <select id="horas" name="horas">
+        <option value="menos1h">Menos de 1h</option>
+        <option value="1a3h">1 a 3h</option>
+        <option value="3a6h">3 a 6h</option>
+        <option value="6a12h">6 a 12h</option>
+      </select>
+
+      <label for="nivel">Nivel de dificultad de la disciplina:</label>
+      <select id="nivel" name="nivel">
+        <option value="bajo">Bajo</option>
+        <option value="medio">Medio</option>
+        <option value="alto">Alto</option>
+      </select>
+
+      <button type="submit">Continuar al Menú</button>
+    </form>
   </div>
 
-  <div class="botones">
-    <button onclick="guardarSeleccion()">Continuar al menú</button>
-  </div>
-
-  <h2 id="imc-mostrar">Tu IMC: <span id="valorIMC">...</span></h2>
-
-  <div class="footer">By: Juan Pablo Cruz</div>
+  <footer>By: Juan Pablo Cruz</footer>
 
   <script>
-    const disciplinasPorDeporte = {
-      mtb: ["Enduro", "Cross Country", "Downhill", "All Mountain"],
-      ciclismo: ["Ruta", "Pista", "Gravel", "Contrarreloj"],
-      escalada: ["Búlder", "Deportiva", "Tradicional"],
-      snowboard: ["Freeride", "Slopestyle", "Half-pipe"],
-      moto_agua: ["Free ride", "Freestyle", "Rally Jet", "Raid", "Resistencia", "Carreras de circuito", "Carreras de velocidad"],
-      buceo: ["Recreativo", "Técnico", "Libre"],
-      boxeo: ["Amateur", "Profesional"],
-      basquetbol: ["Base", "Ala", "Pívot"],
-      futbol: ["Arquero", "Defensa", "Mediocampista", "Delantero"],
-      atletismo: ["Velocidad", "Fondo", "Saltos", "Lanzamientos"],
-      rugby: ["Pilar", "Hooker", "Segunda línea", "Ala", "Centro", "Apertura", "Fullback"],
-      gym: ["Fuerza", "Resistencia", "Estética"],
-      artes_marciales: ["Jiu-Jitsu", "Kickboxing", "MMA", "Karate"]
-    };
-
     function mostrarDisciplinas() {
-      const deporte = document.getElementById("deporte").value;
-      const contenedor = document.getElementById("disciplina-container");
-      const selectDisciplina = document.getElementById("disciplina");
-      selectDisciplina.innerHTML = "";
+      const deporte = document.getElementById('deporte').value;
+      const disciplina = document.getElementById('disciplina');
+      const container = document.getElementById('disciplinaContainer');
+      disciplina.innerHTML = '';
+      container.style.display = 'block';
 
-      if (disciplinasPorDeporte[deporte]) {
-        contenedor.style.display = "block";
-        const opciones = disciplinasPorDeporte[deporte];
-        opciones.forEach(d => {
-          const opt = document.createElement("option");
-          opt.value = d;
-          opt.textContent = d;
-          selectDisciplina.appendChild(opt);
-        });
-      } else {
-        contenedor.style.display = "none";
+      let opciones = [];
+      switch (deporte) {
+        case 'MTB': opciones = ['XC', 'Enduro', 'DH', 'All Mountain']; break;
+        case 'Fútbol': opciones = ['Arquero', 'Defensa', 'Mediocampista', 'Delantero']; break;
+        case 'Básquetbol': opciones = ['Base', 'Escolta', 'Alero', 'Ala-pívot', 'Pívot']; break;
+        case 'Rugby': opciones = ['Pilar', 'Talona', 'Segunda Línea', 'Ala', 'Centro', 'Zaguero']; break;
+        case 'Natación': opciones = ['Libre', 'Espalda', 'Pecho', 'Mariposa']; break;
+        case 'Gimnasio': opciones = ['Fuerza', 'Resistencia', 'Estética']; break;
+        case 'Moto de Agua': opciones = ['Free Ride', 'Freestyle', 'Rally Jet', 'Raid', 'Resistencia', 'Carreras de Circuito', 'Carreras de Velocidad']; break;
+        default: opciones = ['General']; break;
       }
+
+      opciones.forEach(op => {
+        const opt = document.createElement('option');
+        opt.value = op;
+        opt.textContent = op;
+        disciplina.appendChild(opt);
+      });
     }
 
-    function guardarSeleccion() {
-      const deporte = document.getElementById("deporte").value;
-      const disciplina = document.getElementById("disciplina").value;
-      localStorage.setItem("deporte", deporte);
-      localStorage.setItem("disciplina", disciplina);
-      location.href = "menu.html";
-    }
-
-    const imc = localStorage.getItem("imc");
-    document.getElementById("valorIMC").textContent = imc ? parseFloat(imc).toFixed(1) : "No calculado";
+    document.getElementById('formDeporte').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Aquí se podría guardar en localStorage y redirigir
+      window.location.href = 'menu.html';
+    });
   </script>
 </body>
 </html>
