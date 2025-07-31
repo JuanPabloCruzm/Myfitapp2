@@ -1,50 +1,46 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const deporte = localStorage.getItem("deporte");
-  const disciplina = localStorage.getItem("disciplina");
-  const tipoCuerpo = localStorage.getItem("tipoCuerpo");
-  const imc = localStorage.getItem("imc");
+// Base de datos de entrenamientos por combinación
+const planesEntrenamiento = {
+  "MTB-Enduro-sobrepeso-endomorfo": [
+    "Día 1: Cardio en bici 30 min + movilidad de cadera",
+    "Día 2: Técnica de descenso en curva + fuerza tren inferior",
+    "Día 3: Descanso activo (caminar o yoga)",
+    "Día 4: Circuito en cerro 45 min ritmo bajo",
+    "Día 5: Tren superior con peso corporal + core",
+    "Día 6: Bajadas técnicas controladas + visualización mental",
+    "Día 7: Salida larga en cerro ritmo constante"
+  ],
 
-  const clave = `${deporte}_${disciplina}_${tipoCuerpo}_${imc}`.toLowerCase();
+  // Puedes seguir agregando más combinaciones aquí
+  // Ejemplo:
+  // "gimnasio-estética-normal-mesomorfo": [ ... ],
+  // "natación-mariposa-bajo-ectomorfo": [ ... ]
+};
 
-  const entrenamientos = {
-    // 🔻 Ejemplo de estructura (tú puedes completarla con más combinaciones)
-    "mtb_xc_endomorfo_normal": [
-      "Día 1: Rodaje suave 45 min + movilidad",
-      "Día 2: Técnica en subidas + core",
-      "Día 3: Fondo 90 min",
-      "Día 4: Descanso activo",
-      "Día 5: Series en cuestas",
-      "Día 6: Fondo con intervalos",
-      "Día 7: Yoga + recuperación"
-    ],
+// Obtener datos guardados
+const deporte = localStorage.getItem("deporte");
+const disciplina = localStorage.getItem("disciplina");
+const imc = localStorage.getItem("imc");
+const cuerpo = localStorage.getItem("tipoCuerpo");
 
-    "gimnasio_estetica_mesomorfo_sobrepeso": [
-      "Día 1: Full body + 20 min cardio",
-      "Día 2: Tren inferior + movilidad",
-      "Día 3: Tren superior + cardio HIIT",
-      "Día 4: Descanso o caminata",
-      "Día 5: Circuito funcional",
-      "Día 6: Pesas + técnica",
-      "Día 7: Estiramiento + respiración"
-    ],
+// Armar la clave de búsqueda
+const clave = `${deporte}-${disciplina}-${imc}-${cuerpo}`;
 
-    // Agrega aquí todas las combinaciones...
-  };
+// Seleccionar el contenedor
+const contenedor = document.getElementById("entrenamiento");
 
-  const plan = entrenamientos[clave];
-
-  const contenedor = document.getElementById("planEntrenamiento");
-  const titulo = document.getElementById("tituloPlan");
-  titulo.textContent = `${deporte} - ${disciplina} (${tipoCuerpo}, ${imc})`;
-
-  if (plan) {
-    plan.forEach((dia) => {
-      const div = document.createElement("div");
-      div.className = "dia";
-      div.textContent = dia;
-      contenedor.appendChild(div);
-    });
-  } else {
-    contenedor.innerHTML = "<p>No hay plan disponible para esta combinación aún.</p>";
-  }
-});
+// Verificar si existe plan
+if (planesEntrenamiento[clave]) {
+  const plan = planesEntrenamiento[clave];
+  plan.forEach((dia, index) => {
+    const div = document.createElement("div");
+    div.className = "dia";
+    div.innerHTML = `<h3>Día ${index + 1}</h3><p>${dia}</p>`;
+    contenedor.appendChild(div);
+  });
+} else {
+  contenedor.innerHTML = `
+    <p>No hay un plan de entrenamiento aún para tu combinación:</p>
+    <p><strong>${deporte} → ${disciplina} → ${imc} → ${cuerpo}</strong></p>
+    <p>Por favor, vuelve pronto. Estamos trabajando en ello.</p>
+  `;
+}
