@@ -1,101 +1,145 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Configuración de Entrenamiento</title>
-  <link rel="icon" href="favicon.ico">
+  <meta charset="UTF-8" />
+  <title>Plan de Entrenamiento Personalizado</title>
+  <link rel="icon" href="favicon.ico" />
   <style>
     body {
-      background-color: #121212;
-      color: #eee;
+      background-color: #0e0e0e;
+      color: #f1f1f1;
       font-family: 'Segoe UI', sans-serif;
       margin: 0;
       padding: 20px;
     }
+
     h1, h2 {
-      text-align: center;
+      color: #ffffff;
     }
+
     .container {
-      max-width: 700px;
-      margin: 0 auto;
+      max-width: 800px;
+      margin: auto;
       padding: 20px;
-      background-color: #1e1e1e;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+      background-color: #1a1a1a;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #000;
     }
-    label {
-      display: block;
-      margin: 15px 0 5px;
-      font-weight: bold;
-    }
-    select, input[type="radio"] {
-      margin-bottom: 15px;
-    }
-    .radio-group {
+
+    .plan-dia {
+      background-color: #2a2a2a;
+      border: 1px solid #444;
+      padding: 15px;
+      border-radius: 5px;
       margin-bottom: 20px;
     }
-    .radio-group label {
-      font-weight: normal;
-      margin-right: 20px;
+
+    .plan-dia h3 {
+      margin-top: 0;
+      color: #ccc;
     }
+
     button {
-      width: 100%;
-      padding: 15px;
+      background-color: #333;
+      color: #eee;
+      padding: 12px 20px;
       border: none;
-      background-color: #03DAC5;
-      color: #000;
-      font-size: 16px;
-      border-radius: 8px;
+      border-radius: 5px;
       cursor: pointer;
-    }
-    button:hover {
-      background-color: #00bfa5;
-    }
-    .branding {
-      text-align: center;
+      font-size: 16px;
       margin-top: 20px;
-      font-size: 0.9em;
-      color: #aaa;
+    }
+
+    button:hover {
+      background-color: #555;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #777;
+      font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 10px;
+      }
+
+      button {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Entrenamiento Personalizado</h1>
+    <div id="planEntrenamiento">
+      <!-- Aquí se insertará el plan generado por JS -->
+    </div>
 
-    <h2>Juan Pablo – MTB / Downhill</h2>
+    <button onclick="window.location.href='menu.html'">Volver al Menú</button>
 
-    <form action="entrenamiento.html">
-      <label>¿Cuántas horas entrenas a la semana?</label>
-      <div class="radio-group">
-        <label><input type="radio" name="horas" value="<1"> Menos de 1 hora</label>
-        <label><input type="radio" name="horas" value="1-3"> 1 a 3 horas</label>
-        <label><input type="radio" name="horas" value="3-6"> 3 a 6 horas</label>
-        <label><input type="radio" name="horas" value=">6"> Más de 6 horas</label>
-      </div>
-
-      <label>Nivel en la disciplina</label>
-      <div class="radio-group">
-        <label><input type="radio" name="nivel" value="principiante"> Principiante</label>
-        <label><input type="radio" name="nivel" value="intermedio"> Intermedio</label>
-        <label><input type="radio" name="nivel" value="avanzado"> Avanzado</label>
-      </div>
-
-      <label>Objetivo principal</label>
-      <select name="objetivo">
-        <option value="">Selecciona un objetivo (opcional)</option>
-        <option value="bajar_peso">Bajar de peso</option>
-        <option value="resistencia">Ganar resistencia</option>
-        <option value="tecnica">Mejorar técnica</option>
-        <option value="musculo">Ganar masa muscular</option>
-        <option value="mantener">Recuperación / Mantenimiento</option>
-      </select>
-
-      <button type="submit">Generar rutina semanal personalizada</button>
-    </form>
-
-    <div class="branding">By: Juan Pablo Cruz</div>
+    <footer>By: Juan Pablo Cruz</footer>
   </div>
+
+  <script>
+    // Obtener datos almacenados
+    const datosUsuario = JSON.parse(localStorage.getItem("usuario")) || {};
+    const deporte = localStorage.getItem("deporte") || "No especificado";
+    const subdisciplina = localStorage.getItem("disciplina") || "No especificado";
+    const imc = parseFloat(localStorage.getItem("imc")) || 0;
+    const tipoCuerpo = localStorage.getItem("tipoCuerpo") || "ectomorfo";
+    const edad = parseInt(datosUsuario.edad || 25);
+    const sexo = datosUsuario.sexo || "masculino";
+    const horas = localStorage.getItem("horasPorSemana") || "2-5";
+    const dias = parseInt(localStorage.getItem("diasEntrenamiento")) || 4;
+
+    function generarEntrenamiento(dia) {
+      // Puedes expandir esta función para generar rutinas aún más detalladas
+      const base = `${deporte} - ${subdisciplina}`;
+      const intensidad = (imc > 25) ? "enfocado en pérdida de grasa y técnica" :
+                        (imc < 18.5) ? "orientado a ganar masa y coordinación" :
+                        "balanceado con énfasis en rendimiento";
+
+      const cuerpo = tipoCuerpo === "endomorfo" ? "con bloques de cardio"
+                    : tipoCuerpo === "ectomorfo" ? "con ejercicios de fuerza"
+                    : "con entrenamientos mixtos";
+
+      const nivel = edad < 30 ? "alta intensidad" :
+                    edad < 50 ? "media intensidad" : "baja intensidad";
+
+      return `
+        <div class="plan-dia">
+          <h3>Día ${dia}</h3>
+          <p><strong>Disciplina:</strong> ${base}</p>
+          <p><strong>Objetivo del día:</strong> Entrenamiento ${intensidad}, adaptado para ${tipoCuerpo}.</p>
+          <p><strong>Bloques sugeridos:</strong></p>
+          <ul>
+            <li>Calentamiento dinámico (10-15 min)</li>
+            <li>Ejercicios principales según técnica de ${subdisciplina} (${nivel})</li>
+            <li>Refuerzo cruzado con ${
+              deporte === "ciclismo" ? "core y zona lumbar" :
+              deporte === "natación" ? "piernas y movilidad de hombros" :
+              deporte === "escalada" ? "fuerza de agarre y antebrazos" :
+              "ejercicios funcionales"
+            }</li>
+            <li>${cuerpo}</li>
+            <li>Estiramientos o recuperación activa (10 min)</li>
+          </ul>
+        </div>
+      `;
+    }
+
+    const contenedor = document.getElementById("planEntrenamiento");
+    let contenido = "";
+
+    for (let i = 1; i <= dias; i++) {
+      contenido += generarEntrenamiento(i);
+    }
+
+    contenedor.innerHTML = contenido;
+  </script>
 </body>
 </html>
