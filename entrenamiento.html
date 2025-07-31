@@ -67,65 +67,90 @@
     const imc = parseFloat(localStorage.getItem("imc"));
     const deporte = localStorage.getItem("deporte");
     const disciplina = localStorage.getItem("disciplina") || "";
-    const tiempo = localStorage.getItem("tiempo") || "";
 
-    // Mostrar saludo
-    document.getElementById("saludo").textContent = `Hola ${nombre}, este es tu plan de entrenamiento para ${deporte} (${disciplina})`;
+    // Saludo
+    const saludo = document.getElementById("saludo");
+    saludo.textContent = `Hola ${nombre}, este es tu plan para ${deporte} (${disciplina})`;
 
     const rutinaContainer = document.getElementById("rutinaContainer");
 
     function generarRutina() {
       let rutina = [];
 
-      // EJEMPLO: Ciclismo → Ruta → Ectomorfo → IMC bajo
+      // 🚴‍♂️ Ciclismo - Ruta (Ejemplo completo)
       if (deporte === "Ciclismo" && disciplina === "Ruta") {
-        if (tipoCuerpo === "Ectomorfo") {
-          if (imc < 18.5) {
-            rutina = [
-              "Día 1: Rodaje suave 30 min + técnica de pedaleo",
-              "Día 2: Core + movilidad (30 min)",
-              "Día 3: Salida 45 min en terreno plano",
-              "Día 4: Descanso activo (caminar 20 min)",
-              "Día 5: Intervalos 3x3min a ritmo alto + 2 min recuperación",
-              "Día 6: Rodaje largo 1h a ritmo moderado",
-              "Día 7: Estiramientos profundos + rodillo suave 20 min"
-            ];
-          } else if (imc >= 18.5 && imc <= 24.9) {
-            rutina = [
-              "Día 1: Rodaje base 60 min + 5 sprints cortos",
-              "Día 2: Fuerza tren inferior (sentadillas, zancadas)",
-              "Día 3: Subidas cortas: 6x1min en cuesta",
-              "Día 4: Descanso total",
-              "Día 5: Series largas: 3x10 min tempo",
-              "Día 6: Rodaje grupal 90 min",
-              "Día 7: Estiramiento y yoga para ciclistas"
-            ];
-          } else {
-            rutina = [
-              "Día 1: 30 min rodillo + trabajo de cadencia alta",
-              "Día 2: Fuerza funcional (peso corporal)",
-              "Día 3: Rodaje 45 min + 5 aceleraciones",
-              "Día 4: Caminata ligera 30 min",
-              "Día 5: Intervalos 5x2min intenso",
-              "Día 6: Rodaje constante 1h15min",
-              "Día 7: Foam roller + movilidad"
-            ];
-          }
+        if (tipoCuerpo === "Ectomorfo" && imc < 18.5) {
+          rutina = [
+            "Día 1: Rodaje suave 30 min + técnica de pedaleo",
+            "Día 2: Core + movilidad (30 min)",
+            "Día 3: Salida 45 min en terreno plano",
+            "Día 4: Descanso activo (caminar 20 min)",
+            "Día 5: Intervalos 3x3min a ritmo alto + 2 min recuperación",
+            "Día 6: Rodaje largo 1h a ritmo moderado",
+            "Día 7: Estiramientos + rodillo suave"
+          ];
+        } else {
+          rutina = [
+            "Día 1: Rodaje base 60 min",
+            "Día 2: Fuerza tren inferior",
+            "Día 3: Subidas cortas y sprints",
+            "Día 4: Descanso",
+            "Día 5: Series largas 3x10 min",
+            "Día 6: Rodaje 90 min",
+            "Día 7: Estiramiento"
+          ];
         }
       }
 
-      // Aquí puedes agregar más combinaciones: 
-      // if (deporte === "Boxeo" && disciplina === "Profesional" && tipoCuerpo === "Mesomorfo" && imc > 25)...
+      // 🥊 Boxeo
+      if (deporte === "Boxeo") {
+        rutina = [
+          "Día 1: Técnica de golpeo + sombra 30 min",
+          "Día 2: Saltar la cuerda + abdominales",
+          "Día 3: Sparring suave + movilidad",
+          "Día 4: Descanso activo",
+          "Día 5: Circuito de resistencia",
+          "Día 6: Trabajo de reflejos + saco",
+          "Día 7: Estiramientos y recuperación"
+        ];
+      }
 
+      // 🏀 Básquetbol
+      if (deporte === "Básquetbol") {
+        rutina = [
+          "Día 1: Tiros y dribbling",
+          "Día 2: Tren inferior + saltos",
+          "Día 3: Juego de pies + táctica",
+          "Día 4: Descanso activo",
+          "Día 5: Sprint y reacción",
+          "Día 6: Partido amistoso o práctica intensa",
+          "Día 7: Estiramientos + foam roller"
+        ];
+      }
+
+      // ⚽ Fútbol
+      if (deporte === "Fútbol") {
+        rutina = [
+          "Día 1: Técnica de pase y control",
+          "Día 2: Velocidad + coordinación",
+          "Día 3: Simulación de partido",
+          "Día 4: Recuperación activa",
+          "Día 5: Potencia + tiros",
+          "Día 6: Entrenamiento táctico",
+          "Día 7: Estiramiento y análisis"
+        ];
+      }
+
+      // Si no se encuentra rutina específica
       if (rutina.length === 0) {
         rutina = [
-          "Día 1: Sesión de movilidad general (30 min)",
-          "Día 2: Caminata o bicicleta suave (30 min)",
-          "Día 3: Entrenamiento funcional ligero",
-          "Día 4: Descanso activo",
-          "Día 5: Cardio moderado (45 min)",
-          "Día 6: Estiramiento profundo",
-          "Día 7: Actividad libre a elección"
+          "Día 1: Movilidad general (30 min)",
+          "Día 2: Cardio moderado (45 min)",
+          "Día 3: Entrenamiento funcional",
+          "Día 4: Descanso activo (caminar, bici)",
+          "Día 5: Core y elasticidad",
+          "Día 6: Cardio largo (60 min)",
+          "Día 7: Estiramiento total"
         ];
       }
 
