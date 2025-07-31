@@ -29,7 +29,7 @@
       font-weight: bold;
       font-size: 1.1em;
     }
-    select, input[type="radio"] {
+    select {
       display: block;
       margin-top: 10px;
       width: 100%;
@@ -39,14 +39,6 @@
       border: none;
       background-color: #1e1e1e;
       color: #fff;
-    }
-    .opciones {
-      margin-top: 10px;
-    }
-    .opciones label {
-      display: inline-block;
-      margin-right: 20px;
-      font-weight: normal;
     }
     button {
       margin-top: 40px;
@@ -71,39 +63,13 @@
   <div class="container">
     <h1>Selecciona tu Deporte y Disciplina</h1>
 
+    <!-- Solo ciclismo como deporte -->
     <label for="deporte">Deporte</label>
-    <select id="deporte" onchange="mostrarDisciplinas()">
-      <option value="">-- Selecciona un deporte --</option>
-      <option value="MTB">Ciclismo MTB</option>
-      <option value="Ruta">Ciclismo Ruta</option>
-      <option value="Pista">Ciclismo Pista</option>
-      <option value="Triatlón">Triatlón</option>
-      <option value="Natación">Natación</option>
-      <option value="Esquí">Esquí en nieve</option>
-      <option value="Snowboard">Snowboard</option>
-      <option value="EsquíAcuático">Esquí acuático</option>
-      <option value="Atletismo">Atletismo</option>
-      <option value="Boxeo">Boxeo</option>
-      <option value="Escalada">Escalada</option>
-      <option value="Buceo">Buceo</option>
-      <option value="Fútbol">Fútbol</option>
-      <option value="Rugby">Rugby</option>
-      <option value="Básquetbol">Básquetbol</option>
-      <option value="Gimnasio">Gimnasio</option>
-      <option value="ArtesMarciales">Artes Marciales Mixtas</option>
-      <option value="Otro">Otro</option>
+    <select id="deporte" disabled>
+      <option value="Ciclismo" selected>Ciclismo</option>
     </select>
 
     <div id="disciplinaContainer"></div>
-
-    <label for="tiempo">¿Cuántas horas entrenas por semana?</label>
-    <select id="tiempo">
-      <option value="">-- Selecciona un rango --</option>
-      <option value="2-5">2 a 5 horas</option>
-      <option value="5-8">5 a 8 horas</option>
-      <option value="10-15">10 a 15 horas</option>
-      <option value="15+">Más de 15 horas</option>
-    </select>
 
     <label for="nivel">Nivel de experiencia</label>
     <select id="nivel">
@@ -119,59 +85,55 @@
 
   <script>
     function mostrarDisciplinas() {
-      const deporte = document.getElementById("deporte").value;
       const contenedor = document.getElementById("disciplinaContainer");
-      let html = "";
+      const disciplinas = [
+        "MTB - Cross Country (XC)",
+        "MTB - Enduro",
+        "MTB - Downhill",
+        "MTB - All Mountain",
+        "Ruta - Competencia",
+        "Ruta - Resistencia",
+        "Ruta - Contrarreloj",
+        "Pista - Velocidad",
+        "Pista - Persecución",
+        "Pista - Omnium",
+        "Triatlón"
+      ];
 
-      const disciplinas = {
-        MTB: ["Cross Country (XC)", "Enduro", "Downhill", "All Mountain"],
-        Ruta: ["Competencia", "Resistencia", "Contrarreloj"],
-        Pista: ["Velocidad", "Persecución", "Omnium"],
-        Natación: ["Libre", "Espalda", "Mariposa", "Pecho", "Aguas abiertas"],
-        Esquí: ["Alpino", "Fondo", "Freestyle"],
-        Snowboard: ["Freestyle", "Slalom", "Halfpipe"],
-        EsquíAcuático: ["Slalom", "Trucos", "Saltos"],
-        Atletismo: ["Pista", "Salto", "Lanzamiento", "Fondo", "Velocidad"],
-        Boxeo: ["Amateur", "Profesional", "Entrenamiento"],
-        Escalada: ["Boulder", "Deportiva", "Velocidad"],
-        Buceo: ["Recreativo", "Profundo", "Técnico"],
-        Fútbol: ["Posición: Arquero", "Defensa", "Mediocampo", "Delantero"],
-        Rugby: ["Posición: Forward", "Back"],
-        Básquetbol: ["Base", "Escolta", "Alero", "Ala-Pívot", "Pívot"],
-        Gimnasio: ["Meta: Fuerza", "Resistencia", "Estética", "Rehabilitación", "Hipertrofia", "Movilidad"],
-        ArtesMarciales: ["Jiu Jitsu", "Muay Thai", "Boxeo", "Lucha", "MMA"],
-        Otro: ["General", "Competencia", "Recreativo"]
-      };
+      let html = `<label for="disciplina">Disciplina</label>`;
+      html += `<select id="disciplina"><option value="">-- Selecciona una disciplina --</option>`;
 
-      if (disciplinas[deporte]) {
-        html = `<label for="disciplina">${deporte === "Fútbol" || deporte === "Rugby" || deporte === "Básquetbol" ? "Posición/Destreza" : deporte === "Gimnasio" ? "Meta" : deporte === "Natación" ? "Tipo de nado" : "Disciplina"}</label>`;
-        html += `<select id="disciplina">`;
-        html += `<option value="">-- Selecciona una --</option>`;
-        disciplinas[deporte].forEach(function(d) {
-          html += `<option value="${d}">${d}</option>`;
-        });
-        html += `</select>`;
-      }
+      disciplinas.forEach(d => {
+        html += `<option value="${d}">${d}</option>`;
+      });
+      html += `</select>`;
+
       contenedor.innerHTML = html;
     }
 
+    // Mostrar disciplinas al cargar la página
+    window.onload = mostrarDisciplinas;
+
     function continuar() {
-      const deporte = document.getElementById("deporte").value;
+      const deporte = document.getElementById("deporte").value; // Será siempre "Ciclismo"
       const disciplina = document.getElementById("disciplina")?.value || "";
-      const tiempo = document.getElementById("tiempo").value;
       const nivel = document.getElementById("nivel").value;
 
-      if (!deporte || !tiempo || !nivel) {
-        alert("Por favor, completa todos los campos.");
+      if (!disciplina) {
+        alert("Por favor, selecciona una disciplina.");
+        return;
+      }
+      if (!nivel) {
+        alert("Por favor, selecciona tu nivel de experiencia.");
         return;
       }
 
-      // Guardar en localStorage para usar luego
+      // Guardar datos para usar en la siguiente pantalla
       localStorage.setItem("deporte", deporte);
       localStorage.setItem("disciplina", disciplina);
-      localStorage.setItem("tiempo", tiempo);
       localStorage.setItem("nivel", nivel);
 
+      // Redirigir al menú o siguiente paso (ajusta la url si es necesario)
       window.location.href = "menu.html";
     }
   </script>
