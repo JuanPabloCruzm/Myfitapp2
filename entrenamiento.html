@@ -1,47 +1,98 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Planes de Entrenamiento</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #121212;
-      color: #eee;
-      padding: 20px;
-    }
-    #plan-container {
-      background: #222;
-      padding: 15px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      max-width: 600px;
-    }
-    button {
-      background: #1db954;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      color: white;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    button:hover {
-      background: #1ed760;
-    }
-  </style>
+<meta charset="UTF-8" />
+<title>Entrenamiento Simple</title>
 </head>
 <body>
 
-  <h1>Plan de Entrenamiento</h1>
+<h1>Selecciona tu plan de entrenamiento</h1>
 
-  <div id="plan-container">Aquí se mostrará el plan.</div>
+<label for="deporte">Deporte:</label>
+<select id="deporte">
+  <option value="MTB">MTB</option>
+  <option value="Ruta">Ruta</option>
+  <!-- Agrega más deportes si quieres -->
+</select>
 
-  <button onclick="mostrarPlan('mtb', 'xc', 'bajo_peso', 'endomorfo', '18-30', 'principiante', '5-8')">
-    Mostrar Plan MTB XC Bajo Peso Endomorfo 18-30 Principiante 5-8h
-  </button>
+<label for="disciplina">Disciplina:</label>
+<select id="disciplina"></select>
 
-  <script src="entrenamiento.js"></script>
+<label for="imc">IMC:</label>
+<select id="imc">
+  <option value="bajo_peso">Bajo peso</option>
+  <option value="normal">Normal</option>
+  <option value="sobrepeso">Sobrepeso</option>
+</select>
+
+<button onclick="mostrarPlan()">Mostrar Plan</button>
+
+<div id="resultado"></div>
+
+<script>
+const planesEntrenamiento = {
+  MTB: {
+    XC: {
+      bajo_peso: ["Día 1: Calentamiento 15 min...", "Día 2: Entreno de fuerza...", "Día 3: Descanso activo...", "Día 4: Rodillo...", "Día 5: Técnica...", "Día 6: Resistencia...", "Día 7: Descanso."],
+      normal: ["Día 1: Ruta 1h...", "Día 2: Gimnasio...", "Día 3: Natación...", "Día 4: Intervalos...", "Día 5: Técnica...", "Día 6: Ruta larga...", "Día 7: Descanso."],
+      sobrepeso: ["Día 1: Caminata 30 min...", "Día 2: Entreno ligero...", "Día 3: Yoga...", "Día 4: Rodillo suave...", "Día 5: Técnica básica...", "Día 6: Resistencia baja...", "Día 7: Descanso."],
+    },
+    All_Mountain: {
+      bajo_peso: [],
+      normal: [],
+      sobrepeso: []
+    }
+    // Puedes agregar más disciplinas aquí
+  },
+  Ruta: {
+    Contrarreloj: {
+      bajo_peso: [],
+      normal: [],
+      sobrepeso: []
+    }
+    // Agrega más disciplinas
+  }
+  // Agrega más deportes
+};
+
+const disciplinasPorDeporte = {
+  MTB: ["XC", "All_Mountain"],
+  Ruta: ["Contrarreloj"]
+  // Agrega más deportes y sus disciplinas aquí
+};
+
+const disciplinaSelect = document.getElementById("disciplina");
+const deporteSelect = document.getElementById("deporte");
+
+function actualizarDisciplinas() {
+  const deporte = deporteSelect.value;
+  disciplinaSelect.innerHTML = "";
+  disciplinasPorDeporte[deporte].forEach(d => {
+    const option = document.createElement("option");
+    option.value = d;
+    option.textContent = d.replace(/_/g, " ");
+    disciplinaSelect.appendChild(option);
+  });
+}
+
+deporteSelect.addEventListener("change", actualizarDisciplinas);
+window.onload = actualizarDisciplinas;
+
+function mostrarPlan() {
+  const deporte = deporteSelect.value;
+  const disciplina = disciplinaSelect.value;
+  const imc = document.getElementById("imc").value;
+
+  const plan = planesEntrenamiento[deporte]?.[disciplina]?.[imc];
+  const resultadoDiv = document.getElementById("resultado");
+
+  if (!plan || plan.length === 0) {
+    resultadoDiv.textContent = "Plan no disponible para esta combinación.";
+  } else {
+    resultadoDiv.innerHTML = plan.map((d, i) => `<p><b>Día ${i + 1}:</b> ${d}</p>`).join("");
+  }
+}
+</script>
 
 </body>
 </html>
