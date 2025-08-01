@@ -24,6 +24,7 @@
     }
     .botones {
       display: flex;
+      flex-wrap: wrap;
       gap: 10px;
       margin-top: 20px;
     }
@@ -94,9 +95,33 @@
         ]
       },
       "normal": {
-        desayuno: ["(Aquí irán menús para IMC normal + diabetes)", "..."],
-        almuerzo: ["..."],
-        cena: ["..."]
+        desayuno: [
+          "Tostadas integrales con huevo y tomate",
+          "Avena con leche vegetal y frutos secos",
+          "Yogur con linaza y arándanos",
+          "Pan integral con queso fresco y palta",
+          "Smoothie de espinaca, kiwi y avena",
+          "Galletas de avena caseras",
+          "Tortilla de claras con vegetales"
+        ],
+        almuerzo: [
+          "Pechuga de pavo + quinoa + ensalada",
+          "Hamburguesa de lentejas + ensalada mixta",
+          "Pescado al horno + verduras al vapor",
+          "Ensalada de arroz integral + garbanzos",
+          "Pollo grillado con puré de zapallo",
+          "Tortilla española al horno",
+          "Sopa de verduras con fideos integrales"
+        ],
+        cena: [
+          "Ensalada de atún con lechuga y huevo",
+          "Crema de verduras + pan integral",
+          "Huevo cocido + vegetales al vapor",
+          "Yogur natural + frutos secos",
+          "Pescado con puré de coliflor",
+          "Omelette de espinaca",
+          "Wrap de pollo con pan integral"
+        ]
       },
       "sobrepeso": {
         desayuno: [
@@ -131,7 +156,7 @@
 
     function mostrarPlan() {
       if (condiciones.includes("Diabetes")) {
-        const tipo = imc.toLowerCase();
+        const tipo = imc?.toLowerCase();
         const plan = planDiabetes[tipo];
 
         if (!plan) {
