@@ -39,22 +39,27 @@
     button:hover {
       background-color: #00b38f;
     }
-    .condiciones {
-      margin-bottom: 20px;
-    }
     .condiciones label {
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
+    }
+    .ejercicio {
+      color: #ccc;
+      font-style: italic;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <h1>🍽️ Plan de Alimentación Semanal</h1>
+  <h1>🍽️ Plan de Alimentación + Ejercicio Leve</h1>
 
+  <h2>⚕️ Selecciona una condición médica:</h2>
   <div class="condiciones">
-    <h2>⚕️ Selecciona tus condiciones médicas:</h2>
-    <label><input type="checkbox" value="Diabetes" onchange="actualizarCondiciones()"> Diabetes</label>
-    <!-- Puedes agregar más condiciones aquí si lo deseas -->
+    <label><input type="radio" name="condicion" value="Diabetes" onchange="actualizarCondicion()"> Diabetes</label>
+    <label><input type="radio" name="condicion" value="Problemas cardíacos" onchange="actualizarCondicion()"> Problemas cardíacos</label>
+    <label><input type="radio" name="condicion" value="Hipertensión" onchange="actualizarCondicion()"> Hipertensión</label>
+    <label><input type="radio" name="condicion" value="Colesterol alto" onchange="actualizarCondicion()"> Colesterol alto</label>
+    <label><input type="radio" name="condicion" value="Síndrome metabólico" onchange="actualizarCondicion()"> Síndrome metabólico</label>
   </div>
 
   <p id="alerta"></p>
@@ -65,76 +70,219 @@
   </div>
 
   <script>
-    const imc = (localStorage.getItem('imc') || '').toLowerCase();
-    let condicionesSeleccionadas = [];
-
-    const alerta = document.getElementById('alerta');
     const contenido = document.getElementById('contenidoAlimentacion');
+    const alerta = document.getElementById('alerta');
 
-    const planDiabetes = {
-      "bajo": {
-        desayuno: [ "Avena con leche descremada y canela", "Pan integral con palta y huevo duro", "Yogur natural con semillas de chía y nueces", "Smoothie de avena, arándanos y leche vegetal", "Revuelto de huevos con espinaca y tostadas integrales", "Panqueques de avena con fruta natural", "Arepa integral con queso fresco bajo en sal" ],
-        almuerzo: [ "Pechuga de pollo + arroz integral + ensalada", "Lentejas estofadas con verduras y huevo duro", "Ensalada de atún, garbanzos y palta", "Pescado al horno con papas cocidas y espinacas", "Guiso de quinoa con verduras", "Omelette con queso bajo en grasa y arroz integral", "Bowl de arroz, pollo y vegetales salteados" ],
-        cena: [ "Crema de zapallo + pan integral", "Tortilla de vegetales al horno", "Sopa de lentejas con zanahoria y apio", "Ensalada de huevo duro con palta y tomate", "Yogur + frutos secos + tostadas", "Pizza casera integral con vegetales", "Ensalada de atún con garbanzos y lechuga" ]
+    const planes = {
+      "Diabetes": {
+        desayuno: [
+          "Avena con canela y leche vegetal",
+          "Yogur natural con semillas de chía",
+          "Pan integral con huevo cocido",
+          "Smoothie de avena y frutos rojos",
+          "Tortilla de espinaca con tostadas integrales",
+          "Galletas de avena caseras + té",
+          "Pan con ricota baja en grasa y tomate"
+        ],
+        once: [
+          "Manzana + puñado de nueces",
+          "Té sin azúcar + pan integral con palta",
+          "Fruta + yogur sin azúcar",
+          "Tostadas integrales con mermelada sin azúcar",
+          "Galletas de arroz + infusión",
+          "Batido de proteína vegetal + tostada",
+          "Pan de centeno con queso fresco"
+        ],
+        cena: [
+          "Sopa de verduras + huevo cocido",
+          "Ensalada con atún y huevo duro",
+          "Verduras salteadas con tofu",
+          "Puré de zapallo con pollo",
+          "Ensalada mixta con semillas",
+          "Tortilla de verduras",
+          "Pescado al horno + ensalada verde"
+        ],
+        ejercicio: [
+          "Caminar 30 minutos",
+          "Estiramientos suaves 15 min",
+          "Yoga para principiantes",
+          "Bicicleta estática ligera 20 min",
+          "Baile suave en casa",
+          "Caminata al aire libre",
+          "Subir y bajar escaleras con pausa"
+        ]
       },
-      "normal": {
-        desayuno: [ "Tostadas integrales con huevo y tomate", "Avena con leche vegetal y frutos secos", "Yogur con linaza y arándanos", "Pan integral con queso fresco y palta", "Smoothie de espinaca, kiwi y avena", "Galletas de avena caseras", "Tortilla de claras con vegetales" ],
-        almuerzo: [ "Pechuga de pavo + quinoa + ensalada", "Hamburguesa de lentejas + ensalada mixta", "Pescado al horno + verduras al vapor", "Ensalada de arroz integral + garbanzos", "Pollo grillado con puré de zapallo", "Tortilla española al horno", "Sopa de verduras con fideos integrales" ],
-        cena: [ "Ensalada de atún con lechuga y huevo", "Crema de verduras + pan integral", "Huevo cocido + vegetales al vapor", "Yogur natural + frutos secos", "Pescado con puré de coliflor", "Omelette de espinaca", "Wrap de pollo con pan integral" ]
+      "Problemas cardíacos": {
+        desayuno: [
+          "Avena con frutas frescas",
+          "Tostadas integrales con palta",
+          "Yogur descremado + semillas de linaza",
+          "Smoothie de plátano + avena",
+          "Pan de centeno con queso bajo en grasa",
+          "Tortilla de claras con espinaca",
+          "Galletas de avena caseras"
+        ],
+        once: [
+          "Té + frutos secos",
+          "Pan integral con tomate y orégano",
+          "Fruta + yogur bajo en grasa",
+          "Batido vegetal + galletas integrales",
+          "Sandwich pequeño de pavo",
+          "Té + rebanada de pan con palta",
+          "Ensalada de fruta sin azúcar añadida"
+        ],
+        cena: [
+          "Puré de papas + pescado al vapor",
+          "Sopa vegetal + pan integral",
+          "Pollo cocido con arroz integral",
+          "Pescado con brócoli y zanahorias",
+          "Ensalada de atún con lechuga y huevo",
+          "Omelette de verduras",
+          "Sopa de lentejas con verduras"
+        ],
+        ejercicio: [
+          "Caminar 20 min lento",
+          "Ejercicios de respiración",
+          "Movilidad articular en casa",
+          "Estiramiento de piernas y espalda",
+          "Caminata con pausas cada 10 minutos",
+          "Yoga suave sentado",
+          "Ejercicios en silla"
+        ]
       },
-      "sobrepeso": {
-        desayuno: [ "Avena cocida con manzana y canela", "Pan integral con palta y té sin azúcar", "Yogur natural con linaza y semillas", "Smoothie verde con pepino, espinaca y limón", "Tostadas integrales con ricota y tomate", "Huevo revuelto con avena y verduras", "Galletas de avena sin azúcar + té verde" ],
-        almuerzo: [ "Pollo al horno + ensalada verde + media papa cocida", "Ensalada de atún con lentejas y limón", "Guiso de zapallo italiano con huevo", "Pescado a la plancha con quinoa", "Hamburguesa de lentejas con ensalada", "Ensalada tibia de pollo con espinaca y tomate", "Crema de verduras con pollo desmenuzado" ],
-        cena: [ "Caldo de verduras + huevo cocido", "Ensalada de repollo, zanahoria y pollo", "Verduras al vapor con filete de pescado", "Sopa de legumbres sin sal añadida", "Ensalada de atún y huevo duro", "Yogur natural + semillas de linaza", "Huevo revuelto + pan de centeno" ]
+      "Hipertensión": {
+        desayuno: [
+          "Avena sin sal con frutas",
+          "Tostadas sin sal con palta",
+          "Pan integral + tomate",
+          "Yogur natural con linaza",
+          "Smoothie con pepino y manzana",
+          "Cereal integral sin azúcar",
+          "Tortilla de claras con espinaca"
+        ],
+        once: [
+          "Infusión + fruta",
+          "Té + galletas integrales",
+          "Batido de pepino + pan integral",
+          "Tostadas con aguacate",
+          "Manzana + nueces",
+          "Galletas de arroz + té",
+          "Pan integral con ricota"
+        ],
+        cena: [
+          "Sopa de avena + ensalada",
+          "Verduras al vapor con pollo",
+          "Arroz integral con huevo cocido",
+          "Pescado cocido al vapor",
+          "Ensalada con garbanzos y tomate",
+          "Crema de zapallo sin sal",
+          "Fideos integrales con vegetales"
+        ],
+        ejercicio: [
+          "Caminar 25 min",
+          "Tai chi básico",
+          "Movilidad en casa",
+          "Yoga de respiración",
+          "Bicicleta ligera sin resistencia",
+          "Caminata interior (pasillos)",
+          "Trote en el lugar 5 min + estiramiento"
+        ]
+      },
+      "Colesterol alto": {
+        desayuno: [
+          "Avena con linaza y leche vegetal",
+          "Smoothie de arándanos y avena",
+          "Pan integral con tomate",
+          "Yogur bajo en grasa + semillas",
+          "Tostadas integrales + palta",
+          "Pan de centeno + queso descremado",
+          "Fruta + puñado de nueces"
+        ],
+        once: [
+          "Batido verde + galletas integrales",
+          "Té con limón + pan integral",
+          "Fruta + yogur sin azúcar",
+          "Tostada de palta con tomate",
+          "Sopa de verduras ligera",
+          "Infusión + galleta integral",
+          "Pan con hummus"
+        ],
+        cena: [
+          "Ensalada mixta con atún",
+          "Pescado con arroz integral",
+          "Sopa de lentejas",
+          "Omelette con vegetales",
+          "Tostadas integrales + huevo",
+          "Verduras al horno",
+          "Puré de zapallo con pollo"
+        ],
+        ejercicio: [
+          "Caminar a ritmo medio 30 min",
+          "Bicicleta fija suave",
+          "Ejercicio de brazos con botellas",
+          "Yoga relajante",
+          "Movilidad de cuello y espalda",
+          "Caminata en pendiente leve",
+          "Estiramientos posturales"
+        ]
+      },
+      "Síndrome metabólico": {
+        desayuno: [
+          "Avena con manzana verde",
+          "Tostadas integrales con huevo duro",
+          "Yogur natural con linaza",
+          "Smoothie de pepino y espinaca",
+          "Pan integral + palta",
+          "Tortilla de claras + tomate",
+          "Fruta + avena cocida"
+        ],
+        once: [
+          "Fruta + nueces",
+          "Galletas de arroz + infusión",
+          "Té + pan integral",
+          "Yogur con avena",
+          "Tostadas + hummus",
+          "Ensalada de frutas",
+          "Batido de proteína vegetal"
+        ],
+        cena: [
+          "Verduras salteadas + arroz integral",
+          "Pollo cocido con brócoli",
+          "Sopa de legumbres",
+          "Pescado a la plancha",
+          "Ensalada tibia con huevo",
+          "Tortilla de verduras",
+          "Crema de zapallo + tostadas"
+        ],
+        ejercicio: [
+          "Caminata moderada 30 min",
+          "Yoga digestivo",
+          "Subir escaleras 5 minutos",
+          "Estiramientos de cadera",
+          "Trote suave 10 minutos",
+          "Bicicleta ligera",
+          "Movilidad general"
+        ]
       }
     };
 
-    function actualizarCondiciones() {
-      const checkboxes = document.querySelectorAll('.condiciones input[type="checkbox"]');
-      condicionesSeleccionadas = Array.from(checkboxes)
-        .filter(checkbox => checkbox.checked)
-        .map(checkbox => checkbox.value);
-
-      localStorage.setItem('condiciones', JSON.stringify(condicionesSeleccionadas));
-      mostrarPlan();
-    }
-
-    function mostrarPlan() {
-      contenido.innerHTML = '';
-      if (condicionesSeleccionadas.includes("Diabetes")) {
-        const plan = planDiabetes[imc];
-        if (!plan) {
-          contenido.innerHTML = '<p>No hay un plan definido para tu combinación de IMC y condición.</p>';
-          return;
-        }
-
-        alerta.innerHTML = '⚕️ <strong>Plan adaptado a tus condiciones médicas:</strong> ' + condicionesSeleccionadas.join(', ') + '. Consulta siempre con un profesional.';
-
-        ['desayuno', 'almuerzo', 'cena'].forEach((comida) => {
-          const comidas = plan[comida];
-          const div = document.createElement('div');
-          div.className = 'plan';
-          div.innerHTML = `<h2>${comida.charAt(0).toUpperCase() + comida.slice(1)}s</h2><ul>` +
-            comidas.map(dia => `<li>${dia}</li>`).join('') +
-            '</ul>';
-          contenido.appendChild(div);
-        });
-      } else {
+    function actualizarCondicion() {
+      const seleccion = document.querySelector('input[name="condicion"]:checked');
+      if (!seleccion) {
+        contenido.innerHTML = '';
         alerta.innerHTML = '';
-        contenido.innerHTML = '<p>Por favor selecciona una condición médica para mostrar un plan personalizado.</p>';
+        return;
       }
-    }
 
-    // Cargar condiciones previas si existen
-    window.onload = () => {
-      const guardadas = JSON.parse(localStorage.getItem('condiciones')) || [];
-      const checkboxes = document.querySelectorAll('.condiciones input[type="checkbox"]');
-      checkboxes.forEach(cb => {
-        if (guardadas.includes(cb.value)) cb.checked = true;
-      });
-      condicionesSeleccionadas = guardadas;
-      mostrarPlan();
-    };
-  </script>
-</body>
-</html>
+      const condicion = seleccion.value;
+      alerta.innerHTML = `⚕️ <strong>Plan adaptado a:</strong> ${condicion}`;
+      const plan = planes[condicion];
+      contenido.innerHTML = '';
+
+      for (let i = 0; i < 7; i++) {
+        const div = document.createElement('div');
+        div.className = 'plan';
+        div.innerHTML = `<h2>Día ${i + 1}</h2>
+          <ul>
+            <li><strong>Desayuno:</strong> ${plan.desayuno[i]}</li>
+            <li><strong>Once:</strong
