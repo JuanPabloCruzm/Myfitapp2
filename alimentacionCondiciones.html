@@ -55,11 +55,11 @@
 
   <h2>⚕️ Selecciona una condición médica:</h2>
   <div class="condiciones">
-    <label><input type="radio" name="condicion" value="Diabetes" onchange="actualizarCondicion()"> Diabetes</label>
-    <label><input type="radio" name="condicion" value="Problemas cardíacos" onchange="actualizarCondicion()"> Problemas cardíacos</label>
-    <label><input type="radio" name="condicion" value="Hipertensión" onchange="actualizarCondicion()"> Hipertensión</label>
-    <label><input type="radio" name="condicion" value="Colesterol alto" onchange="actualizarCondicion()"> Colesterol alto</label>
-    <label><input type="radio" name="condicion" value="Síndrome metabólico" onchange="actualizarCondicion()"> Síndrome metabólico</label>
+    <label><input type="radio" name="condicion" value="Diabetes"> Diabetes</label>
+    <label><input type="radio" name="condicion" value="Problemas cardíacos"> Problemas cardíacos</label>
+    <label><input type="radio" name="condicion" value="Hipertensión"> Hipertensión</label>
+    <label><input type="radio" name="condicion" value="Colesterol alto"> Colesterol alto</label>
+    <label><input type="radio" name="condicion" value="Síndrome metabólico"> Síndrome metabólico</label>
   </div>
 
   <p id="alerta"></p>
@@ -266,23 +266,29 @@
       }
     };
 
-    function actualizarCondicion() {
-      const seleccion = document.querySelector('input[name="condicion"]:checked');
-      if (!seleccion) {
+    // Detecta cambio de radio y actualiza el plan automáticamente
+    document.querySelectorAll('input[name="condicion"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        const condicion = radio.value;
+        const plan = planes[condicion];
+
+        alerta.innerHTML = `⚕️ <strong>Plan adaptado a:</strong> ${condicion}`;
         contenido.innerHTML = '';
-        alerta.innerHTML = '';
-        return;
-      }
 
-      const condicion = seleccion.value;
-      alerta.innerHTML = `⚕️ <strong>Plan adaptado a:</strong> ${condicion}`;
-      const plan = planes[condicion];
-      contenido.innerHTML = '';
-
-      for (let i = 0; i < 7; i++) {
-        const div = document.createElement('div');
-        div.className = 'plan';
-        div.innerHTML = `<h2>Día ${i + 1}</h2>
-          <ul>
-            <li><strong>Desayuno:</strong> ${plan.desayuno[i]}</li>
-            <li><strong>Once:</strong
+        for (let i = 0; i < 7; i++) {
+          const div = document.createElement('div');
+          div.className = 'plan';
+          div.innerHTML = `<h2>Día ${i + 1}</h2>
+            <ul>
+              <li><strong>Desayuno:</strong> ${plan.desayuno[i]}</li>
+              <li><strong>Once:</strong> ${plan.once[i]}</li>
+              <li><strong>Cena:</strong> ${plan.cena[i]}</li>
+            </ul>
+            <p class="ejercicio">Ejercicio sugerido: ${plan.ejercicio[i]}</p>`;
+          contenido.appendChild(div);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
