@@ -24,7 +24,6 @@
     }
     .botones {
       display: flex;
-      flex-wrap: wrap;
       gap: 10px;
       margin-top: 20px;
     }
@@ -40,129 +39,76 @@
     button:hover {
       background-color: #00b38f;
     }
+    .condiciones {
+      margin-bottom: 20px;
+    }
+    .condiciones label {
+      display: block;
+      margin-bottom: 5px;
+    }
   </style>
 </head>
 <body>
   <h1>🍽️ Plan de Alimentación Semanal</h1>
-  <p id="alerta"></p>
 
+  <div class="condiciones">
+    <h2>⚕️ Selecciona tus condiciones médicas:</h2>
+    <label><input type="checkbox" value="Diabetes" onchange="actualizarCondiciones()"> Diabetes</label>
+    <!-- Puedes agregar más condiciones aquí si lo deseas -->
+  </div>
+
+  <p id="alerta"></p>
   <div id="contenidoAlimentacion"></div>
 
   <div class="botones">
     <button onclick="window.location.href='menu.html'">Volver al menú</button>
-    <button onclick="window.location.href='condiciones.html'">Elegir condiciones médicas</button>
   </div>
 
   <script>
-    const imc = localStorage.getItem('imc');
-    const condiciones = JSON.parse(localStorage.getItem('condiciones')) || [];
+    const imc = (localStorage.getItem('imc') || '').toLowerCase();
+    let condicionesSeleccionadas = [];
 
-    const contenido = document.getElementById('contenidoAlimentacion');
     const alerta = document.getElementById('alerta');
-
-    if (condiciones.length > 0) {
-      alerta.innerHTML = '⚕️ <strong>Plan adaptado a tus condiciones médicas:</strong> ' + condiciones.join(', ') + '. Consulta siempre con un profesional.';
-    }
+    const contenido = document.getElementById('contenidoAlimentacion');
 
     const planDiabetes = {
       "bajo": {
-        desayuno: [
-          "Avena con leche descremada y canela",
-          "Pan integral con palta y huevo duro",
-          "Yogur natural con semillas de chía y nueces",
-          "Smoothie de avena, arándanos y leche vegetal",
-          "Revuelto de huevos con espinaca y tostadas integrales",
-          "Panqueques de avena con fruta natural",
-          "Arepa integral con queso fresco bajo en sal"
-        ],
-        almuerzo: [
-          "Pechuga de pollo + arroz integral + ensalada",
-          "Lentejas estofadas con verduras y huevo duro",
-          "Ensalada de atún, garbanzos y palta",
-          "Pescado al horno con papas cocidas y espinacas",
-          "Guiso de quinoa con verduras",
-          "Omelette con queso bajo en grasa y arroz integral",
-          "Bowl de arroz, pollo y vegetales salteados"
-        ],
-        cena: [
-          "Crema de zapallo + pan integral",
-          "Tortilla de vegetales al horno",
-          "Sopa de lentejas con zanahoria y apio",
-          "Ensalada de huevo duro con palta y tomate",
-          "Yogur + frutos secos + tostadas",
-          "Pizza casera integral con vegetales",
-          "Ensalada de atún con garbanzos y lechuga"
-        ]
+        desayuno: [ "Avena con leche descremada y canela", "Pan integral con palta y huevo duro", "Yogur natural con semillas de chía y nueces", "Smoothie de avena, arándanos y leche vegetal", "Revuelto de huevos con espinaca y tostadas integrales", "Panqueques de avena con fruta natural", "Arepa integral con queso fresco bajo en sal" ],
+        almuerzo: [ "Pechuga de pollo + arroz integral + ensalada", "Lentejas estofadas con verduras y huevo duro", "Ensalada de atún, garbanzos y palta", "Pescado al horno con papas cocidas y espinacas", "Guiso de quinoa con verduras", "Omelette con queso bajo en grasa y arroz integral", "Bowl de arroz, pollo y vegetales salteados" ],
+        cena: [ "Crema de zapallo + pan integral", "Tortilla de vegetales al horno", "Sopa de lentejas con zanahoria y apio", "Ensalada de huevo duro con palta y tomate", "Yogur + frutos secos + tostadas", "Pizza casera integral con vegetales", "Ensalada de atún con garbanzos y lechuga" ]
       },
       "normal": {
-        desayuno: [
-          "Tostadas integrales con huevo y tomate",
-          "Avena con leche vegetal y frutos secos",
-          "Yogur con linaza y arándanos",
-          "Pan integral con queso fresco y palta",
-          "Smoothie de espinaca, kiwi y avena",
-          "Galletas de avena caseras",
-          "Tortilla de claras con vegetales"
-        ],
-        almuerzo: [
-          "Pechuga de pavo + quinoa + ensalada",
-          "Hamburguesa de lentejas + ensalada mixta",
-          "Pescado al horno + verduras al vapor",
-          "Ensalada de arroz integral + garbanzos",
-          "Pollo grillado con puré de zapallo",
-          "Tortilla española al horno",
-          "Sopa de verduras con fideos integrales"
-        ],
-        cena: [
-          "Ensalada de atún con lechuga y huevo",
-          "Crema de verduras + pan integral",
-          "Huevo cocido + vegetales al vapor",
-          "Yogur natural + frutos secos",
-          "Pescado con puré de coliflor",
-          "Omelette de espinaca",
-          "Wrap de pollo con pan integral"
-        ]
+        desayuno: [ "Tostadas integrales con huevo y tomate", "Avena con leche vegetal y frutos secos", "Yogur con linaza y arándanos", "Pan integral con queso fresco y palta", "Smoothie de espinaca, kiwi y avena", "Galletas de avena caseras", "Tortilla de claras con vegetales" ],
+        almuerzo: [ "Pechuga de pavo + quinoa + ensalada", "Hamburguesa de lentejas + ensalada mixta", "Pescado al horno + verduras al vapor", "Ensalada de arroz integral + garbanzos", "Pollo grillado con puré de zapallo", "Tortilla española al horno", "Sopa de verduras con fideos integrales" ],
+        cena: [ "Ensalada de atún con lechuga y huevo", "Crema de verduras + pan integral", "Huevo cocido + vegetales al vapor", "Yogur natural + frutos secos", "Pescado con puré de coliflor", "Omelette de espinaca", "Wrap de pollo con pan integral" ]
       },
       "sobrepeso": {
-        desayuno: [
-          "Avena cocida con manzana y canela",
-          "Pan integral con palta y té sin azúcar",
-          "Yogur natural con linaza y semillas",
-          "Smoothie verde con pepino, espinaca y limón",
-          "Tostadas integrales con ricota y tomate",
-          "Huevo revuelto con avena y verduras",
-          "Galletas de avena sin azúcar + té verde"
-        ],
-        almuerzo: [
-          "Pollo al horno + ensalada verde + media papa cocida",
-          "Ensalada de atún con lentejas y limón",
-          "Guiso de zapallo italiano con huevo",
-          "Pescado a la plancha con quinoa",
-          "Hamburguesa de lentejas con ensalada",
-          "Ensalada tibia de pollo con espinaca y tomate",
-          "Crema de verduras con pollo desmenuzado"
-        ],
-        cena: [
-          "Caldo de verduras + huevo cocido",
-          "Ensalada de repollo, zanahoria y pollo",
-          "Verduras al vapor con filete de pescado",
-          "Sopa de legumbres sin sal añadida",
-          "Ensalada de atún y huevo duro",
-          "Yogur natural + semillas de linaza",
-          "Huevo revuelto + pan de centeno"
-        ]
+        desayuno: [ "Avena cocida con manzana y canela", "Pan integral con palta y té sin azúcar", "Yogur natural con linaza y semillas", "Smoothie verde con pepino, espinaca y limón", "Tostadas integrales con ricota y tomate", "Huevo revuelto con avena y verduras", "Galletas de avena sin azúcar + té verde" ],
+        almuerzo: [ "Pollo al horno + ensalada verde + media papa cocida", "Ensalada de atún con lentejas y limón", "Guiso de zapallo italiano con huevo", "Pescado a la plancha con quinoa", "Hamburguesa de lentejas con ensalada", "Ensalada tibia de pollo con espinaca y tomate", "Crema de verduras con pollo desmenuzado" ],
+        cena: [ "Caldo de verduras + huevo cocido", "Ensalada de repollo, zanahoria y pollo", "Verduras al vapor con filete de pescado", "Sopa de legumbres sin sal añadida", "Ensalada de atún y huevo duro", "Yogur natural + semillas de linaza", "Huevo revuelto + pan de centeno" ]
       }
     };
 
-    function mostrarPlan() {
-      if (condiciones.includes("Diabetes")) {
-        const tipo = imc?.toLowerCase();
-        const plan = planDiabetes[tipo];
+    function actualizarCondiciones() {
+      const checkboxes = document.querySelectorAll('.condiciones input[type="checkbox"]');
+      condicionesSeleccionadas = Array.from(checkboxes)
+        .filter(checkbox => checkbox.checked)
+        .map(checkbox => checkbox.value);
 
+      localStorage.setItem('condiciones', JSON.stringify(condicionesSeleccionadas));
+      mostrarPlan();
+    }
+
+    function mostrarPlan() {
+      contenido.innerHTML = '';
+      if (condicionesSeleccionadas.includes("Diabetes")) {
+        const plan = planDiabetes[imc];
         if (!plan) {
           contenido.innerHTML = '<p>No hay un plan definido para tu combinación de IMC y condición.</p>';
           return;
         }
+
+        alerta.innerHTML = '⚕️ <strong>Plan adaptado a tus condiciones médicas:</strong> ' + condicionesSeleccionadas.join(', ') + '. Consulta siempre con un profesional.';
 
         ['desayuno', 'almuerzo', 'cena'].forEach((comida) => {
           const comidas = plan[comida];
@@ -174,11 +120,21 @@
           contenido.appendChild(div);
         });
       } else {
+        alerta.innerHTML = '';
         contenido.innerHTML = '<p>Por favor selecciona una condición médica para mostrar un plan personalizado.</p>';
       }
     }
 
-    mostrarPlan();
+    // Cargar condiciones previas si existen
+    window.onload = () => {
+      const guardadas = JSON.parse(localStorage.getItem('condiciones')) || [];
+      const checkboxes = document.querySelectorAll('.condiciones input[type="checkbox"]');
+      checkboxes.forEach(cb => {
+        if (guardadas.includes(cb.value)) cb.checked = true;
+      });
+      condicionesSeleccionadas = guardadas;
+      mostrarPlan();
+    };
   </script>
 </body>
 </html>
