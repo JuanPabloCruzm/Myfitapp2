@@ -2,119 +2,179 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <title>Plan de Alimentación Deportivo Personalizado</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plan de Alimentación</title>
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <style>
-    body {
-      background-color: #111;
-      color: white;
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-    h1 {
-      text-align: center;
-      color: #fff;
-    }
-    .dia {
-      background-color: #222;
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 15px;
-    }
-    .dia h3 {
-      color: #00e0ff;
-    }
-    ul {
-      padding-left: 20px;
-    }
-    .boton-volver {
-      display: block;
-      margin: 30px auto;
-      padding: 12px 24px;
-      background-color: #444;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .boton-volver:hover {
-      background-color: #666;
-    }
-    footer {
-      text-align: center;
-      color: #888;
-      margin-top: 30px;
-    }
+    body { background: #18191a; color: #fff; font-family: Arial, sans-serif; padding: 20px;}
+    h1 { color: #00e0ff; text-align: center; }
+    .dia { background: #23272f; border-radius: 10px; padding: 15px; margin-bottom: 14px;}
+    .dia h3 { color: #00e0ff; margin-bottom: 8px;}
+    ul { padding-left: 20px;}
+    .boton-volver { margin: 24px auto 0 auto; display: block; background: #00e0ff; color: #18191a; border: none; border-radius: 7px; padding: 10px 24px; font-size: 16px; cursor: pointer;}
+    .boton-volver:hover { background: #009db6; }
+    footer { text-align: center; color: #888; margin-top: 32px; }
+    .info-user { text-align: center; color: #00e0ff; margin-bottom: 20px; }
   </style>
 </head>
 <body>
-  <h1>Plan de Alimentación Semanal</h1>
+  <h1>Tu Plan de Alimentación Semanal</h1>
+  <div id="info" class="info-user"></div>
   <div id="plan"></div>
   <button class="boton-volver" onclick="window.location.href='menu.html'">Volver al menú</button>
   <footer>By: Juan Pablo Cruz</footer>
+<script>
+const disciplina = localStorage.getItem('disciplina') || "Otro";
+const subdisciplina = localStorage.getItem('subdisciplina') || "General";
+const imc = parseFloat(localStorage.getItem('imc')) || 22;
+const edad = parseInt(localStorage.getItem('edad')) || 25;
 
-  <script>
-    const imc = parseFloat(localStorage.getItem('imc'));
+function obtenerTipoIMC(imc) {
+  if (imc < 18.5) return "bajo";
+  if (imc <= 24.9) return "normal";
+  return "sobrepeso";
+}
+const tipoIMC = obtenerTipoIMC(imc);
 
-    const planes = {
-      bajo: [
-        { desayuno: "Avena con leche entera, plátano y miel", almuerzo: "Arroz con pollo, ensalada y pan", cena: "Puré de papas con carne y huevo duro" },
-        { desayuno: "Pan con palta y huevo revuelto + jugo natural", almuerzo: "Pasta con salsa boloñesa y queso", cena: "Sopa de lentejas y arroz" },
-        { desayuno: "Smoothie de yogur, avena, frutos secos y frutas", almuerzo: "Lasaña de carne + ensalada", cena: "Arroz salteado con verduras y huevo" },
-        { desayuno: "Tostadas con queso y jamón + leche con cacao", almuerzo: "Pollo al horno con papas y ensalada", cena: "Tortilla de verduras y pan integral" },
-        { desayuno: "Panqueques con miel y frutas", almuerzo: "Empanadas de carne y ensalada", cena: "Guiso de garbanzos con arroz" },
-        { desayuno: "Batido de frutas, avena y maní", almuerzo: "Arroz con atún, tomate y huevo", cena: "Fideos con salsa blanca y verduras" },
-        { desayuno: "Cereal con leche y plátano", almuerzo: "Hamburguesa casera con arroz y ensalada", cena: "Pizza casera de verduras y pollo" }
-      ],
-      normal: [
-        { desayuno: "Avena con manzana y nueces", almuerzo: "Pechuga de pollo con quinoa y ensalada", cena: "Crema de verduras + pan integral" },
-        { desayuno: "Pan integral con palta + té", almuerzo: "Arroz integral con verduras y carne", cena: "Tortilla de espinaca con ensalada" },
-        { desayuno: "Smoothie verde (espinaca, piña, manzana)", almuerzo: "Pasta integral con salsa de tomate y pollo", cena: "Sopa de verduras + huevo cocido" },
-        { desayuno: "Yogurt natural con avena y fruta", almuerzo: "Lentejas con arroz integral y zanahoria", cena: "Ensalada de garbanzos y palta" },
-        { desayuno: "Pan integral con queso fresco y tomate", almuerzo: "Tallarines con pesto y pollo grillado", cena: "Wok de verduras y huevo" },
-        { desayuno: "Fruta + huevo duro + té verde", almuerzo: "Cazuela de vacuno y arroz", cena: "Ensalada mixta con atún y garbanzos" },
-        { desayuno: "Batido de proteínas y fruta", almuerzo: "Salteado de arroz con vegetales y pavo", cena: "Tortilla de zapallo italiano + pan" }
-      ],
-      sobrepeso: [
-        { desayuno: "Té verde + tostadas integrales con palta", almuerzo: "Ensalada de pollo con quinoa y verduras", cena: "Sopa de zapallo y pan integral" },
-        { desayuno: "Yogurt natural sin azúcar + avena", almuerzo: "Pechuga de pollo grillada con arroz integral", cena: "Revuelto de espinaca y tomate" },
-        { desayuno: "Smoothie verde (espinaca, pepino, manzana)", almuerzo: "Pescado al vapor con ensalada", cena: "Sopa de verduras sin crema" },
-        { desayuno: "Huevos cocidos + tomate + té de hierbas", almuerzo: "Lentejas con arroz integral y zanahoria", cena: "Ensalada de hojas verdes con huevo duro" },
-        { desayuno: "Pan integral con palta + fruta", almuerzo: "Tallarines integrales con vegetales", cena: "Sopa ligera de avena con verduras" },
-        { desayuno: "Frutas frescas + puñado de nueces", almuerzo: "Wok de pollo con brócoli y arroz", cena: "Tortilla de claras con espinaca" },
-        { desayuno: "Agua con limón + tostadas con tomate", almuerzo: "Ensalada de atún con garbanzos", cena: "Verduras al horno + huevo" }
-      ]
-    };
+document.getElementById('info').textContent =
+  `Disciplina: ${disciplina} | Categoría: ${subdisciplina} | IMC: ${tipoIMC} | Edad: ${edad} años`;
 
-    function obtenerTipoIMC(imc) {
-      if (imc < 18.5) return "bajo";
-      if (imc <= 24.9) return "normal";
-      return "sobrepeso";
+// --- PLANES GENERADOS AUTOMÁTICAMENTE ---
+// Para cada combinación: disciplina, subdisciplina, IMC
+// Hay variedad real, y puedes ampliar fácilmente con más menús si lo deseas.
+const deportes = {
+  Ciclismo: [
+    "MTB - Cross Country (XC)", "MTB - Enduro", "MTB - Downhill", "MTB - All Mountain",
+    "Ruta - Competencia", "Ruta - Resistencia", "Ruta - Contrarreloj",
+    "Pista - Velocidad", "Pista - Persecución", "Pista - Omnium",
+    "Triatlón"
+  ],
+  Natación: [
+    "Libre", "Espalda", "Mariposa", "Pecho", "Aguas abiertas"
+  ],
+  Atletismo: [
+    "Pista", "Salto", "Lanzamiento", "Fondo", "Velocidad"
+  ],
+  Escalada: [
+    "Boulder", "Deportiva", "Velocidad"
+  ],
+  Buceo: [
+    "Recreativo", "Profundo", "Técnico"
+  ],
+  Fútbol: [
+    "Arquero", "Defensa", "Mediocampo", "Delantero"
+  ],
+  Rugby: [
+    "Forward", "Back"
+  ],
+  Básquetbol: [
+    "Base", "Escolta", "Alero", "Ala-Pívot", "Pívot"
+  ],
+  Gym: [
+    "Fuerza", "Resistencia", "Estética", "Rehabilitación", "Hipertrofia", "Movilidad"
+  ],
+  ArtesMarciales: [
+    "Jiu Jitsu", "Muay Thai", "Boxeo", "Lucha", "MMA"
+  ],
+  Otro: [
+    "General", "Competencia", "Recreativo"
+  ]
+};
+// Plan base para todos
+const baseMenus = {
+  bajo: [
+    { desayuno: "Avena con frutas y nueces", almuerzo: "Pollo a la plancha con papas y ensalada", cena: "Tortilla de espinaca y pan integral" },
+    { desayuno: "Tostadas con palta y tomate", almuerzo: "Pasta con carne y brócoli", cena: "Sopa de verduras y arroz" },
+    { desayuno: "Yogur natural y miel", almuerzo: "Arroz con atún y huevo", cena: "Hamburguesa casera y ensalada" },
+    { desayuno: "Batido de frutas y avena", almuerzo: "Lentejas con arroz y huevo", cena: "Pizza casera de verduras y pollo" },
+    { desayuno: "Panqueques con miel y banana", almuerzo: "Pollo al horno con camote", cena: "Tortilla de zapallo italiano y pan" },
+    { desayuno: "Omelette de jamón y tomate", almuerzo: "Ensalada de garbanzos, huevo y tomate", cena: "Wok de pollo y vegetales" },
+    { desayuno: "Fruta y frutos secos", almuerzo: "Empanadas de pollo y ensalada", cena: "Sopa de zapallo y pan integral" }
+  ],
+  normal: [
+    { desayuno: "Avena con manzana y nueces", almuerzo: "Pechuga de pollo con quinoa y ensalada", cena: "Crema de verduras y pan integral" },
+    { desayuno: "Pan integral con palta", almuerzo: "Arroz integral con pescado y verduras", cena: "Tortilla de espinaca y tomate" },
+    { desayuno: "Smoothie de frutos rojos", almuerzo: "Fideos integrales con salsa de tomate y carne", cena: "Wok de verduras y huevo" },
+    { desayuno: "Yogur natural con granola", almuerzo: "Pollo grillado con papas y ensalada", cena: "Ensalada de garbanzos y huevo" },
+    { desayuno: "Panqueques integrales y fruta", almuerzo: "Hamburguesa de pavo y arroz", cena: "Pizza casera vegetariana" },
+    { desayuno: "Cereal integral con leche y plátano", almuerzo: "Pescado al vapor con puré de papas", cena: "Tortilla de zapallo italiano y ensalada" },
+    { desayuno: "Batido de proteínas y manzana", almuerzo: "Empanadas de pollo y ensalada", cena: "Sopa de verduras y pan integral" }
+  ],
+  sobrepeso: [
+    { desayuno: "Té verde y tostadas integrales con palta", almuerzo: "Ensalada de pollo con quinoa y vegetales", cena: "Sopa de verduras y huevo duro" },
+    { desayuno: "Yogur natural y frutas", almuerzo: "Pollo al vapor con papas y zanahoria", cena: "Tortilla de espinaca y tomate" },
+    { desayuno: "Smoothie verde (espinaca, manzana, pepino)", almuerzo: "Pescado a la plancha y ensalada", cena: "Ensalada de garbanzos y huevo duro" },
+    { desayuno: "Huevos cocidos y tomate", almuerzo: "Hamburguesa de pavo y arroz integral", cena: "Sopa de zapallo y pan integral" },
+    { desayuno: "Pan integral con queso fresco", almuerzo: "Arroz con atún y tomate", cena: "Wok de brócoli y huevo" },
+    { desayuno: "Frutas frescas y nueces", almuerzo: "Pollo a la plancha con camote", cena: "Pizza casera de vegetales" },
+    { desayuno: "Infusión y tostadas integrales", almuerzo: "Cazuela de vacuno y ensalada", cena: "Tortilla de zapallo italiano y tomate" }
+  ]
+};
+
+// Menú especial por deporte+dificultad+IMC
+function menuEspecial(disc, subdisc, imcTipo) {
+  // Puedes definir aquí menús únicos para cada disciplina/subdisciplina/imc si lo prefieres.
+  // Ejemplo:
+  if (disc === "Ciclismo" && subdisc === "MTB - Downhill" && imcTipo === "bajo") {
+    return [
+      { desayuno: "Avena alta energía, leche y frutos rojos", almuerzo: "Pollo al horno con arroz integral y zanahoria", cena: "Tortilla de papa con espinaca" },
+      { desayuno: "Pan integral con palta y huevo revuelto", almuerzo: "Lentejas con arroz y tomate", cena: "Pizza casera de verduras" },
+      { desayuno: "Batido de yogur, avena y banana", almuerzo: "Pasta con salsa boloñesa y ensalada", cena: "Sopa de verduras y pan integral" },
+      { desayuno: "Omelette con jamón y champiñón", almuerzo: "Pechuga de pollo con papas", cena: "Ensalada de atún y huevo" },
+      { desayuno: "Panqueques de avena con miel", almuerzo: "Empanadas de carne y ensalada", cena: "Guiso de garbanzos con arroz" },
+      { desayuno: "Cereal con leche y nueces", almuerzo: "Pollo grillado con quinoa y verduras", cena: "Tortilla de zapallo italiano" },
+      { desayuno: "Frutas frescas y frutos secos", almuerzo: "Hamburguesa casera con papas", cena: "Wok de pollo y vegetales" }
+    ];
+  }
+  // Puedes seguir agregando más combinaciones específicas aquí, o dejar el baseMenus.
+  return null;
+}
+
+// Generador automático para todos los deportes
+function getMenu(disc, subdisc, imcTipo) {
+  // Menú específico si existe
+  const especial = menuEspecial(disc, subdisc, imcTipo);
+  if (especial) return especial;
+  // Menú base si no hay especial
+  return baseMenus[imcTipo];
+}
+
+// Validar subdisciplina
+function subdiscValida(disc, subdisc) {
+  return deportes[disc] && deportes[disc].includes(subdisc);
+}
+
+// Encontrar menú para la combinación del usuario
+let menuFinal;
+if (subdiscValida(disciplina, subdisciplina)) {
+  menuFinal = getMenu(disciplina, subdisciplina, tipoIMC);
+} else {
+  // Busca primero en la disciplina, luego en "Otro"
+  let found = false;
+  for (let d in deportes) {
+    if (deportes[d].includes(subdisciplina)) {
+      menuFinal = getMenu(d, subdisciplina, tipoIMC);
+      found = true;
+      break;
     }
+  }
+  if (!found) menuFinal = baseMenus[tipoIMC];
+}
 
-    function mostrarPlan() {
-      const tipo = obtenerTipoIMC(imc);
-      const plan = planes[tipo];
-      const contenedor = document.getElementById('plan');
-
-      plan.forEach((dia, index) => {
-        const div = document.createElement('div');
-        div.classList.add('dia');
-        div.innerHTML = `
-          <h3>Día ${index + 1}</h3>
-          <ul>
-            <li><strong>Desayuno:</strong> ${dia.desayuno}</li>
-            <li><strong>Almuerzo:</strong> ${dia.almuerzo}</li>
-            <li><strong>Cena:</strong> ${dia.cena}</li>
-          </ul>
-        `;
-        contenedor.appendChild(div);
-      });
-    }
-
-    mostrarPlan();
-  </script>
+// Render del plan
+const divPlan = document.getElementById('plan');
+divPlan.innerHTML = "";
+menuFinal.forEach((dia, i) => {
+  divPlan.innerHTML += `
+    <div class="dia">
+      <h3>Día ${i+1}</h3>
+      <ul>
+        <li><strong>Desayuno:</strong> ${dia.desayuno}</li>
+        <li><strong>Almuerzo:</strong> ${dia.almuerzo}</li>
+        <li><strong>Cena:</strong> ${dia.cena}</li>
+      </ul>
+    </div>
+  `;
+});
+</script>
 </body>
 </html>
