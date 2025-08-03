@@ -37,7 +37,7 @@
     }
 
     label::before {
-      content: "👉 ";
+      content: "• ";
       color: #ffffff;
     }
 
@@ -88,11 +88,11 @@
 </head>
 <body>
   <div class="container">
-    <h1>Elige tu flow deportivo 💪</h1>
+    <h1>Elige tu flow deportivo</h1>
 
-    <label for="deporte">¿Con qué deporte te sientes más zorro hoy?</label>
+    <label for="deporte">¿Con qué deporte te identificas hoy?</label>
     <select id="deporte" onchange="mostrarDisciplinas()">
-      <option value="">-- Selecciona tu deporte estrella --</option>
+      <option value="">-- Selecciona tu deporte --</option>
       <option value="Ciclismo">Ciclismo</option>
       <option value="Natación">Natación</option>
       <option value="Atletismo">Atletismo</option>
@@ -108,15 +108,15 @@
 
     <div id="disciplinaContainer"></div>
 
-    <label for="nivel">¿A qué nivel estás rompiéndola?</label>
+    <label for="nivel">¿A qué nivel estás entrenando?</label>
     <select id="nivel">
-      <option value="">-- Elige tu flow --</option>
-      <option value="principiante">Principiante (recién prendiendo fuego)</option>
-      <option value="intermedio">Intermedio (nivel pro en camino)</option>
-      <option value="avanzado">Avanzado (zorro full)</option>
+      <option value="">-- Elige tu nivel --</option>
+      <option value="principiante">Principiante</option>
+      <option value="intermedio">Intermedio</option>
+      <option value="avanzado">Avanzado</option>
     </select>
 
-    <button onclick="continuar()">Listo, vamos con todo 🔥</button>
+    <button onclick="continuar()">Continuar</button>
     <footer>By: Juan Pablo Cruz</footer>
   </div>
 
@@ -155,15 +155,15 @@
     if (disciplinas[deporte]) {
       let labelTexto = "Disciplina";
       if (["Fútbol", "Rugby", "Básquetbol"].includes(deporte)) {
-        labelTexto = "Tu rol zorrón";
+        labelTexto = "Posición";
       } else if (deporte === "Gym") {
-        labelTexto = "¿Cuál es tu meta papá?";
+        labelTexto = "Meta de entrenamiento";
       } else if (deporte === "Natación") {
-        labelTexto = "Estilo de nado facherito";
+        labelTexto = "Estilo de nado";
       }
 
       html += `<label for="disciplina">${labelTexto}</label>`;
-      html += `<select id="disciplina"><option value="">-- Elige una --</option>`;
+      html += `<select id="disciplina"><option value="">-- Selecciona una opción --</option>`;
 
       disciplinas[deporte].forEach(d => {
         html += `<option value="${d}">${d}</option>`;
@@ -184,7 +184,7 @@
     const nivel = document.getElementById("nivel").value;
 
     if (!deporte || !disciplina || !nivel) {
-      alert("Faltan datos, zorro. Completa todo y vamos.");
+      alert("Completa todos los campos antes de continuar.");
       return;
     }
 
