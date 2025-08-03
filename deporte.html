@@ -3,31 +3,44 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Selecciona tu Deporte y Disciplina</title>
+  <title>Tu Deporte y Disciplina</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <style>
     body {
-      background-color: #121212;
-      color: #fff;
+      background-color: #0a0a0a;
+      color: #f0f0f0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0; padding: 0;
+      margin: 0;
+      padding: 0;
     }
+
     .container {
       max-width: 900px;
       margin: auto;
-      padding: 40px 20px;
+      padding: 60px 20px;
     }
+
     h1 {
-      color: #00bfff;
+      color: #ffffff;
       text-align: center;
-      font-size: 2em;
+      font-size: 2.5em;
+      margin-bottom: 40px;
+      text-shadow: 1px 1px 5px #555;
     }
+
     label {
       display: block;
       margin-top: 30px;
       font-weight: bold;
-      font-size: 1.1em;
+      font-size: 1.2em;
+      color: #d1d1d1;
     }
+
+    label::before {
+      content: "👉 ";
+      color: #ffffff;
+    }
+
     select {
       display: block;
       margin-top: 10px;
@@ -35,36 +48,51 @@
       padding: 14px;
       font-size: 1em;
       border-radius: 8px;
-      border: none;
-      background-color: #1e1e1e;
+      border: 1px solid #444;
+      background-color: #1a1a1a;
       color: #fff;
+      transition: border 0.3s;
     }
+
+    select:focus {
+      border-color: #888;
+      outline: none;
+    }
+
     button {
-      margin-top: 40px;
-      padding: 14px 30px;
-      font-size: 1.2em;
-      background-color: #005577;
+      margin-top: 50px;
+      padding: 16px 30px;
+      font-size: 1.3em;
+      font-weight: bold;
+      background: linear-gradient(135deg, #2d2d2d, #444);
       color: #fff;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       width: 100%;
+      transition: background 0.3s, transform 0.2s;
     }
+
+    button:hover {
+      background: linear-gradient(135deg, #444, #666);
+      transform: scale(1.02);
+    }
+
     footer {
-      margin-top: 60px;
+      margin-top: 80px;
       text-align: center;
-      font-size: 1em;
-      color: #888;
+      font-size: 0.95em;
+      color: #777;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Selecciona tu Deporte y Disciplina</h1>
+    <h1>Elige tu flow deportivo 💪</h1>
 
-    <label for="deporte">Deporte</label>
+    <label for="deporte">¿Con qué deporte te sientes más zorro hoy?</label>
     <select id="deporte" onchange="mostrarDisciplinas()">
-      <option value="">-- Selecciona un deporte --</option>
+      <option value="">-- Selecciona tu deporte estrella --</option>
       <option value="Ciclismo">Ciclismo</option>
       <option value="Natación">Natación</option>
       <option value="Atletismo">Atletismo</option>
@@ -80,15 +108,15 @@
 
     <div id="disciplinaContainer"></div>
 
-    <label for="nivel">Nivel de experiencia</label>
+    <label for="nivel">¿A qué nivel estás rompiéndola?</label>
     <select id="nivel">
-      <option value="">-- Selecciona tu nivel --</option>
-      <option value="principiante">Principiante</option>
-      <option value="intermedio">Intermedio</option>
-      <option value="avanzado">Avanzado</option>
+      <option value="">-- Elige tu flow --</option>
+      <option value="principiante">Principiante (recién prendiendo fuego)</option>
+      <option value="intermedio">Intermedio (nivel pro en camino)</option>
+      <option value="avanzado">Avanzado (zorro full)</option>
     </select>
 
-    <button onclick="continuar()">Continuar</button>
+    <button onclick="continuar()">Listo, vamos con todo 🔥</button>
     <footer>By: Juan Pablo Cruz</footer>
   </div>
 
@@ -126,16 +154,16 @@
 
     if (disciplinas[deporte]) {
       let labelTexto = "Disciplina";
-      if (deporte === "Fútbol" || deporte === "Rugby" || deporte === "Básquetbol") {
-        labelTexto = "Posición/Destreza";
+      if (["Fútbol", "Rugby", "Básquetbol"].includes(deporte)) {
+        labelTexto = "Tu rol zorrón";
       } else if (deporte === "Gym") {
-        labelTexto = "Meta";
+        labelTexto = "¿Cuál es tu meta papá?";
       } else if (deporte === "Natación") {
-        labelTexto = "Tipo de nado";
+        labelTexto = "Estilo de nado facherito";
       }
 
       html += `<label for="disciplina">${labelTexto}</label>`;
-      html += `<select id="disciplina"><option value="">-- Selecciona una --</option>`;
+      html += `<select id="disciplina"><option value="">-- Elige una --</option>`;
 
       disciplinas[deporte].forEach(d => {
         html += `<option value="${d}">${d}</option>`;
@@ -156,7 +184,7 @@
     const nivel = document.getElementById("nivel").value;
 
     if (!deporte || !disciplina || !nivel) {
-      alert("Por favor, completa todos los campos.");
+      alert("Faltan datos, zorro. Completa todo y vamos.");
       return;
     }
 
