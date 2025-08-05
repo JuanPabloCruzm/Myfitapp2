@@ -9,148 +9,155 @@
     body {
       background-color: #121212;
       color: #eee;
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
       padding: 20px;
       max-width: 600px;
       margin: auto;
     }
-
     h1 {
       text-align: center;
       margin-bottom: 30px;
     }
-
     label {
       display: block;
       margin-top: 15px;
       font-weight: bold;
     }
-
-    input, select {
+    input[type="number"],
+    input[type="text"],
+    select {
       width: 100%;
       padding: 10px;
-      border: none;
-      border-radius: 5px;
       margin-top: 5px;
       background-color: #1e1e1e;
-      color: white;
-    }
-
-    .descripcion {
-      font-size: 0.9em;
-      color: #bbb;
-      margin-top: 5px;
-    }
-
-    button {
-      width: 100%;
-      margin-top: 30px;
-      padding: 15px;
-      background-color: #444;
-      color: white;
-      border: none;
+      color: #fff;
+      border: 1px solid #444;
       border-radius: 5px;
+    }
+    .tipo-cuerpo {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+    .opcion-cuerpo {
+      flex: 1;
+      margin: 5px;
+      padding: 15px;
+      background-color: #1e1e1e;
+      border: 2px solid #444;
+      border-radius: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .opcion-cuerpo:hover {
+      border-color: #888;
+    }
+    .opcion-cuerpo.seleccionado {
+      border-color: #00bcd4;
+      background-color: #2a2a2a;
+    }
+    #descripcionCuerpo {
+      margin-top: 20px;
+      background-color: #1a1a1a;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #444;
+      display: none;
+    }
+    button {
+      margin-top: 30px;
+      width: 100%;
+      padding: 15px;
+      background-color: #00bcd4;
+      color: #000;
       font-size: 16px;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
     }
-
     button:hover {
-      background-color: #666;
+      background-color: #0097a7;
     }
-
-    footer {
+    .firma {
+      margin-top: 40px;
       text-align: center;
-      margin-top: 30px;
-      font-size: 0.9em;
-      color: #888;
+      font-size: 14px;
+      color: #777;
     }
   </style>
 </head>
-<body onload="mostrarSaludo()">
-  <h1 id="saludo"></h1>
+<body>
+  <h1 id="saludo">Hola, bienvenido</h1>
 
-  <form id="formulario">
-    <label for="edad">Edad (años):</label>
-    <input type="number" id="edad" required />
+  <label for="edad">Edad (años):</label>
+  <input type="number" id="edad" required>
 
-    <label for="peso">Peso (kg):</label>
-    <input type="number" id="peso" required />
+  <label for="peso">Peso (kg):</label>
+  <input type="number" id="peso" step="0.1" required>
 
-    <label for="altura">Altura (en metros, ej: 1.75):</label>
-    <input type="number" step="0.01" id="altura" required />
+  <label for="altura">Altura (metros, ej: 1.75):</label>
+  <input type="number" id="altura" step="0.01" required>
 
-    <label for="tipoCuerpo">Tipo de cuerpo:</label>
-    <select id="tipoCuerpo" required onchange="mostrarDescripcion()">
-      <option value="">Selecciona una opción</option>
-      <option value="endomorfo">Endomorfo</option>
-      <option value="mesomorfo">Mesomorfo</option>
-      <option value="ectomorfo">Ectomorfo</option>
-    </select>
+  <label>Tipo de cuerpo:</label>
+  <div class="tipo-cuerpo">
+    <div class="opcion-cuerpo" data-tipo="endomorfo">Endomorfo</div>
+    <div class="opcion-cuerpo" data-tipo="mesomorfo">Mesomorfo</div>
+    <div class="opcion-cuerpo" data-tipo="ectomorfo">Ectomorfo</div>
+  </div>
 
-    <div class="descripcion" id="descripcionTipo"></div>
+  <div id="descripcionCuerpo"></div>
 
-    <button type="button" onclick="guardarDatos()">Calcular y continuar</button>
-  </form>
+  <button onclick="guardarDatos()">Calcular y continuar</button>
 
-  <footer>By: Juan Pablo Cruz</footer>
+  <div class="firma">By: Juan Pablo Cruz</div>
 
   <script>
-    function mostrarSaludo() {
-      const nombre = localStorage.getItem('nombre') || '';
-      const sexo = localStorage.getItem('sexo') || '';
-      let saludo = '';
-
-      if (sexo === 'masculino') {
-        saludo = 'Hola Sr. ' + nombre;
-      } else if (sexo === 'femenino') {
-        saludo = 'Hola Srta. ' + nombre;
-      } else {
-        saludo = 'Hola ' + nombre;
-      }
-
-      document.getElementById('saludo').textContent = saludo;
+    const saludo = document.getElementById("saludo");
+    const nombre = localStorage.getItem("nombre");
+    const sexo = localStorage.getItem("sexo");
+    if (nombre && sexo) {
+      const saludoSexo = sexo === "masculino" ? "Sr." : "Srta.";
+      saludo.textContent = `Hola ${saludoSexo} ${nombre}, completa tus datos`;
     }
 
-    function mostrarDescripcion() {
-      const tipo = document.getElementById('tipoCuerpo').value;
-      const descripcion = document.getElementById('descripcionTipo');
+    let tipoSeleccionado = "";
 
-      switch(tipo) {
-        case 'endomorfo':
-          descripcion.textContent = "Endomorfo: cuerpo más ancho, mayor facilidad para ganar peso.";
-          break;
-        case 'mesomorfo':
-          descripcion.textContent = "Mesomorfo: cuerpo equilibrado, musculatura natural, buena respuesta al ejercicio.";
-          break;
-        case 'ectomorfo':
-          descripcion.textContent = "Ectomorfo: delgado, difícil ganar masa muscular o grasa.";
-          break;
-        default:
-          descripcion.textContent = '';
-      }
-    }
+    const descripciones = {
+      endomorfo: "Endomorfo: tiende a acumular grasa con facilidad, cuerpo más ancho, metabolismo lento. Ideal para deportes de fuerza o explosivos.",
+      mesomorfo: "Mesomorfo: cuerpo naturalmente atlético, desarrolla músculo fácilmente, buena respuesta al entrenamiento.",
+      ectomorfo: "Ectomorfo: delgado por naturaleza, metabolismo rápido, le cuesta ganar masa muscular pero resistente en deportes de fondo."
+    };
+
+    const opciones = document.querySelectorAll(".opcion-cuerpo");
+    const descDiv = document.getElementById("descripcionCuerpo");
+
+    opciones.forEach(opcion => {
+      opcion.addEventListener("click", () => {
+        opciones.forEach(o => o.classList.remove("seleccionado"));
+        opcion.classList.add("seleccionado");
+        tipoSeleccionado = opcion.getAttribute("data-tipo");
+        descDiv.style.display = "block";
+        descDiv.textContent = descripciones[tipoSeleccionado];
+      });
+    });
 
     function guardarDatos() {
-      const edad = document.getElementById('edad').value;
-      const peso = document.getElementById('peso').value;
-      const altura = document.getElementById('altura').value;
-      const tipoCuerpo = document.getElementById('tipoCuerpo').value;
+      const edad = document.getElementById("edad").value;
+      const peso = document.getElementById("peso").value;
+      const altura = document.getElementById("altura").value;
 
-      if (!edad || !peso || !altura || !tipoCuerpo) {
-        alert('Por favor, completa todos los campos.');
+      if (!edad || !peso || !altura || !tipoSeleccionado) {
+        alert("Por favor, completa todos los campos y selecciona un tipo de cuerpo.");
         return;
       }
 
-      localStorage.setItem('edad', edad);
-      localStorage.setItem('peso', peso);
-      localStorage.setItem('altura', altura);
-      localStorage.setItem('tipoCuerpo', tipoCuerpo);
+      localStorage.setItem("edad", edad);
+      localStorage.setItem("peso", peso);
+      localStorage.setItem("altura", altura);
+      localStorage.setItem("tipoCuerpo", tipoSeleccionado);
 
-      // Calcular IMC
-      const imc = peso / (altura * altura);
-      localStorage.setItem('imc', imc.toFixed(2));
-
-      window.location.href = 'deporte.html';
+      window.location.href = "deporte.html";
     }
   </script>
 </body>
