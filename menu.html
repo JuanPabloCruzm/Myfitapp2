@@ -1,134 +1,127 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tu Menú, Tu Ley</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico" />
-  <style>
-    body {
-      background-color: #121212;
-      color: #f0f0f0;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 20px;
-      margin: 0;
-    }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Menu Principal</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <style>
+    body {
+      background-color: #121212;
+      color: #f0f0f0;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+    }
 
-    h1 {
-      color: #e0e0e0;
-      font-weight: 700;
-      margin-bottom: 40px;
-      text-shadow: 0 0 10px #222;
-    }
+    h1 {
+      color: #e0e0e0;
+      font-weight: 700;
+      margin-bottom: 40px;
+      text-shadow: 0 0 10px #222;
+    }
 
-    .info {
-      background-color: #1a1a1a;
-      border-radius: 12px;
-      padding: 25px 20px;
-      margin-bottom: 30px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      font-size: 1.1em;
-      line-height: 1.5;
-      color: #ddd;
-    }
+    .info {
+      background-color: #1a1a1a;
+      border-radius: 12px;
+      padding: 25px 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 1.1em;
+      line-height: 1.5;
+      color: #ddd;
+    }
 
-    .info p {
-      margin: 10px 0;
-    }
+    .info p {
+      margin: 10px 0;
+    }
 
-    .tipo-cuerpo-desc {
-      margin-top: 10px;
-      font-style: italic;
-      color: #bbb;
-      font-size: 0.95em;
-      min-height: 50px;
-    }
+    .tipo-cuerpo-desc {
+      margin-top: 10px;
+      font-style: italic;
+      color: #bbb;
+      font-size: 0.95em;
+      min-height: 50px;
+    }
 
-    .button {
-      display: block;
-      width: 80%;
-      max-width: 320px;
-      margin: 12px auto;
-      padding: 16px 0;
-      font-size: 18px;
-      font-weight: 700;
-      border: none;
-      border-radius: 10px;
-      background-color: #2e2e2e;
-      color: #f0f0f0;
-      cursor: pointer;
-      box-shadow: 0 0 10px #1a1a1a;
-      transition: background-color 0.3s, box-shadow 0.3s;
-      user-select: none;
-    }
+    .button {
+      display: block;
+      width: 80%;
+      max-width: 320px;
+      margin: 12px auto;
+      padding: 16px 0;
+      font-size: 18px;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      background-color: #2e2e2e; /* gris oscuro elegante */
+      color: #f0f0f0;
+      cursor: pointer;
+      box-shadow: 0 0 10px #1a1a1a;
+      transition: background-color 0.3s, box-shadow 0.3s;
+      user-select: none;
+    }
 
-    .button:hover {
-      background-color: #3c3c3c;
-      box-shadow: 0 0 20px #000000;
-    }
+    .button:hover {
+      background-color: #3c3c3c;
+      box-shadow: 0 0 20px #000000;
+    }
 
-    .footer {
-      margin-top: 40px;
-      font-size: 14px;
-      color: #777;
-      user-select: none;
-    }
-  </style>
+    .footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #777;
+      user-select: none;
+    }
+  </style>
 </head>
 <body>
-  <h1>Tu Menú, Tu Ley. Elige tu próxima jugada 😏</h1>
+  <h1>Tu Menu, Tu Ley. Elige Tu Proxima Jugada!</h1>
 
-  <div class="info">
-    <p><strong>Edad:</strong> <span id="edad"></span> años</p>
-    <p><strong>Peso:</strong> <span id="peso"></span> kg</p>
-    <p><strong>Altura:</strong> <span id="altura"></span> m</p>
-    <p><strong>Tipo de cuerpo:</strong> <span id="tipoCuerpo"></span></p>
-    <div class="tipo-cuerpo-desc" id="descTipoCuerpo"></div>
-    <p><strong>IMC:</strong> <span id="imc"></span></p>
-  </div>
+  <div class="info">
+    <p><strong>Edad:</strong> <span id="edad"></span> años</p>
+    <p><strong>Peso:</strong> <span id="peso"></span> kg</p>
+    <p><strong>Altura:</strong> <span id="altura"></span> m</p>
+    <p><strong>Tipo de cuerpo:</strong> <span id="tipoCuerpo"></span></p>
+    <div class="tipo-cuerpo-desc" id="descTipoCuerpo"></div>
+    <p><strong>IMC:</strong> <span id="imc"></span></p>
+  </div>
 
-  <button class="button" onclick="window.location.href='alimentacion.html'">Plan de Alimentación</button>
-  <button class="button" onclick="window.location.href='alimentacionCondiciones.html'">Plan de Alimentación (Condiciones Médicas)</button>
-  <button class="button" onclick="window.location.href='entrenamiento.html'">Plan de Entrenamiento</button>
-  <button class="button" onclick="window.location.href='deporte.html'">Volver a Selección de Deporte</button>
-  <button class="button" onclick="cerrarSesion()">Cerrar Sesión</button>
+  <button class="button" onclick="window.location.href='alimentacion.html'">Plan de Alimentación</button>
+  <button class="button" onclick="window.location.href='alimentacionCondiciones.html'">Plan de Alimentación (Condiciones Médicas)</button>
+  <button class="button" onclick="window.location.href='entrenamiento.html'">Plan de Entrenamiento</button>
+  <button class="button" onclick="window.location.href='deporte.html'">Volver a Selección de Deporte</button>
 
-  <div class="footer">By: Juan Pablo Cruz</div>
+  <div class="footer">By: Juan Pablo Cruz</div>
 
-  <script>
-    // Cargar datos desde localStorage
-    const edad = localStorage.getItem("edad") || "";
-    const peso = localStorage.getItem("peso") || "";
-    const altura = localStorage.getItem("altura") || "";
-    const tipoCuerpoRaw = localStorage.getItem("tipoCuerpo") || "";
-    const imc = localStorage.getItem("imc") || "";
+  <script>
+    // Cargar datos desde localStorage
+    const edad = localStorage.getItem("edad") || "";
+    const peso = localStorage.getItem("peso") || "";
+    const altura = localStorage.getItem("altura") || "";
+    const tipoCuerpoRaw = localStorage.getItem("tipoCuerpo") || "";
+    const imc = localStorage.getItem("imc") || "";
 
-    document.getElementById("edad").textContent = edad;
-    document.getElementById("peso").textContent = peso;
-    document.getElementById("altura").textContent = altura;
-    document.getElementById("tipoCuerpo").textContent = tipoCuerpoRaw;
-    document.getElementById("imc").textContent = imc;
+    document.getElementById("edad").textContent = edad;
+    document.getElementById("peso").textContent = peso;
+    document.getElementById("altura").textContent = altura;
+    document.getElementById("tipoCuerpo").textContent = tipoCuerpoRaw;
+    document.getElementById("imc").textContent = imc;
 
-    // Descripciones breves para cada tipo de cuerpo
-    const descripciones = {
-      "endomorfo": "Cuerpo con tendencia a acumular grasa, metabolismo lento y estructura más ancha.",
-      "mesomorfo": "Cuerpo atlético, musculoso y con facilidad para ganar masa muscular.",
-      "ectomorfo": "Cuerpo delgado, metabolismo rápido y dificultad para ganar peso o músculo."
-    };
+    // Descripciones breves para cada tipo de cuerpo (claves en minúsculas)
+    const descripciones = {
+      "endomorfo": "Cuerpo con tendencia a acumular grasa, metabolismo lento y estructura más ancha.",
+      "mesomorfo": "Cuerpo atlético, musculoso y con facilidad para ganar masa muscular.",
+      "ectomorfo": "Cuerpo delgado, metabolismo rápido y dificultad para ganar peso o músculo."
+    };
 
-    const tipoCuerpoKey = tipoCuerpoRaw.trim().toLowerCase();
-    const descripcion = descripciones[tipoCuerpoKey] || "Tipo de cuerpo no especificado.";
-    document.getElementById("descTipoCuerpo").textContent = descripcion;
-
-    // Cerrar sesión y volver al inicio
-    function cerrarSesion() {
-      localStorage.clear(); // Borra todos los datos guardados
-      window.location.href = "index.html"; // Redirige al inicio
-    }
-  </script>
+    const tipoCuerpoKey = tipoCuerpoRaw.trim().toLowerCase();
+    const descripcion = descripciones[tipoCuerpoKey] || "Tipo de cuerpo no especificado.";
+    document.getElementById("descTipoCuerpo").textContent = descripcion;
+  </script>
 </body>
 </html>
