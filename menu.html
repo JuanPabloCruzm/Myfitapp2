@@ -80,7 +80,7 @@
   </style>
 </head>
 <body>
-  <h1>Tu Menú, Tu Ley. Elige tu próxima jugada 😏</h1>
+  <h1>Tu Menú, Tu Ley. Elige tu próxima jugada</h1>
 
   <div class="info">
     <p><strong>Edad:</strong> <span id="edad"></span> años</p>
@@ -107,27 +107,32 @@
     const tipoCuerpoRaw = localStorage.getItem("tipoCuerpo") || "";
     const imc = localStorage.getItem("imc") || "";
 
+    // Mostrar datos
     document.getElementById("edad").textContent = edad;
     document.getElementById("peso").textContent = peso;
     document.getElementById("altura").textContent = altura;
-    document.getElementById("tipoCuerpo").textContent = tipoCuerpoRaw;
+
+    // Asegurarse de que tipo de cuerpo sea visible
+    const tipoCuerpo = tipoCuerpoRaw.charAt(0).toUpperCase() + tipoCuerpoRaw.slice(1).toLowerCase();
+    document.getElementById("tipoCuerpo").textContent = tipoCuerpo;
+
     document.getElementById("imc").textContent = imc;
 
-    // Descripciones breves para cada tipo de cuerpo
+    // Descripciones breves
     const descripciones = {
       "endomorfo": "Cuerpo con tendencia a acumular grasa, metabolismo lento y estructura más ancha.",
       "mesomorfo": "Cuerpo atlético, musculoso y con facilidad para ganar masa muscular.",
       "ectomorfo": "Cuerpo delgado, metabolismo rápido y dificultad para ganar peso o músculo."
     };
 
-    const tipoCuerpoKey = tipoCuerpoRaw.trim().toLowerCase();
-    const descripcion = descripciones[tipoCuerpoKey] || "Tipo de cuerpo no especificado.";
+    const key = tipoCuerpoRaw.trim().toLowerCase();
+    const descripcion = descripciones[key] || "Tipo de cuerpo no especificado.";
     document.getElementById("descTipoCuerpo").textContent = descripcion;
 
     // Cerrar sesión y volver al inicio
     function cerrarSesion() {
-      localStorage.clear(); // Borra todos los datos guardados
-      window.location.href = "inicio.html"; // Redirige al inicio
+      localStorage.clear();
+      window.location.href = "index.html";
     }
   </script>
 </body>
