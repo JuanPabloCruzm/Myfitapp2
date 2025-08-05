@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Datos Físicos</title>
   <link rel="icon" href="favicon.ico" />
   <style>
@@ -12,65 +12,77 @@
       text-align: center;
       padding: 20px;
     }
+
     h1 {
-      color: #ccc;
+      font-size: 2em;
+      margin-bottom: 10px;
     }
+
+    .input-group {
+      margin: 20px 0;
+    }
+
     input, select {
-      background-color: #1e1e1e;
-      color: #fff;
-      border: 1px solid #555;
       padding: 10px;
-      margin: 10px auto;
-      display: block;
+      font-size: 18px;
+      border-radius: 8px;
+      border: none;
+      margin-top: 5px;
       width: 80%;
       max-width: 300px;
-      border-radius: 8px;
+      background-color: #2c2c2c;
+      color: #fff;
     }
-    .tipo-cuerpo-container {
+
+    .body-types {
       display: flex;
-      flex-wrap: wrap;
       justify-content: center;
-      margin-top: 20px;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-top: 30px;
     }
-    .tipo-cuerpo {
-      background-color: #1e1e1e;
-      border: 2px solid #444;
+
+    .body-type {
+      background-color: #1f1f1f;
+      padding: 20px;
       border-radius: 12px;
-      padding: 15px;
-      margin: 10px;
       width: 250px;
-      cursor: pointer;
-      transition: 0.3s;
     }
-    .tipo-cuerpo:hover {
-      border-color: #888;
+
+    .body-type input[type="radio"] {
+      transform: scale(1.2);
+      margin: 10px;
     }
-    .tipo-cuerpo.selected {
-      border-color: #999;
-      background-color: #2a2a2a;
+
+    .body-type label {
+      font-size: 20px;
+      font-weight: bold;
     }
-    .descripcion {
-      font-size: 0.9em;
-      color: #aaa;
+
+    .description {
       margin-top: 10px;
+      font-size: 15px;
+      color: #ccc;
     }
+
     button {
+      margin-top: 30px;
+      padding: 15px 30px;
+      font-size: 18px;
       background-color: #444;
       color: white;
       border: none;
-      padding: 12px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 30px;
       border-radius: 10px;
-      transition: 0.3s;
+      cursor: pointer;
     }
+
     button:hover {
       background-color: #666;
     }
+
     footer {
       margin-top: 40px;
-      font-size: 0.8em;
+      font-size: 14px;
       color: #777;
     }
   </style>
@@ -78,71 +90,82 @@
 <body>
   <h1 id="saludo">Hey!</h1>
 
-  <input type="number" id="edad" placeholder="Edad (Ej: 25)" required>
-  <input type="number" id="peso" placeholder="Peso en kg (Ej: 70)" required>
-  <input type="number" id="altura" step="0.01" placeholder="Altura en metros (Ej: 1.75)" required>
-
-  <h2 style="margin-top: 40px;">Selecciona tu tipo de cuerpo</h2>
-
-  <div class="tipo-cuerpo-container">
-    <div class="tipo-cuerpo" onclick="seleccionarCuerpo('endomorfo')" id="endomorfo">
-      <strong>Endomorfo</strong>
-      <div class="descripcion">Tendencia a acumular grasa, cuerpo redondeado, metabolismo lento.</div>
+  <form id="datosForm" action="deporte.html" method="GET">
+    <div class="input-group">
+      <label for="edad"><strong>¿Qué edad tienes?</strong></label><br>
+      <input type="number" id="edad" name="edad" placeholder="Ej: 25" required>
     </div>
-    <div class="tipo-cuerpo" onclick="seleccionarCuerpo('mesomorfo')" id="mesomorfo">
-      <strong>Mesomorfo</strong>
-      <div class="descripcion">Cuerpo atlético, gana músculo fácilmente, estructura equilibrada.</div>
-    </div>
-    <div class="tipo-cuerpo" onclick="seleccionarCuerpo('ectomorfo')" id="ectomorfo">
-      <strong>Ectomorfo</strong>
-      <div class="descripcion">Delgado, dificultad para ganar peso, metabolismo rápido.</div>
-    </div>
-  </div>
 
-  <button onclick="continuar()">Calcular y continuar</button>
+    <div class="input-group">
+      <label for="peso"><strong>¿Cuánto pesas? (kg)</strong></label><br>
+      <input type="number" id="peso" name="peso" placeholder="Ej: 70" step="0.1" required>
+    </div>
+
+    <div class="input-group">
+      <label for="altura"><strong>¿Cuál es tu altura? (metros)</strong></label><br>
+      <input type="number" id="altura" name="altura" placeholder="Ej: 1.75" step="0.01" required>
+    </div>
+
+    <h2>Selecciona tu tipo de cuerpo</h2>
+    <div class="body-types">
+      <div class="body-type">
+        <input type="radio" id="endomorfo" name="tipoCuerpo" value="endomorfo" required>
+        <label for="endomorfo">Endomorfo</label>
+        <div class="description">
+          Cuerpo más redondeado, gana grasa fácilmente y metabolismo lento.
+        </div>
+      </div>
+
+      <div class="body-type">
+        <input type="radio" id="mesomorfo" name="tipoCuerpo" value="mesomorfo">
+        <label for="mesomorfo">Mesomorfo</label>
+        <div class="description">
+          Atlético, gana músculo con facilidad, estructura equilibrada.
+        </div>
+      </div>
+    </div>
+
+    <div class="body-types" style="justify-content: center; margin-top: 10px;">
+      <div class="body-type">
+        <input type="radio" id="ectomorfo" name="tipoCuerpo" value="ectomorfo">
+        <label for="ectomorfo">Ectomorfo</label>
+        <div class="description">
+          Delgado, dificultad para ganar peso, metabolismo acelerado.
+        </div>
+      </div>
+    </div>
+
+    <button type="submit">Calcular y continuar</button>
+  </form>
 
   <footer>By: Juan Pablo Cruz</footer>
 
   <script>
-    // Cargar saludo personalizado
-    window.onload = function () {
-      const nombre = localStorage.getItem('nombre') || '';
-      const sexo = localStorage.getItem('sexo') || 'otro';
-      const saludo = document.getElementById("saludo");
-      if (sexo === 'masculino') {
-        saludo.textContent = `Hey! Sr. ${nombre}`;
-      } else if (sexo === 'femenino') {
-        saludo.textContent = `Hey! Srta. ${nombre}`;
-      } else {
-        saludo.textContent = `Hey! ${nombre}`;
-      }
-    };
+    // Saludo dinámico
+    const saludo = document.getElementById("saludo");
+    const nombre = localStorage.getItem("nombre") || "";
+    const sexo = localStorage.getItem("sexo") || "";
 
-    // Selección de tipo de cuerpo
-    let tipoCuerpoSeleccionado = '';
-    function seleccionarCuerpo(tipo) {
-      tipoCuerpoSeleccionado = tipo;
-      document.querySelectorAll('.tipo-cuerpo').forEach(el => el.classList.remove('selected'));
-      document.getElementById(tipo).classList.add('selected');
+    if (sexo === "masculino") {
+      saludo.textContent = `Hey! Sr. ${nombre}`;
+    } else if (sexo === "femenino") {
+      saludo.textContent = `Hey! Srta. ${nombre}`;
+    } else {
+      saludo.textContent = `Hey! ${nombre}`;
     }
 
-    function continuar() {
+    // Al enviar, guardar los datos
+    document.getElementById("datosForm").addEventListener("submit", function (e) {
       const edad = document.getElementById("edad").value;
       const peso = document.getElementById("peso").value;
       const altura = document.getElementById("altura").value;
-
-      if (!edad || !peso || !altura || !tipoCuerpoSeleccionado) {
-        alert("Por favor completa todos los campos y selecciona tu tipo de cuerpo.");
-        return;
-      }
+      const tipoCuerpo = document.querySelector('input[name="tipoCuerpo"]:checked').value;
 
       localStorage.setItem("edad", edad);
       localStorage.setItem("peso", peso);
       localStorage.setItem("altura", altura);
-      localStorage.setItem("tipoCuerpo", tipoCuerpoSeleccionado);
-
-      window.location.href = "deporte.html";
-    }
+      localStorage.setItem("tipoCuerpo", tipoCuerpo);
+    });
   </script>
 </body>
 </html>
