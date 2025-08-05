@@ -6,236 +6,122 @@
   <link rel="icon" href="favicon.ico" />
   <style>
     body {
-      background-color: #0a0a0a;
-      color: #f0f0f0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      padding: 40px 20px;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    h1 {
-      text-align: center;
-      font-size: 2em;
-      margin-bottom: 30px;
-      color: #ffffff;
-      text-shadow: 1px 1px 4px #444;
-    }
-
-    label, p {
-      margin-top: 20px;
-      font-size: 1.05em;
-      color: #ccc;
-    }
-
-    input[type=number] {
-      width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #444;
-      margin-top: 5px;
-      margin-bottom: 20px;
-      background-color: #1a1a1a;
+      background-color: #121212;
       color: #eee;
-      font-size: 1em;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    label, select, input {
+      display: block;
+      margin: 15px 0;
+      font-size: 16px;
+    }
+
+    .saludo {
+      font-size: 22px;
+      margin-bottom: 20px;
     }
 
     button {
-      display: block;
-      width: 100%;
-      background: linear-gradient(135deg, #2a2a2a, #444);
+      background-color: #444;
       color: white;
-      padding: 14px;
+      padding: 10px 20px;
       border: none;
-      border-radius: 8px;
-      margin-top: 30px;
-      font-size: 1.15em;
-      font-weight: bold;
+      font-size: 16px;
       cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease;
     }
 
     button:hover {
-      background: linear-gradient(135deg, #444, #666);
-      transform: scale(1.01);
+      background-color: #666;
     }
 
-    footer {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 0.9em;
-      color: #777;
-    }
-
-    .tipos-cuerpo {
-      display: flex;
-      gap: 12px;
-      margin-top: 15px;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
-
-    .tipo-card {
-      flex: 1 1 30%;
-      background-color: #1a1a1a;
-      padding: 16px;
-      border-radius: 10px;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: border-color 0.3s ease, background-color 0.3s ease;
-      user-select: none;
-    }
-
-    .tipo-card:hover {
-      background-color: #2a2a2a;
-    }
-
-    .tipo-card.selected {
-      border-color: #888;
-      background-color: #2e2e2e;
-    }
-
-    .tipo-card h3 {
-      margin: 0 0 8px 0;
-      font-size: 1.15em;
-      text-align: center;
-      color: #fff;
-    }
-
-    .tipo-card p {
-      font-size: 0.9em;
-      color: #bbb;
-      text-align: center;
-    }
-
-    #definicion-larga {
-      margin-top: 25px;
-      padding: 16px;
-      background-color: #1a1a1a;
-      border-radius: 10px;
-      font-size: 0.95em;
-      line-height: 1.5;
-      min-height: 80px;
-      color: #ccc;
+    .definicion {
+      font-size: 14px;
+      color: #aaa;
+      margin-top: -10px;
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
+  <div class="saludo" id="saludo"></div>
 
-  <h1 id="saludo">Hey!</h1>
-  <p>Ingresa tus datos físicos con precisión:</p>
+  <label for="edad">Edad:</label>
+  <input type="number" id="edad" />
 
-  <form id="formDatos">
-    <label for="edad">Edad (años):</label>
-    <input type="number" id="edad" name="edad" required min="1">
+  <label for="peso">Peso (kg):</label>
+  <input type="number" id="peso" />
 
-    <label for="peso">Peso (kg):</label>
-    <input type="number" id="peso" name="peso" required step="0.1" min="1">
+  <label for="altura">Altura (m):</label>
+  <input type="number" step="0.01" id="altura" placeholder="Ej: 1.75" />
 
-    <label for="altura">Altura (m): <small>Ej: 1.75</small></label>
-    <input type="number" id="altura" name="altura" required step="0.01" min="1">
+  <label for="cuerpo">Tipo de cuerpo:</label>
+  <select id="cuerpo" onchange="mostrarDefinicion()">
+    <option value="">Selecciona una opción</option>
+    <option value="endomorfo">Endomorfo</option>
+    <option value="mesomorfo">Mesomorfo</option>
+    <option value="ectomorfo">Ectomorfo</option>
+  </select>
+  <div class="definicion" id="definicion"></div>
 
-    <label>Tipo de cuerpo:</label>
-    <div class="tipos-cuerpo">
-      <div class="tipo-card" data-tipo="endomorfo" tabindex="0">
-        <h3>Endomorfo</h3>
-        <p>Tendencia a acumular grasa</p>
-      </div>
-      <div class="tipo-card" data-tipo="mesomorfo" tabindex="0">
-        <h3>Mesomorfo</h3>
-        <p>Cuerpo musculoso y atlético</p>
-      </div>
-      <div class="tipo-card" data-tipo="ectomorfo" tabindex="0">
-        <h3>Ectomorfo</h3>
-        <p>Delgado, metabolismo rápido</p>
-      </div>
-    </div>
-
-    <div id="definicion-larga">Selecciona un tipo de cuerpo para ver más información aquí.</div>
-
-    <input type="hidden" id="cuerpo" name="cuerpo" required>
-
-    <button type="submit">Calcular y continuar</button>
-  </form>
-
-  <footer>By: Juan Pablo Cruz</footer>
+  <button onclick="calcularContinuar()">Calcular y continuar</button>
 
   <script>
-    const sexo = localStorage.getItem('sexo');
-    const nombre = localStorage.getItem('nombre');
-    const saludo = document.getElementById('saludo');
-    if (sexo === 'masculino') {
-      saludo.textContent = `Hola Sr. ${nombre}`;
-    } else if (sexo === 'femenino') {
-      saludo.textContent = `Hola Srta. ${nombre}`;
-    } else {
-      saludo.textContent = 'Hola';
+    // Mostrar saludo personalizado
+    const nombre = localStorage.getItem("nombre");
+    const sexo = localStorage.getItem("sexo");
+    const saludo = document.getElementById("saludo");
+
+    if (nombre && sexo) {
+      const prefijo = sexo === "masculino" ? "Sr." : "Srta.";
+      saludo.textContent = `Hola ${prefijo} ${nombre}, completa tus datos físicos`;
     }
 
-    const definicionesLargas = {
-      endomorfo: "Los endomorfos tienden a acumular grasa fácilmente, tienen un metabolismo más lento y pueden tener dificultad para perder peso. Requieren una alimentación balanceada y ejercicios cardiovasculares junto con fuerza.",
-      mesomorfo: "Los mesomorfos tienen un cuerpo naturalmente musculoso y atlético, responden muy bien al entrenamiento de fuerza y suelen ganar músculo con facilidad.",
-      ectomorfo: "Los ectomorfos son delgados, con un metabolismo rápido, lo que dificulta la ganancia de peso y masa muscular. Suelen necesitar una dieta hipercalórica y entrenamientos específicos para aumentar masa muscular."
-    };
+    // Mostrar definición según tipo de cuerpo
+    function mostrarDefinicion() {
+      const tipo = document.getElementById("cuerpo").value;
+      const def = document.getElementById("definicion");
 
-    const tipoCards = document.querySelectorAll('.tipo-card');
-    const definicionLargaDiv = document.getElementById('definicion-larga');
-    const inputCuerpo = document.getElementById('cuerpo');
-
-    function seleccionarTipo(tipo) {
-      tipoCards.forEach(c => {
-        c.classList.toggle('selected', c.getAttribute('data-tipo') === tipo);
-      });
-      inputCuerpo.value = tipo;
-      definicionLargaDiv.textContent = definicionesLargas[tipo];
+      if (tipo === "endomorfo") {
+        def.textContent = "Tendencia a acumular grasa, estructura ósea más ancha.";
+      } else if (tipo === "mesomorfo") {
+        def.textContent = "Fácil desarrollo muscular, cuerpo atlético natural.";
+      } else if (tipo === "ectomorfo") {
+        def.textContent = "Delgado por naturaleza, metabolismo rápido.";
+      } else {
+        def.textContent = "";
+      }
     }
 
-    tipoCards.forEach(card => {
-      card.addEventListener('click', () => {
-        seleccionarTipo(card.getAttribute('data-tipo'));
-      });
-      card.addEventListener('keypress', e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          seleccionarTipo(card.getAttribute('data-tipo'));
-        }
-      });
-    });
+    // Calcular IMC y guardar datos
+    function calcularContinuar() {
+      const edad = parseInt(document.getElementById("edad").value);
+      const peso = parseFloat(document.getElementById("peso").value);
+      const altura = parseFloat(document.getElementById("altura").value);
+      const cuerpo = document.getElementById("cuerpo").value;
 
-    window.addEventListener('DOMContentLoaded', () => {
-      const edad = localStorage.getItem('edad');
-      const peso = localStorage.getItem('peso');
-      const altura = localStorage.getItem('altura');
-      const cuerpo = localStorage.getItem('cuerpo');
-
-      if (edad) document.getElementById('edad').value = edad;
-      if (peso) document.getElementById('peso').value = peso;
-      if (altura) document.getElementById('altura').value = altura;
-      if (cuerpo) seleccionarTipo(cuerpo);
-    });
-
-    document.getElementById('formDatos').addEventListener('submit', function(e) {
-      e.preventDefault();
-      if (!inputCuerpo.value) {
-        alert('Por favor, selecciona un tipo de cuerpo.');
+      if (!edad || !peso || !altura || !cuerpo) {
+        alert("Por favor, completa todos los campos.");
         return;
       }
 
-      const edad = document.getElementById('edad').value;
-      const peso = document.getElementById('peso').value;
-      const altura = document.getElementById('altura').value;
-      const cuerpo = inputCuerpo.value;
+      const imc = peso / (altura * altura);
+      let categoriaIMC = "";
 
-      localStorage.setItem('edad', edad);
-      localStorage.setItem('peso', peso);
-      localStorage.setItem('altura', altura);
-      localStorage.setItem('cuerpo', cuerpo);
+      if (imc < 18.5) categoriaIMC = "bajo peso";
+      else if (imc < 25) categoriaIMC = "peso normal";
+      else categoriaIMC = "sobrepeso";
 
-      const imc = (peso / (altura * altura)).toFixed(2);
-      localStorage.setItem('imc', imc);
+      localStorage.setItem("edad", edad);
+      localStorage.setItem("peso", peso);
+      localStorage.setItem("altura", altura);
+      localStorage.setItem("tipoCuerpo", cuerpo);
+      localStorage.setItem("imc", imc.toFixed(1));
+      localStorage.setItem("categoriaIMC", categoriaIMC);
 
-      window.location.href = 'deporte.html';
-    });
+      window.location.href = "deporte.html";
+    }
   </script>
 </body>
 </html>
