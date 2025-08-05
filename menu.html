@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Menú Principal</title>
+  <title>Tu Menú, Tu Ley</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <style>
     body {
@@ -58,7 +58,7 @@
       font-weight: 700;
       border: none;
       border-radius: 10px;
-      background-color: #2e2e2e; /* gris oscuro elegante */
+      background-color: #2e2e2e;
       color: #f0f0f0;
       cursor: pointer;
       box-shadow: 0 0 10px #1a1a1a;
@@ -80,7 +80,7 @@
   </style>
 </head>
 <body>
-  <h1>Menú Principal</h1>
+  <h1>Tu Menú, Tu Ley. Elige tu próxima jugada 😏</h1>
 
   <div class="info">
     <p><strong>Edad:</strong> <span id="edad"></span> años</p>
@@ -95,6 +95,7 @@
   <button class="button" onclick="window.location.href='alimentacionCondiciones.html'">Plan de Alimentación (Condiciones Médicas)</button>
   <button class="button" onclick="window.location.href='entrenamiento.html'">Plan de Entrenamiento</button>
   <button class="button" onclick="window.location.href='deporte.html'">Volver a Selección de Deporte</button>
+  <button class="button" onclick="cerrarSesion()">Cerrar Sesión</button>
 
   <div class="footer">By: Juan Pablo Cruz</div>
 
@@ -112,7 +113,7 @@
     document.getElementById("tipoCuerpo").textContent = tipoCuerpoRaw;
     document.getElementById("imc").textContent = imc;
 
-    // Descripciones breves para cada tipo de cuerpo (claves en minúsculas)
+    // Descripciones breves para cada tipo de cuerpo
     const descripciones = {
       "endomorfo": "Cuerpo con tendencia a acumular grasa, metabolismo lento y estructura más ancha.",
       "mesomorfo": "Cuerpo atlético, musculoso y con facilidad para ganar masa muscular.",
@@ -122,6 +123,12 @@
     const tipoCuerpoKey = tipoCuerpoRaw.trim().toLowerCase();
     const descripcion = descripciones[tipoCuerpoKey] || "Tipo de cuerpo no especificado.";
     document.getElementById("descTipoCuerpo").textContent = descripcion;
+
+    // Cerrar sesión y volver al inicio
+    function cerrarSesion() {
+      localStorage.clear(); // Borra todos los datos guardados
+      window.location.href = "inicio.html"; // Redirige al inicio
+    }
   </script>
 </body>
 </html>
