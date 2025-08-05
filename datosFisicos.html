@@ -9,134 +9,139 @@
       background-color: #121212;
       color: #eee;
       font-family: Arial, sans-serif;
-      margin: 0;
+      text-align: center;
       padding: 20px;
     }
     h1 {
-      text-align: center;
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-    }
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 5px;
-      border: none;
-      background-color: #2c2c2c;
-      color: #fff;
-    }
-    .tipos-cuerpo {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
-      gap: 10px;
-    }
-    .tipo {
-      background-color: #1e1e1e;
-      padding: 15px;
-      border-radius: 10px;
-      flex: 1;
-      text-align: center;
-      cursor: pointer;
-      border: 2px solid transparent;
-    }
-    .tipo:hover {
-      border-color: #888;
-    }
-    .tipo.selected {
-      border-color: #00ffcc;
-      background-color: #2a2a2a;
-    }
-    .definicion {
-      margin-top: 10px;
-      font-size: 14px;
       color: #ccc;
     }
-    button {
-      margin-top: 30px;
-      width: 100%;
+    input, select {
+      background-color: #1e1e1e;
+      color: #fff;
+      border: 1px solid #555;
+      padding: 10px;
+      margin: 10px auto;
+      display: block;
+      width: 80%;
+      max-width: 300px;
+      border-radius: 8px;
+    }
+    .tipo-cuerpo-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .tipo-cuerpo {
+      background-color: #1e1e1e;
+      border: 2px solid #444;
+      border-radius: 12px;
       padding: 15px;
-      background-color: #00ffcc;
-      border: none;
-      color: #000;
-      font-weight: bold;
-      font-size: 16px;
-      border-radius: 10px;
+      margin: 10px;
+      width: 250px;
       cursor: pointer;
+      transition: 0.3s;
+    }
+    .tipo-cuerpo:hover {
+      border-color: #888;
+    }
+    .tipo-cuerpo.selected {
+      border-color: #999;
+      background-color: #2a2a2a;
+    }
+    .descripcion {
+      font-size: 0.9em;
+      color: #aaa;
+      margin-top: 10px;
+    }
+    button {
+      background-color: #444;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 30px;
+      border-radius: 10px;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #666;
     }
     footer {
-      text-align: center;
-      margin-top: 30px;
-      font-size: 14px;
+      margin-top: 40px;
+      font-size: 0.8em;
       color: #777;
     }
   </style>
 </head>
 <body>
-  <h1 id="saludo">Hola</h1>
+  <h1 id="saludo">Hey!</h1>
 
-  <form id="formDatos" action="deporte.html" method="GET" onsubmit="guardarDatos()">
-    <label for="edad">Edad:</label>
-    <input type="number" id="edad" name="edad" required>
+  <input type="number" id="edad" placeholder="Edad (Ej: 25)" required>
+  <input type="number" id="peso" placeholder="Peso en kg (Ej: 70)" required>
+  <input type="number" id="altura" step="0.01" placeholder="Altura en metros (Ej: 1.75)" required>
 
-    <label for="peso">Peso (kg):</label>
-    <input type="number" id="peso" name="peso" step="0.1" required>
+  <h2 style="margin-top: 40px;">Selecciona tu tipo de cuerpo</h2>
 
-    <label for="altura">Altura (metros):</label>
-    <input type="number" id="altura" name="altura" step="0.01" required>
-
-    <label>Selecciona tu tipo de cuerpo:</label>
-    <div class="tipos-cuerpo">
-      <div class="tipo" onclick="seleccionarTipo('endomorfo')">
-        <strong>Endomorfo</strong>
-        <div class="definicion">Cuerpo más ancho, tiende a ganar grasa fácilmente, metabolismo lento.</div>
-      </div>
-      <div class="tipo" onclick="seleccionarTipo('ectomorfo')">
-        <strong>Ectomorfo</strong>
-        <div class="definicion">Delgado por naturaleza, metabolismo rápido, dificultad para ganar masa muscular.</div>
-      </div>
-      <div class="tipo" onclick="seleccionarTipo('mesomorfo')">
-        <strong>Mesomorfo</strong>
-        <div class="definicion">Cuerpo atlético, gana músculo fácilmente, estructura equilibrada.</div>
-      </div>
+  <div class="tipo-cuerpo-container">
+    <div class="tipo-cuerpo" onclick="seleccionarCuerpo('endomorfo')" id="endomorfo">
+      <strong>Endomorfo</strong>
+      <div class="descripcion">Tendencia a acumular grasa, cuerpo redondeado, metabolismo lento.</div>
     </div>
+    <div class="tipo-cuerpo" onclick="seleccionarCuerpo('mesomorfo')" id="mesomorfo">
+      <strong>Mesomorfo</strong>
+      <div class="descripcion">Cuerpo atlético, gana músculo fácilmente, estructura equilibrada.</div>
+    </div>
+    <div class="tipo-cuerpo" onclick="seleccionarCuerpo('ectomorfo')" id="ectomorfo">
+      <strong>Ectomorfo</strong>
+      <div class="descripcion">Delgado, dificultad para ganar peso, metabolismo rápido.</div>
+    </div>
+  </div>
 
-    <input type="hidden" id="tipoCuerpo" name="tipoCuerpo" required>
-    <button type="submit">Calcular y continuar</button>
-  </form>
+  <button onclick="continuar()">Calcular y continuar</button>
 
   <footer>By: Juan Pablo Cruz</footer>
 
   <script>
-    function seleccionarTipo(tipo) {
-      document.getElementById('tipoCuerpo').value = tipo;
-      const tipos = document.querySelectorAll('.tipo');
-      tipos.forEach(div => div.classList.remove('selected'));
-      event.currentTarget.classList.add('selected');
-    }
-
-    window.onload = function() {
-      const nombre = localStorage.getItem('nombre');
-      const sexo = localStorage.getItem('sexo');
-      if (nombre && sexo) {
-        const saludo = sexo === 'masculino' ? 'Sr.' : 'Srta.';
-        document.getElementById('saludo').innerText = `Hola ${saludo} ${nombre}`;
+    // Cargar saludo personalizado
+    window.onload = function () {
+      const nombre = localStorage.getItem('nombre') || '';
+      const sexo = localStorage.getItem('sexo') || 'otro';
+      const saludo = document.getElementById("saludo");
+      if (sexo === 'masculino') {
+        saludo.textContent = `Hey! Sr. ${nombre}`;
+      } else if (sexo === 'femenino') {
+        saludo.textContent = `Hey! Srta. ${nombre}`;
+      } else {
+        saludo.textContent = `Hey! ${nombre}`;
       }
+    };
+
+    // Selección de tipo de cuerpo
+    let tipoCuerpoSeleccionado = '';
+    function seleccionarCuerpo(tipo) {
+      tipoCuerpoSeleccionado = tipo;
+      document.querySelectorAll('.tipo-cuerpo').forEach(el => el.classList.remove('selected'));
+      document.getElementById(tipo).classList.add('selected');
     }
 
-    function guardarDatos() {
+    function continuar() {
       const edad = document.getElementById("edad").value;
       const peso = document.getElementById("peso").value;
       const altura = document.getElementById("altura").value;
-      const tipoCuerpo = document.getElementById("tipoCuerpo").value;
+
+      if (!edad || !peso || !altura || !tipoCuerpoSeleccionado) {
+        alert("Por favor completa todos los campos y selecciona tu tipo de cuerpo.");
+        return;
+      }
 
       localStorage.setItem("edad", edad);
       localStorage.setItem("peso", peso);
       localStorage.setItem("altura", altura);
-      localStorage.setItem("tipoCuerpo", tipoCuerpo);
+      localStorage.setItem("tipoCuerpo", tipoCuerpoSeleccionado);
+
+      window.location.href = "deporte.html";
     }
   </script>
 </body>
