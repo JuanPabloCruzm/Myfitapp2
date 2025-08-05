@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -12,7 +12,7 @@
       padding: 20px;
     }
     h1, h2 {
-      color: #ccc; /* gris claro */
+      color: #ccc;
     }
     .plan {
       margin-bottom: 40px;
@@ -75,53 +75,47 @@
 
     const planes = {
       "Diabetes": {
-        desayuno: [
-          "Avena con canela y leche vegetal",
-          "Yogur natural con semillas de chía",
-          "Pan integral con huevo cocido",
-          "Smoothie de avena y frutos rojos",
-          "Tortilla de espinaca con tostadas integrales",
-          "Galletas de avena caseras + té",
-          "Pan con ricota baja en grasa y tomate"
-        ],
-        once: [
-          "Manzana + puñado de nueces",
-          "Té sin azúcar + pan integral con palta",
-          "Fruta + yogur sin azúcar",
-          "Tostadas integrales con mermelada sin azúcar",
-          "Galletas de arroz + infusión",
-          "Batido de proteína vegetal + tostada",
-          "Pan de centeno con queso fresco"
-        ],
-        cena: [
-          "Sopa de verduras + huevo cocido",
-          "Ensalada con atún y huevo duro",
-          "Verduras salteadas con tofu",
-          "Puré de zapallo con pollo",
-          "Ensalada mixta con semillas",
-          "Tortilla de verduras",
-          "Pescado al horno + ensalada verde"
-        ],
-        ejercicio: [
-          "Caminar 30 minutos",
-          "Estiramientos suaves 15 min",
-          "Yoga para principiantes",
-          "Bicicleta estática ligera 20 min",
-          "Baile suave en casa",
-          "Caminata al aire libre",
-          "Subir y bajar escaleras con pausa"
-        ]
+        desayuno: ["Avena con canela", "Yogur con chía", "Pan integral con huevo", "Smoothie de frutos rojos", "Tortilla con espinaca", "Galletas de avena", "Ricota y tomate"],
+        once: ["Manzana y nueces", "Té y pan con palta", "Fruta y yogur", "Tostadas con mermelada sin azúcar", "Galletas de arroz", "Batido vegetal", "Pan con queso fresco"],
+        cena: ["Sopa + huevo", "Ensalada con atún", "Verduras y tofu", "Puré y pollo", "Ensalada con semillas", "Tortilla de verduras", "Pescado al horno"],
+        ejercicio: ["Caminar 30 min", "Estiramientos 15 min", "Yoga suave", "Bici estática 20 min", "Baile suave", "Caminata libre", "Escaleras suave"]
       },
-      // ... (otros planes idénticos a los tuyos: Problemas cardíacos, etc.)
+      "Problemas cardíacos": {
+        desayuno: ["Fruta fresca", "Avena cocida", "Tostadas integrales", "Yogur bajo en grasa", "Smoothie de frutas", "Pan con palta", "Leche vegetal con granola"],
+        once: ["Té verde + nueces", "Fruta + pan integral", "Infusión + yogur", "Batido sin azúcar", "Galletas integrales", "Barra de cereal", "Ensalada de frutas"],
+        cena: ["Pescado con verduras", "Ensalada completa", "Sopa de avena", "Pollo al vapor", "Wok de vegetales", "Tortilla vegetal", "Puré con proteína magra"],
+        ejercicio: ["Caminar 20 min", "Bici ligera", "Tai chi", "Yoga sentado", "Caminata en casa", "Respiración profunda", "Estiramientos"]
+      },
+      "Hipertensión": {
+        desayuno: ["Pan integral sin sal", "Fruta fresca", "Avena con banana", "Té sin azúcar", "Smoothie verde", "Pan con ricota", "Cereal sin sal"],
+        once: ["Té de hierbas", "Fruta y yogur", "Pan integral con tomate", "Galletas sin sal", "Frutos secos sin sal", "Tostadas con palta", "Batido vegetal"],
+        cena: ["Verduras salteadas", "Ensalada con legumbres", "Pollo al horno", "Puré sin sal añadida", "Tortilla con verduras", "Sopa sin sal", "Pescado cocido"],
+        ejercicio: ["Caminar suave", "Yoga", "Tai chi", "Estiramientos", "Respiración guiada", "Bici lenta", "Baile relajado"]
+      },
+      "Colesterol alto": {
+        desayuno: ["Avena + frutas", "Pan integral con palta", "Smoothie verde", "Yogur natural", "Tostadas con tomate", "Cereal alto en fibra", "Fruta + nueces"],
+        once: ["Té + fruta", "Batido sin azúcar", "Pan con hummus", "Frutos secos", "Ensalada pequeña", "Barra de avena", "Pan de centeno"],
+        cena: ["Ensalada con legumbres", "Pescado azul", "Verduras al vapor", "Pollo cocido", "Tortilla con avena", "Tofu salteado", "Sopa vegetal"],
+        ejercicio: ["Caminar 30 min", "Bicicleta moderada", "Yoga para colesterol", "Aeróbico suave", "Pilates", "Subir escaleras", "Danza leve"]
+      },
+      "Síndrome metabólico": {
+        desayuno: ["Avena integral", "Smoothie con proteína vegetal", "Pan integral con huevo", "Frutas frescas", "Yogur sin azúcar", "Tostadas con palta", "Batido verde"],
+        once: ["Té sin azúcar + frutos secos", "Yogur + fruta", "Tostadas con mermelada light", "Galletas de avena", "Fruta y barra proteica", "Infusión + cereal", "Pan con tomate"],
+        cena: ["Verduras con pollo", "Sopa con legumbres", "Ensalada y tofu", "Wok de vegetales", "Pollo al vapor", "Salmón con quinoa", "Puré y ensalada verde"],
+        ejercicio: ["Caminar a paso rápido", "Bicicleta moderada", "Yoga", "Entrenamiento de bajo impacto", "Baile suave", "Circuito en casa", "Caminata larga"]
+      }
     };
 
-    // Escucha los cambios de selección
     document.querySelectorAll('input[name="condicion"]').forEach(radio => {
       radio.addEventListener('change', () => {
         const condicion = radio.value;
         const plan = planes[condicion];
 
-        if (!plan) return;
+        if (!plan) {
+          alerta.innerHTML = "❌ Plan no disponible.";
+          contenido.innerHTML = "";
+          return;
+        }
 
         alerta.innerHTML = `⚕️ <strong>Plan adaptado a:</strong> ${condicion}`;
         contenido.innerHTML = '';
