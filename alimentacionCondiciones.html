@@ -1,8 +1,8 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Plan de Alimentación</title>
+  <title>Plan de Alimentación Especial</title>
   <link rel="icon" href="favicon.ico" />
   <style>
     body {
@@ -48,12 +48,23 @@
       font-style: italic;
       margin-top: 10px;
     }
+    .imc-radio {
+      margin-bottom: 16px;
+    }
+    .imc-radio label {
+      margin-right: 18px;
+    }
   </style>
 </head>
 <body>
-  <h1>🍽️ Plan de Alimentación + Ejercicio Leve</h1>
-  <h2>⚕️ Selecciona una condición médica:</h2>
+  <h1>🍽️ Plan de Alimentación + Ejercicio Leve (Condiciones Médicas)</h1>
+  <h2>⚕️ Selecciona una condición médica y tu IMC:</h2>
 
+  <div class="imc-radio">
+    <label><input type="radio" name="imc" value="bajo"> Bajo peso</label>
+    <label><input type="radio" name="imc" value="normal"> Peso normal</label>
+    <label><input type="radio" name="imc" value="alto"> Sobrepeso</label>
+  </div>
   <div class="condiciones">
     <label><input type="radio" name="condicion" value="Diabetes"> Diabetes</label>
     <label><input type="radio" name="condicion" value="Problemas cardíacos"> Problemas cardíacos</label>
@@ -73,69 +84,639 @@
     const contenido = document.getElementById('contenidoAlimentacion');
     const alerta = document.getElementById('alerta');
 
+    // Planes detallados por condición médica y tipo de IMC
     const planes = {
-      "Diabetes": {
-        desayuno: ["Avena con canela", "Yogur con chía", "Pan integral con huevo", "Smoothie de frutos rojos", "Tortilla con espinaca", "Galletas de avena", "Ricota y tomate"],
-        once: ["Manzana y nueces", "Té y pan con palta", "Fruta y yogur", "Tostadas con mermelada sin azúcar", "Galletas de arroz", "Batido vegetal", "Pan con queso fresco"],
-        cena: ["Sopa + huevo", "Ensalada con atún", "Verduras y tofu", "Puré y pollo", "Ensalada con semillas", "Tortilla de verduras", "Pescado al horno"],
-        ejercicio: ["Caminar 30 min", "Estiramientos 15 min", "Yoga suave", "Bici estática 20 min", "Baile suave", "Caminata libre", "Escaleras suave"]
+      Diabetes: {
+        bajo: {
+          desayuno: [
+            "Avena con leche descremada, plátano y nueces",
+            "Tostadas integrales con queso fresco y tomate",
+            "Yogur descremado con chía y frutillas",
+            "Pan integral con palta y huevo revuelto",
+            "Smoothie de frutos rojos, leche y almendras",
+            "Tortilla de espinaca y pan integral",
+            "Galletas de avena sin azúcar + leche semidescremada"
+          ],
+          once: [
+            "Manzana con mantequilla de maní",
+            "Té y pan con palta y tomate",
+            "Fruta fresca y yogur descremado",
+            "Tostadas integrales con mermelada sin azúcar",
+            "Galletas de arroz con queso fresco",
+            "Batido vegetal de avena y banana",
+            "Pan integral con ricota y tomate"
+          ],
+          cena: [
+            "Sopa de verduras + huevo duro + pan integral",
+            "Ensalada de atún, garbanzos y huevo",
+            "Verduras al vapor y filete de pescado",
+            "Puré de papa y pollo al horno",
+            "Ensalada de lentejas, semillas de girasol y tomate",
+            "Tortilla de verduras con espinaca y zanahoria",
+            "Pescado al horno con salsa de tomate natural"
+          ],
+          ejercicio: [
+            "Caminar 35 min después de desayunar",
+            "Estiramientos y yoga suave 20 min",
+            "Bici estática ritmo suave 25 min",
+            "Baile leve 20 min",
+            "Caminata libre 30 min",
+            "Ejercicios de equilibrio 15 min",
+            "Escaleras suave 10 min"
+          ]
+        },
+        normal: {
+          desayuno: [
+            "Avena cocida con manzana y canela",
+            "Yogur descremado con semillas y frutas",
+            "Pan integral con huevo y tomate",
+            "Smoothie de frutos rojos y chía",
+            "Tortilla de espinaca y champiñones",
+            "Galletas de avena y leche descremada",
+            "Ricota con tomate y pan integral"
+          ],
+          once: [
+            "Manzana y nueces",
+            "Té y pan con palta",
+            "Fruta y yogur natural",
+            "Tostadas con mermelada sin azúcar",
+            "Galletas de arroz integral",
+            "Batido vegetal de avena",
+            "Pan integral con queso fresco"
+          ],
+          cena: [
+            "Sopa de verduras + huevo",
+            "Ensalada con atún y huevo",
+            "Verduras y tofu",
+            "Puré de papa y pollo",
+            "Ensalada con semillas y tomate",
+            "Tortilla de verduras",
+            "Pescado al horno con vegetales"
+          ],
+          ejercicio: [
+            "Caminar 30 min",
+            "Estiramientos 15 min",
+            "Yoga suave",
+            "Bici estática 20 min",
+            "Baile suave",
+            "Caminata libre",
+            "Escaleras suave"
+          ]
+        },
+        alto: {
+          desayuno: [
+            "Avena con agua y manzana rallada",
+            "Pan integral con tomate y ricota light",
+            "Yogur light con frutillas y chía",
+            "Smoothie verde (espinaca, pepino, manzana)",
+            "Tortilla de claras y verduras",
+            "Galletas de arroz y té verde",
+            "Fruta fresca y puñado de almendras"
+          ],
+          once: [
+            "Fruta fresca y nueces",
+            "Té verde y pan integral con palta",
+            "Infusión y yogur descremado",
+            "Tostadas integrales con tomate",
+            "Barra de cereal sin azúcar",
+            "Batido vegetal bajo en grasa",
+            "Pan integral con queso light"
+          ],
+          cena: [
+            "Sopa de verduras sin sal + pescado a la plancha",
+            "Ensalada de hojas verdes y pollo grillado",
+            "Verduras al vapor y tofu",
+            "Puré de zapallo y filete de merluza",
+            "Ensalada de legumbres y tomate",
+            "Tortilla de verduras al vapor",
+            "Pescado blanco al horno con vegetales"
+          ],
+          ejercicio: [
+            "Caminar 20 min",
+            "Estiramientos suaves",
+            "Yoga sentado",
+            "Bici estática 10 min",
+            "Respiración profunda",
+            "Baile suave sentado",
+            "Caminata suave"
+          ]
+        }
       },
       "Problemas cardíacos": {
-        desayuno: ["Fruta fresca", "Avena cocida", "Tostadas integrales", "Yogur bajo en grasa", "Smoothie de frutas", "Pan con palta", "Leche vegetal con granola"],
-        once: ["Té verde + nueces", "Fruta + pan integral", "Infusión + yogur", "Batido sin azúcar", "Galletas integrales", "Barra de cereal", "Ensalada de frutas"],
-        cena: ["Pescado con verduras", "Ensalada completa", "Sopa de avena", "Pollo al vapor", "Wok de vegetales", "Tortilla vegetal", "Puré con proteína magra"],
-        ejercicio: ["Caminar 20 min", "Bici ligera", "Tai chi", "Yoga sentado", "Caminata en casa", "Respiración profunda", "Estiramientos"]
+        bajo: {
+          desayuno: [
+            "Fruta fresca (naranja o papaya)",
+            "Avena cocida con leche descremada",
+            "Tostadas integrales con ricota y tomate",
+            "Yogur bajo en grasa con fruta",
+            "Smoothie de plátano y espinaca",
+            "Pan integral con palta",
+            "Leche vegetal con cereales integrales"
+          ],
+          once: [
+            "Té verde + nueces y manzana",
+            "Fruta + pan integral con queso fresco",
+            "Infusión + yogur descremado",
+            "Batido de fruta y leche descremada",
+            "Galletas integrales y té",
+            "Barra de cereal y fruta",
+            "Ensalada de frutas con semillas"
+          ],
+          cena: [
+            "Pescado con verduras al vapor",
+            "Ensalada completa con pollo y palta",
+            "Sopa de avena y huevo duro",
+            "Pollo al vapor con zapallo",
+            "Wok de vegetales y tofu",
+            "Tortilla vegetal y arroz integral",
+            "Puré con proteína magra"
+          ],
+          ejercicio: [
+            "Caminar 25 min",
+            "Bici ligera 15 min",
+            "Tai chi básico",
+            "Yoga sentado 20 min",
+            "Caminata en casa 20 min",
+            "Respiración profunda 10 min",
+            "Estiramientos ligeros"
+          ]
+        },
+        normal: {
+          desayuno: [
+            "Fruta fresca",
+            "Avena cocida",
+            "Tostadas integrales",
+            "Yogur bajo en grasa",
+            "Smoothie de frutas",
+            "Pan con palta",
+            "Leche vegetal con granola"
+          ],
+          once: [
+            "Té verde + nueces",
+            "Fruta + pan integral",
+            "Infusión + yogur",
+            "Batido sin azúcar",
+            "Galletas integrales",
+            "Barra de cereal",
+            "Ensalada de frutas"
+          ],
+          cena: [
+            "Pescado con verduras",
+            "Ensalada completa",
+            "Sopa de avena",
+            "Pollo al vapor",
+            "Wok de vegetales",
+            "Tortilla vegetal",
+            "Puré con proteína magra"
+          ],
+          ejercicio: [
+            "Caminar 20 min",
+            "Bici ligera",
+            "Tai chi",
+            "Yoga sentado",
+            "Caminata en casa",
+            "Respiración profunda",
+            "Estiramientos"
+          ]
+        },
+        alto: {
+          desayuno: [
+            "Fruta fresca (manzana o pera)",
+            "Avena con agua y canela",
+            "Tostadas integrales con palta",
+            "Yogur light con semillas",
+            "Smoothie verde (espinaca, pepino, manzana)",
+            "Pan integral sin sal",
+            "Leche vegetal con granola light"
+          ],
+          once: [
+            "Té verde + frutos secos sin sal",
+            "Fruta + pan integral sin sal",
+            "Infusión + yogur light",
+            "Batido vegetal bajo en grasa",
+            "Galletas integrales sin sal",
+            "Barra de cereal light",
+            "Ensalada de frutas"
+          ],
+          cena: [
+            "Pescado blanco con verduras al vapor",
+            "Ensalada de legumbres y vegetales",
+            "Sopa de verduras sin sal",
+            "Pollo a la plancha sin piel",
+            "Wok de vegetales sin sal añadida",
+            "Tortilla de verduras al vapor",
+            "Puré con proteína magra"
+          ],
+          ejercicio: [
+            "Caminar 15 min",
+            "Respiración guiada 10 min",
+            "Yoga sentado",
+            "Tai chi suave",
+            "Bici lenta 10 min",
+            "Estiramientos leves",
+            "Baile relajado"
+          ]
+        }
       },
       "Hipertensión": {
-        desayuno: ["Pan integral sin sal", "Fruta fresca", "Avena con banana", "Té sin azúcar", "Smoothie verde", "Pan con ricota", "Cereal sin sal"],
-        once: ["Té de hierbas", "Fruta y yogur", "Pan integral con tomate", "Galletas sin sal", "Frutos secos sin sal", "Tostadas con palta", "Batido vegetal"],
-        cena: ["Verduras salteadas", "Ensalada con legumbres", "Pollo al horno", "Puré sin sal añadida", "Tortilla con verduras", "Sopa sin sal", "Pescado cocido"],
-        ejercicio: ["Caminar suave", "Yoga", "Tai chi", "Estiramientos", "Respiración guiada", "Bici lenta", "Baile relajado"]
+        bajo: {
+          desayuno: [
+            "Pan integral sin sal y palta",
+            "Fruta fresca (kiwi, pera)",
+            "Avena con banana y canela",
+            "Té de hierbas sin azúcar",
+            "Smoothie verde (espinaca, apio, manzana)",
+            "Pan con ricota y tomate",
+            "Cereal sin sal con leche descremada"
+          ],
+          once: [
+            "Té de hierbas y fruta fresca",
+            "Yogur descremado y frutos secos sin sal",
+            "Pan integral con tomate",
+            "Galletas sin sal y leche descremada",
+            "Ensalada de frutas",
+            "Tostadas con palta y huevo duro",
+            "Batido vegetal de pepino y manzana"
+          ],
+          cena: [
+            "Verduras salteadas y arroz integral",
+            "Ensalada con legumbres y tomate",
+            "Pollo al horno con zapallo",
+            "Puré de papa y zanahoria sin sal añadida",
+            "Tortilla de claras con espinaca",
+            "Sopa sin sal y pan integral",
+            "Pescado cocido con verduras"
+          ],
+          ejercicio: [
+            "Caminar suave 20 min",
+            "Yoga relajante",
+            "Tai chi básico",
+            "Estiramientos suaves",
+            "Respiración guiada",
+            "Bici lenta 15 min",
+            "Baile relajado"
+          ]
+        },
+        normal: {
+          desayuno: [
+            "Pan integral sin sal",
+            "Fruta fresca",
+            "Avena con banana",
+            "Té sin azúcar",
+            "Smoothie verde",
+            "Pan con ricota",
+            "Cereal sin sal"
+          ],
+          once: [
+            "Té de hierbas",
+            "Fruta y yogur",
+            "Pan integral con tomate",
+            "Galletas sin sal",
+            "Frutos secos sin sal",
+            "Tostadas con palta",
+            "Batido vegetal"
+          ],
+          cena: [
+            "Verduras salteadas",
+            "Ensalada con legumbres",
+            "Pollo al horno",
+            "Puré sin sal añadida",
+            "Tortilla con verduras",
+            "Sopa sin sal",
+            "Pescado cocido"
+          ],
+          ejercicio: [
+            "Caminar suave",
+            "Yoga",
+            "Tai chi",
+            "Estiramientos",
+            "Respiración guiada",
+            "Bici lenta",
+            "Baile relajado"
+          ]
+        },
+        alto: {
+          desayuno: [
+            "Avena con agua y manzana",
+            "Tostadas integrales sin sal y palta",
+            "Yogur descremado y fruta",
+            "Té de hierbas sin azúcar",
+            "Smoothie de apio y pepino",
+            "Pan integral sin sal y ricota light",
+            "Cereal sin sal con leche vegetal"
+          ],
+          once: [
+            "Fruta fresca y frutos secos sin sal",
+            "Té de hierbas y pan sin sal",
+            "Infusión de manzanilla y yogur light",
+            "Galletas integrales sin sal",
+            "Ensalada de frutas con chía",
+            "Tostadas sin sal y tomate",
+            "Batido vegetal bajo en sodio"
+          ],
+          cena: [
+            "Verduras al vapor y pescado blanco",
+            "Ensalada de legumbres y tomate",
+            "Pollo grillado sin sal añadida",
+            "Puré de zapallo y zanahoria",
+            "Tortilla de verduras al vapor",
+            "Sopa de verduras sin sal",
+            "Pescado cocido al vapor"
+          ],
+          ejercicio: [
+            "Caminar 10-15 min",
+            "Yoga sentado y respiración",
+            "Tai chi suave",
+            "Estiramientos ligeros",
+            "Respiración guiada",
+            "Bici muy lenta",
+            "Movilidad articular"
+          ]
+        }
       },
       "Colesterol alto": {
-        desayuno: ["Avena + frutas", "Pan integral con palta", "Smoothie verde", "Yogur natural", "Tostadas con tomate", "Cereal alto en fibra", "Fruta + nueces"],
-        once: ["Té + fruta", "Batido sin azúcar", "Pan con hummus", "Frutos secos", "Ensalada pequeña", "Barra de avena", "Pan de centeno"],
-        cena: ["Ensalada con legumbres", "Pescado azul", "Verduras al vapor", "Pollo cocido", "Tortilla con avena", "Tofu salteado", "Sopa vegetal"],
-        ejercicio: ["Caminar 30 min", "Bicicleta moderada", "Yoga para colesterol", "Aeróbico suave", "Pilates", "Subir escaleras", "Danza leve"]
+        bajo: {
+          desayuno: [
+            "Avena + frutas frescas y nueces",
+            "Pan integral con palta y tomate",
+            "Smoothie verde con espinaca y manzana",
+            "Yogur natural descremado y semillas",
+            "Tostadas de centeno con tomate fresco",
+            "Cereal alto en fibra y leche descremada",
+            "Fruta fresca y nueces"
+          ],
+          once: [
+            "Té + fruta fresca",
+            "Batido de frutas y avena",
+            "Pan integral con hummus",
+            "Frutos secos y yogur light",
+            "Ensalada pequeña de frutas",
+            "Barra de avena y leche vegetal",
+            "Pan de centeno y ricota"
+          ],
+          cena: [
+            "Ensalada con legumbres y huevo",
+            "Pescado azul al vapor y verduras",
+            "Verduras al vapor y arroz integral",
+            "Pollo cocido y ensalada fresca",
+            "Tortilla con avena y espinaca",
+            "Tofu salteado y verduras",
+            "Sopa vegetal y pan integral"
+          ],
+          ejercicio: [
+            "Caminar 30 min",
+            "Bicicleta moderada 20 min",
+            "Yoga para colesterol 20 min",
+            "Aeróbico suave 15 min",
+            "Pilates básico 20 min",
+            "Subir escaleras lento",
+            "Danza leve"
+          ]
+        },
+        normal: {
+          desayuno: [
+            "Avena + frutas",
+            "Pan integral con palta",
+            "Smoothie verde",
+            "Yogur natural",
+            "Tostadas con tomate",
+            "Cereal alto en fibra",
+            "Fruta + nueces"
+          ],
+          once: [
+            "Té + fruta",
+            "Batido sin azúcar",
+            "Pan con hummus",
+            "Frutos secos",
+            "Ensalada pequeña",
+            "Barra de avena",
+            "Pan de centeno"
+          ],
+          cena: [
+            "Ensalada con legumbres",
+            "Pescado azul",
+            "Verduras al vapor",
+            "Pollo cocido",
+            "Tortilla con avena",
+            "Tofu salteado",
+            "Sopa vegetal"
+          ],
+          ejercicio: [
+            "Caminar 30 min",
+            "Bicicleta moderada",
+            "Yoga para colesterol",
+            "Aeróbico suave",
+            "Pilates",
+            "Subir escaleras",
+            "Danza leve"
+          ]
+        },
+        alto: {
+          desayuno: [
+            "Avena cocida en agua y fruta fresca",
+            "Pan integral con palta y tomate",
+            "Smoothie verde light",
+            "Yogur light y semillas de chía",
+            "Tostadas integrales y tomate",
+            "Cereal alto en fibra y leche vegetal",
+            "Fruta fresca y almendras"
+          ],
+          once: [
+            "Té + fruta fresca",
+            "Batido vegetal bajo en grasa",
+            "Pan integral con hummus light",
+            "Frutos secos naturales",
+            "Ensalada de frutas pequeña",
+            "Barra de avena light",
+            "Pan de centeno y ricota light"
+          ],
+          cena: [
+            "Ensalada de legumbres y tomate",
+            "Pescado blanco al vapor y verduras",
+            "Verduras al vapor y arroz integral",
+            "Pollo al vapor y ensalada fresca",
+            "Tortilla de claras y espinaca",
+            "Tofu salteado y verduras",
+            "Sopa vegetal y galleta de arroz"
+          ],
+          ejercicio: [
+            "Caminar 20 min",
+            "Bicicleta suave 10 min",
+            "Yoga sentado",
+            "Aeróbico muy suave",
+            "Estiramientos",
+            "Subir escaleras lento",
+            "Danza lenta"
+          ]
+        }
       },
       "Síndrome metabólico": {
-        desayuno: ["Avena integral", "Smoothie con proteína vegetal", "Pan integral con huevo", "Frutas frescas", "Yogur sin azúcar", "Tostadas con palta", "Batido verde"],
-        once: ["Té sin azúcar + frutos secos", "Yogur + fruta", "Tostadas con mermelada light", "Galletas de avena", "Fruta y barra proteica", "Infusión + cereal", "Pan con tomate"],
-        cena: ["Verduras con pollo", "Sopa con legumbres", "Ensalada y tofu", "Wok de vegetales", "Pollo al vapor", "Salmón con quinoa", "Puré y ensalada verde"],
-        ejercicio: ["Caminar a paso rápido", "Bicicleta moderada", "Yoga", "Entrenamiento de bajo impacto", "Baile suave", "Circuito en casa", "Caminata larga"]
+        bajo: {
+          desayuno: [
+            "Avena integral con leche descremada y semillas",
+            "Smoothie de proteína vegetal y plátano",
+            "Pan integral con huevo y tomate",
+            "Frutas frescas y yogur light",
+            "Yogur sin azúcar y nueces",
+            "Tostadas con palta y huevo",
+            "Batido verde de espinaca y manzana"
+          ],
+          once: [
+            "Té sin azúcar + frutos secos",
+            "Yogur + fruta fresca",
+            "Tostadas integrales con mermelada light",
+            "Galletas de avena sin azúcar",
+            "Fruta y barra proteica",
+            "Infusión + cereal alto en fibra",
+            "Pan con tomate y ricota"
+          ],
+          cena: [
+            "Verduras al vapor con pollo cocido",
+            "Sopa de legumbres y pan integral",
+            "Ensalada verde, tomate y tofu",
+            "Wok de vegetales y huevo duro",
+            "Pollo al vapor y ensalada fresca",
+            "Salmón con quinoa y tomate",
+            "Puré de papa con ensalada verde"
+          ],
+          ejercicio: [
+            "Caminar a paso rápido 30 min",
+            "Bicicleta moderada 20 min",
+            "Yoga básico 15 min",
+            "Entrenamiento de bajo impacto",
+            "Baile suave 10 min",
+            "Circuito funcional en casa",
+            "Caminata larga"
+          ]
+        },
+        normal: {
+          desayuno: [
+            "Avena integral",
+            "Smoothie con proteína vegetal",
+            "Pan integral con huevo",
+            "Frutas frescas",
+            "Yogur sin azúcar",
+            "Tostadas con palta",
+            "Batido verde"
+          ],
+          once: [
+            "Té sin azúcar + frutos secos",
+            "Yogur + fruta",
+            "Tostadas con mermelada light",
+            "Galletas de avena",
+            "Fruta y barra proteica",
+            "Infusión + cereal",
+            "Pan con tomate"
+          ],
+          cena: [
+            "Verduras con pollo",
+            "Sopa con legumbres",
+            "Ensalada y tofu",
+            "Wok de vegetales",
+            "Pollo al vapor",
+            "Salmón con quinoa",
+            "Puré y ensalada verde"
+          ],
+          ejercicio: [
+            "Caminar a paso rápido",
+            "Bicicleta moderada",
+            "Yoga",
+            "Entrenamiento de bajo impacto",
+            "Baile suave",
+            "Circuito en casa",
+            "Caminata larga"
+          ]
+        },
+        alto: {
+          desayuno: [
+            "Avena integral en agua y semillas",
+            "Smoothie de proteína vegetal light",
+            "Pan integral con huevo duro",
+            "Frutas frescas bajas en azúcar",
+            "Yogur light sin azúcar",
+            "Tostadas integrales con palta",
+            "Batido verde bajo en calorías"
+          ],
+          once: [
+            "Té sin azúcar + frutos secos",
+            "Yogur light + fruta",
+            "Tostadas integrales y mermelada sin azúcar",
+            "Galletas de avena light",
+            "Fruta fresca y barra proteica light",
+            "Infusión + cereal alto en fibra",
+            "Pan integral con tomate"
+          ],
+          cena: [
+            "Verduras al vapor y pollo grillado",
+            "Sopa de legumbres light",
+            "Ensalada verde con tofu",
+            "Wok de vegetales y huevo duro",
+            "Pollo al vapor y ensalada fresca",
+            "Salmón a la plancha con quinoa",
+            "Puré de zapallo y ensalada verde"
+          ],
+          ejercicio: [
+            "Caminar 15 min",
+            "Bicicleta suave 10 min",
+            "Yoga sentado",
+            "Entrenamiento funcional suave",
+            "Baile leve en casa",
+            "Circuito movilidad articular",
+            "Caminata suave"
+          ]
+        }
       }
     };
 
-    document.querySelectorAll('input[name="condicion"]').forEach(radio => {
+    let tipoIMC = null;
+    let condicion = null;
+
+    document.querySelectorAll('input[name="imc"]').forEach(radio => {
       radio.addEventListener('change', () => {
-        const condicion = radio.value;
-        const plan = planes[condicion];
-
-        if (!plan) {
-          alerta.innerHTML = "❌ Plan no disponible.";
-          contenido.innerHTML = "";
-          return;
-        }
-
-        alerta.innerHTML = `⚕️ <strong>Plan adaptado a:</strong> ${condicion}`;
-        contenido.innerHTML = '';
-
-        for (let i = 0; i < 7; i++) {
-          const div = document.createElement('div');
-          div.className = 'plan';
-          div.innerHTML = `
-            <h2>Día ${i + 1}</h2>
-            <ul>
-              <li><strong>Desayuno:</strong> ${plan.desayuno[i]}</li>
-              <li><strong>Once:</strong> ${plan.once[i]}</li>
-              <li><strong>Cena:</strong> ${plan.cena[i]}</li>
-            </ul>
-            <p class="ejercicio">Ejercicio sugerido: ${plan.ejercicio[i]}</p>
-          `;
-          contenido.appendChild(div);
-        }
+        tipoIMC = radio.value;
+        mostrarPlan();
       });
     });
+
+    document.querySelectorAll('input[name="condicion"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        condicion = radio.value;
+        mostrarPlan();
+      });
+    });
+
+    function mostrarPlan() {
+      if (!condicion || !tipoIMC) {
+        alerta.innerHTML = "Por favor selecciona una condición médica y tu IMC.";
+        contenido.innerHTML = "";
+        return;
+      }
+
+      const plan = planes[condicion] && planes[condicion][tipoIMC];
+      if (!plan) {
+        alerta.innerHTML = "❌ Plan no disponible para esa combinación.";
+        contenido.innerHTML = "";
+        return;
+      }
+
+      alerta.innerHTML = `⚕️ <strong>Plan adaptado a:</strong> ${condicion} - IMC: <span style="color:#ffd700;">${tipoIMC.charAt(0).toUpperCase() + tipoIMC.slice(1)}</span>`;
+      contenido.innerHTML = '';
+
+      for (let i = 0; i < 7; i++) {
+        const div = document.createElement('div');
+        div.className = 'plan';
+        div.innerHTML = `
+          <h2>Día ${i + 1}</h2>
+          <ul>
+            <li><strong>Desayuno:</strong> ${plan.desayuno[i]}</li>
+            <li><strong>Once:</strong> ${plan.once[i]}</li>
+            <li><strong>Cena:</strong> ${plan.cena[i]}</li>
+          </ul>
+          <p class="ejercicio">Ejercicio sugerido: ${plan.ejercicio[i]}</p>
+        `;
+        contenido.appendChild(div);
+      }
+    }
   </script>
 </body>
 </html>
