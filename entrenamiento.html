@@ -61,51 +61,317 @@
 
   <script>
     const imc = parseFloat(localStorage.getItem('imc'));
+    const deporteRaw = (localStorage.getItem('deporte') || '').toLowerCase();
 
-    const entrenamiento = {
-      bajo: [
-        "Día 1: Caminata ligera 30 min + movilidad articular",
-        "Día 2: Rutina de cuerpo completo con peso corporal (flexiones, sentadillas, abdominales)",
-        "Día 3: Bicicleta 45 min a ritmo suave",
-        "Día 4: Yoga de equilibrio + estiramientos",
-        "Día 5: Rutina de fuerza con peso corporal (3 series de 10 reps)",
-        "Día 6: Caminata rápida o trote suave 30 min",
-        "Día 7: Descanso activo (paseo o yoga suave)"
-      ],
-      normal: [
-        "Día 1: Calentamiento + circuito funcional (30 min)",
-        "Día 2: Cardio HIIT 20 min + core (plancha, crunch)",
-        "Día 3: Piernas y glúteos con peso corporal o bandas",
-        "Día 4: Entrenamiento de fuerza (push-ups, sentadillas, dips)",
-        "Día 5: Cardio continuo 45 min (bicicleta, trote, etc.)",
-        "Día 6: Yoga para fuerza y flexibilidad",
-        "Día 7: Caminata larga o descanso activo"
-      ],
-      sobrepeso: [
-        "Día 1: Caminata rápida 45 min",
-        "Día 2: Ejercicios de bajo impacto (sentadillas, marchar en el lugar)",
-        "Día 3: Bicicleta estacionaria 30–45 min",
-        "Día 4: Yoga para movilidad y respiración",
-        "Día 5: Cardio suave 30 min + estiramientos",
-        "Día 6: Ejercicios en agua o caminata larga",
-        "Día 7: Descanso o yoga suave"
-      ]
+    // Normalizo para evitar espacios y acentos simples
+    const deporte = deporteRaw.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '');
+
+    // Rutinas por deporte e IMC
+    const planesEntrenamiento = {
+      ciclismo: {
+        bajo: [
+          "Día 1: Paseo suave en bicicleta 45 min + estiramientos",
+          "Día 2: Entrenamiento de fuerza con peso corporal (sentadillas, planchas)",
+          "Día 3: Bicicleta estática 30 min ritmo suave",
+          "Día 4: Yoga para movilidad y respiración",
+          "Día 5: Salida en bici 1 hora con ritmo bajo",
+          "Día 6: Entrenamiento funcional (bandas elásticas)",
+          "Día 7: Descanso activo o caminata"
+        ],
+        normal: [
+          "Día 1: Entrenamiento de resistencia en bici 1.5 horas",
+          "Día 2: Rutina fuerza para piernas y core (pesas libres)",
+          "Día 3: Intervalos en bici (HIIT) 30 min",
+          "Día 4: Yoga para fuerza y flexibilidad",
+          "Día 5: Paseo largo en bici 2 horas",
+          "Día 6: Entrenamiento funcional y pliometría",
+          "Día 7: Descanso o actividad ligera"
+        ],
+        sobrepeso: [
+          "Día 1: Bicicleta estática 30 min a ritmo suave",
+          "Día 2: Ejercicios de fuerza con peso corporal y bandas",
+          "Día 3: Caminata rápida 40 min",
+          "Día 4: Yoga suave para movilidad articular",
+          "Día 5: Bicicleta paseo 45 min terreno plano",
+          "Día 6: Ejercicios funcionales de bajo impacto",
+          "Día 7: Descanso activo"
+        ]
+      },
+      natacion: {
+        bajo: [
+          "Día 1: Nado suave 30 min + estiramientos",
+          "Día 2: Fuerza ligera para brazos y core",
+          "Día 3: Nado continuo 40 min ritmo bajo",
+          "Día 4: Yoga para flexibilidad",
+          "Día 5: Técnica y respiración en natación",
+          "Día 6: Nado suave 45 min",
+          "Día 7: Descanso activo"
+        ],
+        normal: [
+          "Día 1: Nado continuo 60 min, varios estilos",
+          "Día 2: Entrenamiento de fuerza en seco (pesas libres)",
+          "Día 3: Intervalos natación HIIT 30 min",
+          "Día 4: Yoga para fuerza y flexibilidad",
+          "Día 5: Técnica avanzada y velocidad",
+          "Día 6: Nado largo 1 hora",
+          "Día 7: Descanso o natación suave"
+        ],
+        sobrepeso: [
+          "Día 1: Nado suave 20-30 min para baja presión articular",
+          "Día 2: Movilidad y fuerza ligera",
+          "Día 3: Nado lento 30 min",
+          "Día 4: Yoga suave para movilidad",
+          "Día 5: Técnica básica de natación",
+          "Día 6: Nado suave 30 min",
+          "Día 7: Descanso activo"
+        ]
+      },
+      atletismo: {
+        bajo: [
+          "Día 1: Caminata rápida 30 min + estiramientos",
+          "Día 2: Entrenamiento de técnica básica de carrera",
+          "Día 3: Carrera suave 20 min",
+          "Día 4: Yoga para flexibilidad y respiración",
+          "Día 5: Fuerza para piernas (peso corporal)",
+          "Día 6: Carrera continua 30 min ritmo bajo",
+          "Día 7: Descanso activo"
+        ],
+        normal: [
+          "Día 1: Entrenamiento de velocidad e intervalos 40 min",
+          "Día 2: Técnica de salto y pliometría",
+          "Día 3: Carrera continua 45 min",
+          "Día 4: Yoga para fuerza y flexibilidad",
+          "Día 5: Fuerza con pesas para piernas y core",
+          "Día 6: Series de velocidad y resistencia",
+          "Día 7: Descanso o trote suave"
+        ],
+        sobrepeso: [
+          "Día 1: Caminata rápida 45 min",
+          "Día 2: Ejercicios de fuerza ligera para piernas",
+          "Día 3: Caminata con intervalos suaves",
+          "Día 4: Yoga suave para movilidad articular",
+          "Día 5: Caminata larga y estiramientos",
+          "Día 6: Cardio bajo impacto (bicicleta o natación)",
+          "Día 7: Descanso activo"
+        ]
+      },
+      escalada: {
+        bajo: [
+          "Día 1: Escalada indoor fácil 1 hora",
+          "Día 2: Fuerza de agarre y core ligera",
+          "Día 3: Estiramientos y movilidad articular",
+          "Día 4: Yoga para equilibrio",
+          "Día 5: Escalada técnica y resistencia 45 min",
+          "Día 6: Ejercicios funcionales para brazos y piernas",
+          "Día 7: Descanso activo"
+        ],
+        normal: [
+          "Día 1: Escalada indoor 1.5 horas con rutas variadas",
+          "Día 2: Entrenamiento de fuerza para agarre y core",
+          "Día 3: Yoga para fuerza y flexibilidad",
+          "Día 4: Escalada técnica avanzada 1 hora",
+          "Día 5: Circuito funcional de fuerza y resistencia",
+          "Día 6: Estiramientos y recuperación activa",
+          "Día 7: Descanso"
+        ],
+        sobrepeso: [
+          "Día 1: Escalada suave indoor 45 min",
+          "Día 2: Ejercicios de movilidad y fuerza ligera",
+          "Día 3: Caminata o bici suave 30 min",
+          "Día 4: Yoga suave para movilidad",
+          "Día 5: Escalada técnica baja intensidad 30 min",
+          "Día 6: Estiramientos y fortalecimiento",
+          "Día 7: Descanso activo"
+        ]
+      },
+      buceo: {
+        bajo: [
+          "Día 1: Entrenamiento cardiovascular ligero 30 min",
+          "Día 2: Ejercicios de fuerza para espalda y core",
+          "Día 3: Estiramientos y movilidad",
+          "Día 4: Yoga para respiración y flexibilidad",
+          "Día 5: Práctica de flotabilidad y técnica",
+          "Día 6: Cardio suave 30 min",
+          "Día 7: Descanso activo"
+        ],
+        normal: [
+          "Día 1: Cardio HIIT 30 min",
+          "Día 2: Fuerza para espalda y core con pesas",
+          "Día 3: Yoga para fuerza y respiración",
+          "Día 4: Práctica de flotabilidad y técnica avanzada",
+          "Día 5: Cardio continuo 45 min",
+          "Día 6: Estiramientos y recuperación activa",
+          "Día 7: Descanso"
+        ],
+        sobrepeso: [
+          "Día 1: Caminata rápida 40 min",
+          "Día 2: Ejercicios de fuerza ligera y movilidad",
+          "Día 3: Yoga suave para respiración",
+          "Día 4: Cardio bajo impacto 30 min",
+          "Día 5: Técnica básica de buceo y flotabilidad",
+          "Día 6: Estiramientos y recuperación",
+          "Día 7: Descanso activo"
+        ]
+      },
+      futbol: {
+        bajo: [
+          "Día 1: Entrenamiento básico de pases y control de balón",
+          "Día 2: Carrera suave y movilidad articular",
+          "Día 3: Fuerza con peso corporal",
+          "Día 4: Yoga para flexibilidad",
+          "Día 5: Técnica y dribbling ligero",
+          "Día 6: Juego recreativo suave",
+          "Día 7: Descanso activo"
+        ],
+        normal: [
+          "Día 1: Entrenamiento de resistencia y velocidad 1 hora",
+          "Día 2: Fuerza para piernas y core con pesas",
+          "Día 3: Técnica avanzada y táctica",
+          "Día 4: Yoga para fuerza y movilidad",
+          "Día 5: Partido o juego intenso",
+          "Día 6: Recuperación activa y estiramientos",
+          "Día 7: Descanso"
+        ],
+        sobrepeso: [
+          "Día 1: Caminata rápida con balón 30 min",
+          "Día 2: Ejercicios básicos de fuerza y movilidad",
+          "Día 3: Técnica sencilla y control de balón",
+          "Día 4: Yoga suave para movilidad",
+          "Día 5: Juego ligero y táctico",
+          "Día 6: Caminata larga y estiramientos",
+          "Día 7: Descanso activo"
+        ]
+      },
+      rugby: {
+        bajo: [
+          "Día 1: Entrenamiento básico de pase y recepción",
+          "Día 2: Cardio suave 30 min",
+          "Día 3: Fuerza con peso corporal",
+          "Día 4: Yoga para equilibrio y flexibilidad",
+          "Día 5: Técnicas de tackle ligeras",
+          "Día 6: Juego recreativo suave",
+          "Día 7: Descanso activo"
+        ],
+        normal: [
+          "Día 1: Entrenamiento de resistencia y fuerza 1 hora",
+          "Día 2: Técnica avanzada y tácticas",
+          "Día 3: Entrenamiento de velocidad y agilidad",
+          "Día 4: Yoga para fuerza y movilidad",
+          "Día 5: Partido o práctica intensa",
+          "Día 6: Recuperación activa",
+          "Día 7: Descanso"
+        ],
+        sobrepeso: [
+          "Día 1: Caminata rápida 30-40 min",
+          "Día 2: Ejercicios básicos de fuerza y movilidad",
+          "Día 3: Técnica ligera y pase",
+          "Día 4: Yoga suave para movilidad",
+          "Día 5: Juego ligero táctico",
+          "Día 6: Caminata larga y estiramientos",
+          "Día 7: Descanso activo"
+        ]
+      },
+      basquet: {
+        bajo: [
+          "Día 1: Entrenamiento básico de dribbling y pases",
+          "Día 2: Cardio suave 30 min",
+          "Día 3: Fuerza con peso corporal",
+          "Día 4: Yoga para flexibilidad y respiración",
+          "Día 5: Técnica de tiro ligero",
+          "Día 6: Juego recreativo suave",
+          "Día 7: Descanso activo"
+        ],
+        normal: [
+          "Día 1: Entrenamiento de resistencia y velocidad",
+          "Día 2: Técnica avanzada y táctica",
+          "Día 3: Fuerza para piernas y core",
+          "Día 4: Yoga para fuerza y movilidad",
+          "Día 5: Partido o práctica intensa",
+          "Día 6: Recuperación activa",
+          "Día 7: Descanso"
+        ],
+        sobrepeso: [
+          "Día 1: Caminata rápida con balón 30 min",
+          "Día 2: Ejercicios básicos de fuerza y movilidad",
+          "Día 3: Técnica sencilla y control de balón",
+          "Día 4: Yoga suave para movilidad",
+          "Día 5: Juego ligero y táctico",
+          "Día 6: Caminata larga y estiramientos",
+          "Día 7: Descanso activo"
+        ]
+      },
+      gym: {
+        bajo: [
+          "Día 1: Entrenamiento ligero con máquinas (3x12 reps, peso bajo)",
+          "Día 2: Cardio suave 30 min en cinta o bici",
+          "Día 3: Rutina cuerpo completo con peso corporal, intensidad baja",
+          "Día 4: Yoga y estiramientos para recuperación",
+          "Día 5: Fuerza funcional con bandas elásticas",
+          "Día 6: Cardio moderado 40 min (bicicleta o remo)",
+          "Día 7: Descanso activo (caminata o estiramientos)"
+        ],
+        normal: [
+          "Día 1: Fuerza con pesas libres (4x10 reps)",
+          "Día 2: Cardio HIIT 20 min + core (plancha, crunch)",
+          "Día 3: Piernas y glúteos con peso libre",
+          "Día 4: Circuito funcional + estiramientos",
+          "Día 5: Cardio continuo 45 min (bici, remo, trote)",
+          "Día 6: Yoga para fuerza y flexibilidad",
+          "Día 7: Caminata larga o descanso activo"
+        ],
+        sobrepeso: [
+          "Día 1: Ejercicios bajo impacto en máquinas (3x15 reps, peso bajo)",
+          "Día 2: Caminata rápida 40 min + movilidad articular",
+          "Día 3: Fuerza con peso corporal y bandas",
+          "Día 4: Yoga suave para movilidad y respiración",
+          "Día 5: Cardio suave 30 min + estiramientos",
+          "Día 6: Natación o bici estacionaria 30 min",
+          "Día 7: Descanso activo (paseo o yoga suave)"
+        ]
+      },
+      artesmarcialesmixtas: {
+        bajo: [
+          "Día 1: Técnica básica de golpeo y defensa 30 min",
+          "Día 2: Cardio suave y movilidad articular",
+          "Día 3: Fuerza ligera con peso corporal",
+          "Día 4: Yoga para flexibilidad y respiración",
+          "Día 5: Entrenamiento de resistencia 40 min",
+          "Día 6: Técnica y sparring ligero",
+          "Día 7: Descanso activo"
+        ],
+        normal: [
+          "Día 1: Entrenamiento de fuerza y resistencia 1 hora",
+          "Día 2: Técnica avanzada de golpeo y defensa",
+          "Día 3: Cardio HIIT 30 min",
+          "Día 4: Yoga para fuerza y flexibilidad",
+          "Día 5: Sparring y práctica técnica",
+          "Día 6: Circuito funcional intenso",
+          "Día 7: Descanso"
+        ],
+        sobrepeso: [
+          "Día 1: Cardio bajo impacto 30 min",
+          "Día 2: Técnica básica y movilidad",
+          "Día 3: Fuerza ligera con peso corporal",
+          "Día 4: Yoga suave para relajación",
+          "Día 5: Cardio suave y estiramientos",
+          "Día 6: Técnica ligera y recuperación",
+          "Día 7: Descanso activo"
+        ]
+      }
     };
 
     function mostrarEntrenamiento() {
       const contenedor = document.getElementById('plan');
-      let tipo = "";
+      let tipoIMC = "";
 
-      if (imc < 18.5) {
-        tipo = "bajo";
-      } else if (imc >= 18.5 && imc <= 24.9) {
-        tipo = "normal";
-      } else {
-        tipo = "sobrepeso";
-      }
+      if (imc < 18.5) tipoIMC = "bajo";
+      else if (imc >= 18.5 && imc <= 24.9) tipoIMC = "normal";
+      else tipoIMC = "sobrepeso";
 
-      const dias = entrenamiento[tipo];
-      dias.forEach((actividad, index) => {
+      const plan = planesEntrenamiento[deporte] || planesEntrenamiento.gym;
+      const planDias = plan[tipoIMC];
+
+      planDias.forEach((actividad, idx) => {
         const div = document.createElement("div");
         div.classList.add("dia");
         div.innerHTML = `<strong>${actividad}</strong>`;
