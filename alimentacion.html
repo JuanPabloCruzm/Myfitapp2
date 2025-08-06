@@ -1,171 +1,381 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Plan de Alimentación</title>
-  <link rel="icon" href="favicon.ico" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Plan de Alimentación Personalizado</title>
   <style>
-    body {
-      background-color: #121212;
-      color: #eeeeee;
-      font-family: 'Segoe UI', sans-serif;
-      text-align: center;
-      padding: 20px;
-    }
-
-    h1, h2 {
-      color: #ffffff;
-    }
-
-    .usuario-info {
-      background-color: #1e1e1e;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    th, td {
-      border: 1px solid #444;
-      padding: 10px;
-    }
-
-    th {
-      background-color: #333;
-      color: #fff;
-    }
-
-    td {
-      background-color: #1a1a1a;
-    }
-
-    .volver {
-      margin-top: 30px;
-      background-color: #333;
-      color: #fff;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .volver:hover {
-      background-color: #555;
-    }
-
-    footer {
-      margin-top: 40px;
-      font-size: 0.9em;
-      color: #888;
-    }
+    body { background: #181818; color: #eee; font-family: Arial,sans-serif; max-width: 900px; margin: auto; padding: 20px;}
+    .datos-usuario, .plan { background: #232323; border-radius: 10px; padding: 20px; margin-bottom: 22px;}
+    .dia { margin-bottom: 16px; border-bottom: 1px solid #333; padding-bottom: 10px;}
+    h1, h2 { text-align: center; }
+    .highlight { color: #ffb347; }
+    .boton-volver { display:block; margin:20px auto 0; padding:10px 20px; border-radius:8px; background:#666; color:#fff; border:none;}
+    .boton-volver:hover{ background: #444;}
   </style>
 </head>
 <body>
-  <h1>🍽️ Plan de Alimentación Semanal</h1>
+  <h1>Tu Plan de Alimentación Semanal</h1>
+  <div class="datos-usuario" id="datosUsuario"></div>
+  <div class="plan" id="plan"></div>
+  <button class="boton-volver" onclick="window.location.href='menu.html'">Volver al menú</button>
+<script>
+// DATOS DE USUARIO (simulados, puedes cambiarlos por localStorage o tu backend)
+const usuario = {
+  nombre: localStorage.getItem('nombre') || 'Usuario',
+  sexo: localStorage.getItem('sexo') || 'No especificado',
+  edad: localStorage.getItem('edad') || 'No especificada',
+  imc: parseFloat(localStorage.getItem('imc')) || 0
+};
+let estadoIMC = '';
+if (usuario.imc < 18.5) estadoIMC = 'Bajo peso';
+else if (usuario.imc <= 24.9) estadoIMC = 'Peso normal';
+else estadoIMC = 'Sobrepeso';
 
-  <div class="usuario-info">
-    <p><strong>Nombre:</strong> <span id="nombre"></span></p>
-    <p><strong>Sexo:</strong> <span id="sexo"></span></p>
-    <p><strong>Edad:</strong> <span id="edad"></span> años</p>
-    <p><strong>IMC:</strong> <span id="imc"></span></p>
-  </div>
+let tipoIMC = '';
+if (usuario.imc < 18.5) tipoIMC = 'bajo';
+else if (usuario.imc <= 24.9) tipoIMC = 'normal';
+else tipoIMC = 'alto';
 
-  <h2>Recomendaciones Nutricionales</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Día</th>
-        <th>Desayuno</th>
-        <th>Almuerzo</th>
-        <th>Cena</th>
-      </tr>
-    </thead>
-    <tbody id="tabla-comidas">
-      <!-- Comidas generadas con JavaScript -->
-    </tbody>
-  </table>
+let deporte = (localStorage.getItem('deporte') || '').trim().toLowerCase();
+function deporteKey(d) {
+  switch (d) {
+    case "ciclismo": return "ciclismo";
+    case "natacion": return "natacion";
+    case "atletismo": return "atletismo";
+    case "escalada": return "escalada";
+    case "buceo": return "buceo";
+    case "futbol": return "futbol";
+    case "rugby": return "rugby";
+    case "basquetbol":
+    case "basketball":
+    case "basquet": return "basquetbol";
+    case "gym":
+    case "gimnasio": return "gym";
+    case "amm":
+    case "artes marciales mixtas":
+    case "artes marciales": return "amm";
+    default: return null;
+  }
+}
+const deportePlan = deporteKey(deporte);
 
-  <button class="volver" onclick="window.location.href='menu.html'">Volver al Menú</button>
+document.getElementById('datosUsuario').innerHTML = `
+  <h2>Datos del Usuario</h2>
+  <p><strong>Nombre:</strong> ${usuario.nombre}</p>
+  <p><strong>Sexo:</strong> ${usuario.sexo}</p>
+  <p><strong>Edad:</strong> ${usuario.edad} años</p>
+  <p><strong>IMC:</strong> ${usuario.imc} <span class="highlight">(${estadoIMC})</span></p>
+  <p><strong>Deporte:</strong> <span id="deporteElegido">${deporte.charAt(0).toUpperCase() + deporte.slice(1)}</span></p>
+`;
 
-  <footer>By: Juan Pablo Cruz</footer>
+// PLANES DE ALIMENTACIÓN PARA TODOS LOS DEPORTES Y ESTADOS IMC
+const planes = {
+ciclismo: {
+bajo: [
+  {desayuno:"Avena con frutas y miel", almuerzo:"Pollo a la plancha con arroz integral", cena:"Ensalada de atún y huevo"},
+  {desayuno:"Tostadas integrales con palta y tomate", almuerzo:"Pasta integral con verduras", cena:"Sopa de verduras y pan integral"},
+  {desayuno:"Yogur con granola y frutos secos", almuerzo:"Pechuga de pavo con batata y brócoli", cena:"Tortilla de espinaca"},
+  {desayuno:"Batido de leche, plátano y avena", almuerzo:"Lentejas con arroz y huevo duro", cena:"Crema de zapallo"},
+  {desayuno:"Pan integral con queso fresco", almuerzo:"Quinoa con pollo y verduras", cena:"Ensalada César con pollo"},
+  {desayuno:"Huevos revueltos y fruta", almuerzo:"Pescado al horno con puré de papas", cena:"Ensalada mixta"},
+  {desayuno:"Smoothie de frutas y semillas", almuerzo:"Carne magra con arroz integral", cena:"Sopa de verduras"}
+],
+normal: [
+  {desayuno:"Huevos revueltos con tomate", almuerzo:"Arroz integral con pollo y verduras", cena:"Pescado a la plancha con quinoa"},
+  {desayuno:"Yogur griego con frutas", almuerzo:"Pasta integral con salsa de tomate y carne", cena:"Ensalada César"},
+  {desayuno:"Avena con leche y frutos secos", almuerzo:"Pollo al curry con arroz", cena:"Crema de zapallo"},
+  {desayuno:"Tostadas con aguacate", almuerzo:"Lentejas con arroz y verduras", cena:"Pollo al horno con vegetales"},
+  {desayuno:"Batido de proteína y frutas", almuerzo:"Pescado al vapor con brócoli", cena:"Ensalada fresca"},
+  {desayuno:"Pan integral con mantequilla de maní", almuerzo:"Ensalada de garbanzos", cena:"Pizza integral casera"},
+  {desayuno:"Smoothie verde", almuerzo:"Quinoa con pollo y verduras", cena:"Sopa de verduras"}
+],
+alto: [
+  {desayuno:"Infusión y fruta fresca", almuerzo:"Ensalada verde con pollo a la plancha", cena:"Sopa de verduras"},
+  {desayuno:"Yogur natural y semillas de chía", almuerzo:"Pescado al vapor y ensalada", cena:"Crema de calabaza"},
+  {desayuno:"Batido verde detox", almuerzo:"Pollo al horno y brócoli", cena:"Ensalada fresca"},
+  {desayuno:"Té verde y tostadas integrales", almuerzo:"Tacos de lechuga y pollo", cena:"Puré de calabaza"},
+  {desayuno:"Fruta fresca y nueces", almuerzo:"Ensalada de lentejas", cena:"Sopa de verduras"},
+  {desayuno:"Tostadas integrales y té", almuerzo:"Pechuga de pavo a la plancha", cena:"Verduras al vapor"},
+  {desayuno:"Batido de proteína vegetal", almuerzo:"Pescado blanco y ensalada", cena:"Crema de verduras"}
+]},
+natacion: {
+bajo: [
+  {desayuno:"Avena con miel y frutos secos", almuerzo:"Pechuga de pollo con arroz integral", cena:"Ensalada de quinoa"},
+  {desayuno:"Tostadas integrales con aguacate y huevo", almuerzo:"Pasta integral con salsa de tomate", cena:"Sopa de verduras"},
+  {desayuno:"Batido de plátano con leche y semillas", almuerzo:"Filete de pescado con verduras al vapor", cena:"Crema de calabaza"},
+  {desayuno:"Yogur natural con frutas y granola", almuerzo:"Ensalada César con pollo", cena:"Tortilla de verduras"},
+  {desayuno:"Pan integral con mantequilla de maní", almuerzo:"Lentejas con arroz integral", cena:"Sopa de verduras"},
+  {desayuno:"Huevos revueltos con espinaca", almuerzo:"Pollo al curry con arroz basmati", cena:"Verduras al vapor"},
+  {desayuno:"Smoothie de frutas con proteína", almuerzo:"Cazuela de vacuno con verduras", cena:"Pizza integral casera"}
+],
+normal: [
+  {desayuno:"Huevos revueltos con tomate y pan integral", almuerzo:"Arroz integral con pollo y verduras", cena:"Pescado al horno con quinoa"},
+  {desayuno:"Yogur griego con frutas y nueces", almuerzo:"Pasta integral con salsa de tomate y carne magra", cena:"Ensalada César"},
+  {desayuno:"Smoothie verde con espinaca y plátano", almuerzo:"Quinoa con pollo y verduras", cena:"Crema de zapallo"},
+  {desayuno:"Tostadas con aguacate y huevo pochado", almuerzo:"Lentejas con arroz integral y verduras", cena:"Pollo al horno con vegetales"},
+  {desayuno:"Batido de proteína con frutas", almuerzo:"Pescado al vapor con brócoli", cena:"Ensalada fresca"},
+  {desayuno:"Avena con leche y frutos secos", almuerzo:"Ensalada de garbanzos y verduras", cena:"Pizza integral casera"},
+  {desayuno:"Pan integral con mantequilla de maní", almuerzo:"Pollo al curry con arroz basmati", cena:"Sopa de verduras"}
+],
+alto: [
+  {desayuno:"Infusión verde y fruta fresca", almuerzo:"Ensalada verde con pollo a la plancha", cena:"Sopa de verduras"},
+  {desayuno:"Yogur natural con semillas de chía", almuerzo:"Pescado al vapor con ensalada", cena:"Crema de calabaza"},
+  {desayuno:"Batido verde detox", almuerzo:"Pollo al horno con brócoli", cena:"Ensalada fresca"},
+  {desayuno:"Infusión con tostadas integrales", almuerzo:"Tacos de lechuga con pollo", cena:"Puré de calabaza"},
+  {desayuno:"Frutas frescas y nueces", almuerzo:"Ensalada de lentejas", cena:"Sopa de verduras"},
+  {desayuno:"Té verde y tostadas integrales", almuerzo:"Pechuga de pavo a la plancha", cena:"Verduras al vapor"},
+  {desayuno:"Batido de proteína vegetal", almuerzo:"Pescado blanco con ensalada", cena:"Crema de verduras"}
+]},
+atletismo: {
+bajo: [
+  {desayuno:"Avena con frutas frescas y semillas", almuerzo:"Pollo a la plancha con quinoa y verduras", cena:"Ensalada de lentejas"},
+  {desayuno:"Tostadas integrales con huevo y tomate", almuerzo:"Pasta integral con salsa de tomate natural", cena:"Sopa de verduras"},
+  {desayuno:"Batido de plátano y espinaca", almuerzo:"Filete de pescado con puré de papas", cena:"Crema de calabaza"},
+  {desayuno:"Yogur natural con granola", almuerzo:"Ensalada César con pollo", cena:"Tortilla de espinaca"},
+  {desayuno:"Pan integral con mantequilla de maní", almuerzo:"Lentejas con arroz integral y verduras", cena:"Sopa de verduras"},
+  {desayuno:"Huevos revueltos con espinacas y pan integral", almuerzo:"Pollo al curry con arroz basmati", cena:"Verduras al vapor"},
+  {desayuno:"Smoothie de frutas con proteína", almuerzo:"Cazuela de vacuno con verduras", cena:"Pizza integral casera"}
+],
+normal: [
+  {desayuno:"Huevos revueltos con tomate y pan integral", almuerzo:"Arroz integral con pollo y verduras", cena:"Pescado al horno con quinoa"},
+  {desayuno:"Yogur griego con frutas y nueces", almuerzo:"Pasta integral con salsa de tomate y carne magra", cena:"Ensalada César"},
+  {desayuno:"Smoothie verde con espinaca y plátano", almuerzo:"Quinoa con pollo y verduras", cena:"Crema de zapallo"},
+  {desayuno:"Tostadas con aguacate y huevo pochado", almuerzo:"Lentejas con arroz integral y verduras", cena:"Pollo al horno con vegetales"},
+  {desayuno:"Batido de proteína con frutas", almuerzo:"Pescado al vapor con brócoli", cena:"Ensalada fresca"},
+  {desayuno:"Avena con leche y frutos secos", almuerzo:"Ensalada de garbanzos y verduras", cena:"Pizza integral casera"},
+  {desayuno:"Pan integral con mantequilla de maní", almuerzo:"Pollo al curry con arroz basmati", cena:"Sopa de verduras"}
+],
+alto: [
+  {desayuno:"Infusión verde y fruta fresca", almuerzo:"Ensalada verde con pollo a la plancha", cena:"Sopa de verduras"},
+  {desayuno:"Yogur natural con semillas de chía", almuerzo:"Pescado al vapor con ensalada", cena:"Crema de calabaza"},
+  {desayuno:"Batido verde detox", almuerzo:"Pollo al horno con brócoli", cena:"Ensalada fresca"},
+  {desayuno:"Infusión con tostadas integrales", almuerzo:"Tacos de lechuga con pollo", cena:"Puré de calabaza"},
+  {desayuno:"Frutas frescas y nueces", almuerzo:"Ensalada de lentejas", cena:"Sopa de verduras"},
+  {desayuno:"Té verde y tostadas integrales", almuerzo:"Pechuga de pavo a la plancha", cena:"Verduras al vapor"},
+  {desayuno:"Batido de proteína vegetal", almuerzo:"Pescado blanco con ensalada", cena:"Crema de verduras"}
+]},
+escalada: {
+bajo: [
+  {desayuno:"Avena con miel y frutas", almuerzo:"Pollo con arroz integral y brócoli", cena:"Ensalada de quinoa y aguacate"},
+  {desayuno:"Tostadas integrales con huevo y tomate", almuerzo:"Pasta integral con salsa ligera", cena:"Sopa de verduras"},
+  {desayuno:"Batido de plátano y semillas", almuerzo:"Filete de pescado con verduras al vapor", cena:"Crema de zapallo"},
+  {desayuno:"Yogur natural con granola", almuerzo:"Ensalada César con pollo", cena:"Tortilla de verduras"},
+  {desayuno:"Pan integral con mantequilla de maní", almuerzo:"Lentejas con verduras", cena:"Sopa de verduras"},
+  {desayuno:"Huevos revueltos con espinacas", almuerzo:"Pollo al curry con arroz basmati", cena:"Verduras al vapor"},
+  {desayuno:"Smoothie de frutas y proteína", almuerzo:"Cazuela de vacuno con verduras", cena:"Pizza integral casera"}
+],
+normal: [
+  {desayuno:"Huevos revueltos con tomate y pan integral", almuerzo:"Arroz integral con pollo y verduras", cena:"Pescado al horno con quinoa"},
+  {desayuno:"Yogur griego con frutas y nueces", almuerzo:"Pasta integral con salsa de tomate y carne magra", cena:"Ensalada César"},
+  {desayuno:"Smoothie verde con espinaca y plátano", almuerzo:"Quinoa con pollo y verduras", cena:"Crema de zapallo"},
+  {desayuno:"Tostadas con aguacate y huevo pochado", almuerzo:"Lentejas con arroz integral y verduras", cena:"Pollo al horno con vegetales"},
+  {desayuno:"Batido de proteína con frutas", almuerzo:"Pescado al vapor con brócoli", cena:"Ensalada fresca"},
+  {desayuno:"Avena con leche y frutos secos", almuerzo:"Ensalada de garbanzos y verduras", cena:"Pizza integral casera"},
+  {desayuno:"Pan integral con mantequilla de maní", almuerzo:"Pollo al curry con arroz basmati", cena:"Sopa de verduras"}
+],
+alto: [
+  {desayuno:"Infusión verde y fruta fresca", almuerzo:"Ensalada verde con pollo a la plancha", cena:"Sopa de verduras"},
+  {desayuno:"Yogur natural con semillas de chía", almuerzo:"Pescado al vapor con ensalada", cena:"Crema de calabaza"},
+  {desayuno:"Batido verde detox", almuerzo:"Pollo al horno con brócoli", cena:"Ensalada fresca"},
+  {desayuno:"Infusión con tostadas integrales", almuerzo:"Tacos de lechuga con pollo", cena:"Puré de calabaza"},
+  {desayuno:"Frutas frescas y nueces", almuerzo:"Ensalada de lentejas", cena:"Sopa de verduras"},
+  {desayuno:"Té verde y tostadas integrales", almuerzo:"Pechuga de pavo a la plancha", cena:"Verduras al vapor"},
+  {desayuno:"Batido de proteína vegetal", almuerzo:"Pescado blanco con ensalada", cena:"Crema de verduras"}
+]},
+buceo: {
+bajo: [
+  {desayuno:"Avena con fruta y semillas", almuerzo:"Pechuga de pollo con arroz integral", cena:"Ensalada fresca"},
+  {desayuno:"Tostadas integrales con huevo y aguacate", almuerzo:"Pasta integral con verduras", cena:"Sopa de verduras"},
+  {desayuno:"Batido de plátano con leche", almuerzo:"Filete de pescado con verduras", cena:"Crema de zapallo"},
+  {desayuno:"Yogur natural con granola y frutos rojos", almuerzo:"Ensalada César con pollo", cena:"Tortilla de verduras"},
+  {desayuno:"Pan integral con mantequilla de maní", almuerzo:"Lentejas con arroz integral", cena:"Sopa de verduras"},
+  {desayuno:"Huevos revueltos con espinacas", almuerzo:"Pollo al curry con arroz basmati", cena:"Verduras al vapor"},
+  {desayuno:"Smoothie de frutas y proteína", almuerzo:"Cazuela de vacuno con verduras", cena:"Pizza integral casera"}
+],
+normal: [
+  {desayuno:"Huevos revueltos con tomate y pan integral", almuerzo:"Arroz integral con pollo y verduras", cena:"Pescado al horno con quinoa"},
+  {desayuno:"Yogur griego con frutas y nueces", almuerzo:"Pasta integral con salsa de tomate y carne magra", cena:"Ensalada César"},
+  {desayuno:"Smoothie verde con espinaca y plátano", almuerzo:"Quinoa con pollo y verduras", cena:"Crema de zapallo"},
+  {desayuno:"Tostadas con aguacate y huevo pochado", almuerzo:"Lentejas con arroz integral y verduras", cena:"Pollo al horno con vegetales"},
+  {desayuno:"Batido de proteína con frutas", almuerzo:"Pescado al vapor con brócoli", cena:"Ensalada fresca"},
+  {desayuno:"Avena con leche y frutos secos", almuerzo:"Ensalada de garbanzos y verduras", cena:"Pizza integral casera"},
+  {desayuno:"Pan integral con mantequilla de maní", almuerzo:"Pollo al curry con arroz basmati", cena:"Sopa de verduras"}
+],
+alto: [
+  {desayuno:"Infusión verde y fruta fresca", almuerzo:"Ensalada verde con pollo a la plancha", cena:"Sopa de verduras"},
+  {desayuno:"Yogur natural con semillas de chía", almuerzo:"Pescado al vapor con ensalada", cena:"Crema de calabaza"},
+  {desayuno:"Batido verde detox", almuerzo:"Pollo al horno con brócoli", cena:"Ensalada fresca"},
+  {desayuno:"Infusión con tostadas integrales", almuerzo:"Tacos de lechuga con pollo", cena:"Puré de calabaza"},
+  {desayuno:"Frutas frescas y nueces", almuerzo:"Ensalada de lentejas", cena:"Sopa de verduras"},
+  {desayuno:"Té verde y tostadas integrales", almuerzo:"Pechuga de pavo a la plancha", cena:"Verduras al vapor"},
+  {desayuno:"Batido de proteína vegetal", almuerzo:"Pescado blanco con ensalada", cena:"Crema de verduras"}
+]},
+// ... resto de deportes igual que los ejemplos de arriba ...
+futbol: {
+bajo: [
+  {desayuno:"Avena con frutas y semillas", almuerzo:"Pollo a la plancha con arroz integral", cena:"Ensalada fresca"},
+  {desayuno:"Tostadas integrales con huevo y aguacate", almuerzo:"Pasta integral con verduras", cena:"Sopa de verduras"},
+  {desayuno:"Batido de plátano con leche", almuerzo:"Filete de pescado con verduras", cena:"Crema de zapallo"},
+  {desayuno:"Yogur natural con granola", almuerzo:"Ensalada César con pollo", cena:"Tortilla de verduras"},
+  {desayuno:"Pan integral con mantequilla de maní", almuerzo:"Lentejas con arroz integral", cena:"Sopa de verduras"},
+  {desayuno:"Huevos revueltos con espinacas", almuerzo:"Pollo al curry con arroz basmati", cena:"Verduras al vapor"},
+  {desayuno:"Smoothie de frutas y proteína", almuerzo:"Cazuela de vacuno con verduras", cena:"Pizza integral casera"}
+],
+normal: [
+  {desayuno:"Huevos revueltos con tomate y pan integral", almuerzo:"Arroz integral con pollo y verduras", cena:"Pescado al horno con quinoa"},
+  {desayuno:"Yogur griego con frutas y nueces", almuerzo:"Pasta integral con salsa de tomate y carne magra", cena:"Ensalada César"},
+  {desayuno:"Smoothie verde con espinaca y plátano", almuerzo:"Quinoa con pollo y verduras", cena:"Crema de zapallo"},
+  {desayuno:"Tostadas con aguacate y huevo pochado", almuerzo:"Lentejas con arroz integral y verduras", cena:"Pollo al horno con vegetales"},
+  {desayuno:"Batido de proteína con frutas", almuerzo:"Pescado al vapor con brócoli", cena:"Ensalada fresca"},
+  {desayuno:"Avena con leche y frutos secos", almuerzo:"Ensalada de garbanzos y verduras", cena:"Pizza integral casera"},
+  {desayuno:"Pan integral con mantequilla de maní", almuerzo:"Pollo al curry con arroz basmati", cena:"Sopa de verduras"}
+],
+alto: [
+  {desayuno:"Infusión verde y fruta fresca", almuerzo:"Ensalada verde con pollo a la plancha", cena:"Sopa de verduras"},
+  {desayuno:"Yogur natural con semillas de chía", almuerzo:"Pescado al vapor con ensalada", cena:"Crema de calabaza"},
+  {desayuno:"Batido verde detox", almuerzo:"Pollo al horno con brócoli", cena:"Ensalada fresca"},
+  {desayuno:"Infusión con tostadas integrales", almuerzo:"Tacos de lechuga con pollo", cena:"Puré de calabaza"},
+  {desayuno:"Frutas frescas y nueces", almuerzo:"Ensalada de lentejas", cena:"Sopa de verduras"},
+  {desayuno:"Té verde y tostadas integrales", almuerzo:"Pechuga de pavo a la plancha", cena:"Verduras al vapor"},
+  {desayuno:"Batido de proteína vegetal", almuerzo:"Pescado blanco con ensalada", cena:"Crema de verduras"}
+]},
+rugby: {
+bajo: [
+  {desayuno:"Avena con frutas frescas", almuerzo:"Pollo a la plancha con arroz integral", cena:"Ensalada fresca"},
+  {desayuno:"Tostadas integrales con huevo y tomate", almuerzo:"Pasta integral con verduras", cena:"Sopa de verduras"},
+  {desayuno:"Batido de plátano con leche", almuerzo:"Filete de pescado con verduras", cena:"Crema de zapallo"},
+  {desayuno:"Yogur natural con granola y frutos rojos", almuerzo:"Ensalada César con pollo", cena:"Tortilla de verduras"},
+  {desayuno:"Pan integral con mantequilla de maní", almuerzo:"Lentejas con arroz integral", cena:"Sopa de verduras"},
+  {desayuno:"Huevos revueltos con espinacas", almuerzo:"Pollo al curry con arroz basmati", cena:"Verduras al vapor"},
+  {desayuno:"Smoothie de frutas y proteína", almuerzo:"Cazuela de vacuno con verduras", cena:"Pizza integral casera"}
+],
+normal: [
+  {desayuno:"Huevos revueltos con tomate y pan integral", almuerzo:"Arroz integral con pollo y verduras", cena:"Pescado al horno con quinoa"},
+  {desayuno:"Yogur griego con frutas y nueces", almuerzo:"Pasta integral con salsa de tomate y carne magra", cena:"Ensalada César"},
+  {desayuno:"Smoothie verde con espinaca y plátano", almuerzo:"Quinoa con pollo y verduras", cena:"Crema de zapallo"},
+  {desayuno:"Tostadas con aguacate y huevo pochado", almuerzo:"Lentejas con arroz integral y verduras", cena:"Pollo al horno con vegetales"},
+  {desayuno:"Batido de proteína con frutas", almuerzo:"Pescado al vapor con brócoli", cena:"Ensalada fresca"},
+  {desayuno:"Avena con leche y frutos secos", almuerzo:"Ensalada de garbanzos y verduras", cena:"Pizza integral casera"},
+  {desayuno:"Pan integral con mantequilla de maní", almuerzo:"Pollo al curry con arroz basmati", cena:"Sopa de verduras"}
+],
+alto: [
+  {desayuno:"Infusión verde y fruta fresca", almuerzo:"Ensalada verde con pollo a la plancha", cena:"Sopa de verduras"},
+  {desayuno:"Yogur natural con semillas de chía", almuerzo:"Pescado al vapor con ensalada", cena:"Crema de calabaza"},
+  {desayuno:"Batido verde detox", almuerzo:"Pollo al horno con brócoli", cena:"Ensalada fresca"},
+  {desayuno:"Infusión con tostadas integrales", almuerzo:"Tacos de lechuga con pollo", cena:"Puré de calabaza"},
+  {desayuno:"Frutas frescas y nueces", almuerzo:"Ensalada de lentejas", cena:"Sopa de verduras"},
+  {desayuno:"Té verde y tostadas integrales", almuerzo:"Pechuga de pavo a la plancha", cena:"Verduras al vapor"},
+  {desayuno:"Batido de proteína vegetal", almuerzo:"Pescado blanco con ensalada", cena:"Crema de verduras"}
+]},
+basquetbol: {
+bajo: [
+  {desayuno:"Avena con frutas frescas y nueces", almuerzo:"Pollo con arroz integral y verduras", cena:"Ensalada de quinoa"},
+  {desayuno:"Tostadas integrales con huevo y tomate", almuerzo:"Pasta integral con salsa natural", cena:"Sopa de verduras"},
+  {desayuno:"Batido de plátano con leche y semillas", almuerzo:"Filete de pescado con verduras al vapor", cena:"Crema de calabaza"},
+  {desayuno:"Yogur natural con granola y frutos rojos", almuerzo:"Ensalada César con pollo", cena:"Tortilla de verduras"},
+  {desayuno:"Pan integral con mantequilla de maní", almuerzo:"Lentejas con verduras", cena:"Sopa de verduras"},
+  {desayuno:"Huevos revueltos con espinacas", almuerzo:"Pollo al curry con arroz basmati", cena:"Verduras al vapor"},
+  {desayuno:"Smoothie de frutas con proteína", almuerzo:"Cazuela de vacuno con verduras", cena:"Pizza integral casera"}
+],
+normal: [
+  {desayuno:"Huevos revueltos con tomate y pan integral", almuerzo:"Arroz integral con pollo y verduras", cena:"Pescado al horno con quinoa"},
+  {desayuno:"Yogur griego con frutas y nueces", almuerzo:"Pasta integral con salsa de tomate y carne magra", cena:"Ensalada César"},
+  {desayuno:"Smoothie verde con espinaca y plátano", almuerzo:"Quinoa con pollo y verduras", cena:"Crema de zapallo"},
+  {desayuno:"Tostadas con aguacate y huevo pochado", almuerzo:"Lentejas con arroz integral y verduras", cena:"Pollo al horno con vegetales"},
+  {desayuno:"Batido de proteína con frutas", almuerzo:"Pescado al vapor con brócoli", cena:"Ensalada fresca"},
+  {desayuno:"Avena con leche y frutos secos", almuerzo:"Ensalada de garbanzos y verduras", cena:"Pizza integral casera"},
+  {desayuno:"Pan integral con mantequilla de maní", almuerzo:"Pollo al curry con arroz basmati", cena:"Sopa de verduras"}
+],
+alto: [
+  {desayuno:"Infusión verde y fruta fresca", almuerzo:"Ensalada verde con pollo a la plancha", cena:"Sopa de verduras"},
+  {desayuno:"Yogur natural con semillas de chía", almuerzo:"Pescado al vapor con ensalada", cena:"Crema de calabaza"},
+  {desayuno:"Batido verde detox", almuerzo:"Pollo al horno con brócoli", cena:"Ensalada fresca"},
+  {desayuno:"Infusión con tostadas integrales", almuerzo:"Tacos de lechuga con pollo", cena:"Puré de calabaza"},
+  {desayuno:"Frutas frescas y nueces", almuerzo:"Ensalada de lentejas", cena:"Sopa de verduras"},
+  {desayuno:"Té verde y tostadas integrales", almuerzo:"Pechuga de pavo a la plancha", cena:"Verduras al vapor"},
+  {desayuno:"Batido de proteína vegetal", almuerzo:"Pescado blanco con ensalada", cena:"Crema de verduras"}
+]},
+gym: {
+bajo: [
+  {desayuno:"Avena con frutas y nueces", almuerzo:"Pollo a la plancha con arroz integral y brócoli", cena:"Ensalada de atún con aguacate"},
+  {desayuno:"Tostadas integrales con huevo revuelto", almuerzo:"Pasta integral con salsa de tomate natural", cena:"Salmón al horno con espárragos"},
+  {desayuno:"Batido de plátano, leche y semillas", almuerzo:"Quinoa con verduras y pollo", cena:"Crema de calabaza"},
+  {desayuno:"Yogur natural con granola y frutos rojos", almuerzo:"Ensalada César con pollo", cena:"Tortilla de espinaca"},
+  {desayuno:"Pan integral con mantequilla de maní y banana", almuerzo:"Lentejas con arroz integral y verduras", cena:"Sopa de verduras"},
+  {desayuno:"Huevos revueltos con espinacas y pan integral", almuerzo:"Filete de pescado con puré de papas", cena:"Ensalada fresca"},
+  {desayuno:"Smoothie de frutas y proteína", almuerzo:"Pechuga de pavo con batata asada", cena:"Verduras al vapor con arroz integral"}
+],
+normal: [
+  {desayuno:"Huevos revueltos con tomate y pan integral", almuerzo:"Arroz integral con pollo y verduras", cena:"Pescado al horno con quinoa"},
+  {desayuno:"Yogur griego con frutas y nueces", almuerzo:"Pasta integral con salsa de tomate y carne magra", cena:"Ensalada César"},
+  {desayuno:"Smoothie verde con espinaca y plátano", almuerzo:"Quinoa con pollo y verduras", cena:"Crema de zapallo"},
+  {desayuno:"Tostadas con aguacate y huevo pochado", almuerzo:"Lentejas con arroz integral y verduras", cena:"Pollo al horno con vegetales"},
+  {desayuno:"Batido de proteína con frutas", almuerzo:"Pescado al vapor con brócoli", cena:"Ensalada fresca"},
+  {desayuno:"Avena con leche y frutos secos", almuerzo:"Ensalada de garbanzos y verduras", cena:"Pizza integral casera"},
+  {desayuno:"Pan integral con mantequilla de maní", almuerzo:"Pollo al curry con arroz basmati", cena:"Sopa de verduras"}
+],
+alto: [
+  {desayuno:"Infusión verde y fruta fresca", almuerzo:"Ensalada verde con pollo a la plancha", cena:"Sopa de verduras"},
+  {desayuno:"Yogur natural con semillas de chía", almuerzo:"Pescado al vapor con ensalada", cena:"Crema de calabaza"},
+  {desayuno:"Batido verde detox", almuerzo:"Pollo al horno con brócoli", cena:"Ensalada fresca"},
+  {desayuno:"Infusión con tostadas integrales", almuerzo:"Tacos de lechuga con pollo", cena:"Puré de calabaza"},
+  {desayuno:"Frutas frescas y nueces", almuerzo:"Ensalada de lentejas", cena:"Sopa de verduras"},
+  {desayuno:"Té verde y tostadas integrales", almuerzo:"Pechuga de pavo a la plancha", cena:"Verduras al vapor"},
+  {desayuno:"Batido de proteína vegetal", almuerzo:"Pescado blanco con ensalada", cena:"Crema de verduras"}
+]},
+amm: {
+bajo: [
+  {desayuno:"Avena con frutas frescas y semillas", almuerzo:"Pollo con arroz integral y verduras", cena:"Ensalada de quinoa"},
+  {desayuno:"Tostadas integrales con huevo y tomate", almuerzo:"Pasta integral con salsa ligera", cena:"Sopa de verduras"},
+  {desayuno:"Batido de plátano con leche y semillas", almuerzo:"Filete de pescado con verduras al vapor", cena:"Crema de calabaza"},
+  {desayuno:"Yogur natural con granola", almuerzo:"Ensalada César con pollo", cena:"Tortilla de verduras"},
+  {desayuno:"Pan integral con mantequilla de maní", almuerzo:"Lentejas con verduras", cena:"Sopa de verduras"},
+  {desayuno:"Huevos revueltos con espinacas", almuerzo:"Pollo al curry con arroz basmati", cena:"Verduras al vapor"},
+  {desayuno:"Smoothie de frutas y proteína", almuerzo:"Cazuela de vacuno con verduras", cena:"Pizza integral casera"}
+],
+normal: [
+  {desayuno:"Huevos revueltos con tomate y pan integral", almuerzo:"Arroz integral con pollo y verduras", cena:"Pescado al horno con quinoa"},
+  {desayuno:"Yogur griego con frutas y nueces", almuerzo:"Pasta integral con salsa de tomate y carne magra", cena:"Ensalada César"},
+  {desayuno:"Smoothie verde con espinaca y plátano", almuerzo:"Quinoa con pollo y verduras", cena:"Crema de zapallo"},
+  {desayuno:"Tostadas con aguacate y huevo pochado", almuerzo:"Lentejas con arroz integral y verduras", cena:"Pollo al horno con vegetales"},
+  {desayuno:"Batido de proteína con frutas", almuerzo:"Pescado al vapor con brócoli", cena:"Ensalada fresca"},
+  {desayuno:"Avena con leche y frutos secos", almuerzo:"Ensalada de garbanzos y verduras", cena:"Pizza integral casera"},
+  {desayuno:"Pan integral con mantequilla de maní", almuerzo:"Pollo al curry con arroz basmati", cena:"Sopa de verduras"}
+],
+alto: [
+  {desayuno:"Infusión verde y fruta fresca", almuerzo:"Ensalada verde con pollo a la plancha", cena:"Sopa de verduras"},
+  {desayuno:"Yogur natural con semillas de chía", almuerzo:"Pescado al vapor con ensalada", cena:"Crema de calabaza"},
+  {desayuno:"Batido verde detox", almuerzo:"Pollo al horno con brócoli", cena:"Ensalada fresca"},
+  {desayuno:"Infusión con tostadas integrales", almuerzo:"Tacos de lechuga con pollo", cena:"Puré de calabaza"},
+  {desayuno:"Frutas frescas y nueces", almuerzo:"Ensalada de lentejas", cena:"Sopa de verduras"},
+  {desayuno:"Té verde y tostadas integrales", almuerzo:"Pechuga de pavo a la plancha", cena:"Verduras al vapor"},
+  {desayuno:"Batido de proteína vegetal", almuerzo:"Pescado blanco con ensalada", cena:"Crema de verduras"}
+]}
+};
 
-  <script>
-    const nombre = localStorage.getItem("nombre") || "Usuario";
-    const sexo = localStorage.getItem("sexo") || "No definido";
-    const edad = localStorage.getItem("edad") || "Desconocida";
-    const imc = parseFloat(localStorage.getItem("imc")) || 0;
+// DÍAS DE LA SEMANA
+const dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 
-    document.getElementById("nombre").textContent = nombre;
-    document.getElementById("sexo").textContent = sexo;
-    document.getElementById("edad").textContent = edad;
-    document.getElementById("imc").textContent = imc.toFixed(1);
-
-    const comidas = {
-      bajo: [
-        ["Tostadas con palta y huevo + jugo natural", "Arroz con pollo y ensalada", "Sopa de lentejas y pan integral"],
-        ["Avena con fruta seca", "Lasaña vegetal con carne magra", "Ensalada con atún y arroz integral"],
-        ["Pan integral con mermelada natural y yogurt", "Guiso de lentejas con verduras", "Pescado con papas y ensalada"],
-        ["Smoothie de plátano y avena", "Fideos con carne y salsa de tomate", "Crema de verduras y pan pita"],
-        ["Panqueques de avena y plátano", "Sándwich de pollo con palta y ensalada", "Tortilla de verduras y arroz"],
-        ["Yogurt con granola y miel", "Arroz chaufa de pollo", "Sopaipillas horneadas con ensalada"],
-        ["Cereal con leche y fruta", "Puré con carne y ensalada", "Arroz con huevo y tomate"]
-      ],
-      normal: [
-        ["Huevos revueltos con espinaca + pan integral", "Pollo al horno con arroz y verduras", "Ensalada mixta con atún y huevo duro"],
-        ["Batido de frutas con avena", "Tallarines con salsa boloñesa", "Omelette de verduras y pan integral"],
-        ["Tostadas con palta + té verde", "Quinoa con vegetales salteados", "Pechuga a la plancha con papas"],
-        ["Avena con frutas frescas", "Guiso de garbanzos y arroz", "Ensalada de legumbres y atún"],
-        ["Yogurt con nueces y fruta", "Cazuela de ave", "Sándwich integral de atún y tomate"],
-        ["Pan integral con huevo y tomate", "Ensalada de pasta con pollo", "Sopa de verduras y pan pita"],
-        ["Smoothie de frutos rojos", "Pastel de choclo", "Tortilla de verduras y ensalada"]
-      ],
-      sobrepeso: [
-        ["Avena con manzana rallada + té verde", "Ensalada grande con proteína magra", "Sopa de verduras con huevo duro"],
-        ["Smoothie de verduras + pan integral", "Pechuga con arroz integral y espinacas", "Tortilla de acelga y ensalada"],
-        ["Yogurt natural con semillas y fruta", "Pollo a la plancha con quinoa", "Crema de zapallo y pan integral"],
-        ["Pan integral con palta (1 cda)", "Garbanzos con verduras", "Ensalada con huevo y palmitos"],
-        ["Batido con proteína y espinaca", "Cazuela baja en grasa", "Zapallitos rellenos de atún"],
-        ["Huevos cocidos con verduras", "Lentejas con arroz integral", "Sopa liviana y ensalada"],
-        ["Té con pan pita y queso fresco", "Ensalada de atún con legumbres", "Verduras grilladas con huevo"]
-      ]
-    };
-
-    let tipoIMC = "normal";
-    if (imc < 18.5) {
-      tipoIMC = "bajo";
-    } else if (imc > 25) {
-      tipoIMC = "sobrepeso";
-    }
-
-    const tabla = document.getElementById("tabla-comidas");
-    const menu = comidas[tipoIMC];
-
-    for (let i = 0; i < 7; i++) {
-      const fila = document.createElement("tr");
-
-      const dia = document.createElement("td");
-      dia.textContent = `Día ${i + 1}`;
-      fila.appendChild(dia);
-
-      const desayuno = document.createElement("td");
-      desayuno.textContent = menu[i][0];
-      fila.appendChild(desayuno);
-
-      const almuerzo = document.createElement("td");
-      almuerzo.textContent = menu[i][1];
-      fila.appendChild(almuerzo);
-
-      const cena = document.createElement("td");
-      cena.textContent = menu[i][2];
-      fila.appendChild(cena);
-
-      tabla.appendChild(fila);
-    }
-  </script>
+// MOSTRAR PLAN SEMANAL
+let planDiv = document.getElementById('plan');
+let plan = planes[deportePlan] && planes[deportePlan][tipoIMC];
+if (!plan) {
+  planDiv.innerHTML = `<p>No hay menú para este deporte o IMC.</p>`;
+} else {
+  let html = '<h2>Plan Semanal de Comidas</h2>';
+  plan.forEach((dia, i) => {
+    html += `
+      <div class="dia">
+        <strong>${dias[i]}</strong><br>
+        <strong>Desayuno:</strong> ${dia.desayuno}<br>
+        <strong>Almuerzo:</strong> ${dia.almuerzo}<br>
+        <strong>Cena:</strong> ${dia.cena}
+      </div>
+    `;
+  });
+  planDiv.innerHTML = html;
+}
+</script>
 </body>
 </html>
