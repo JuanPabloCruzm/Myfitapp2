@@ -1,172 +1,107 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Plan de Alimentación</title>
   <link rel="icon" href="favicon.ico" />
   <style>
     body {
       background-color: #121212;
-      color: #f0f0f0;
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 20px;
-    }
-
-    h1 {
-      text-align: center;
-      font-size: 30px;
-      color: #e0e0e0;
-      margin-bottom: 25px;
-    }
-
-    .info-user {
-      background-color: #1c1c1c;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 600px;
-      margin: 0 auto 30px auto;
-      text-align: center;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
-    }
-
-    .info-user p {
-      margin: 6px 0;
-      font-size: 16px;
-      color: #ccc;
-    }
-
-    .semana {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
-      padding: 10px;
-    }
-
-    .dia {
-      background-color: #1e1e1e;
-      border-radius: 12px;
-      padding: 18px;
-      box-shadow: 0 0 8px rgba(255, 255, 255, 0.04);
-    }
-
-    .dia h3 {
       color: #eee;
-      margin-bottom: 10px;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
     }
 
-    .dia p {
-      margin: 6px 0;
-      font-size: 15px;
-      color: #d0d0d0;
+    h1, h2 {
+      color: #fff;
     }
 
-    .boton-volver {
-      margin: 40px auto 0 auto;
-      display: block;
-      background: #444;
-      color: #f0f0f0;
-      border: none;
+    .user-info {
+      background-color: #1e1e1e;
+      padding: 15px;
       border-radius: 10px;
-      padding: 12px 26px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s ease;
+      margin-bottom: 20px;
     }
 
-    .boton-volver:hover {
-      background: #666;
+    .day {
+      background-color: #1f1f1f;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    h3 {
+      margin-top: 0;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    button {
+      background-color: #444;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #666;
     }
   </style>
 </head>
 <body>
+  <h1>🍽️ Plan de Alimentación Semanal</h1>
 
-  <h1>Plan de Alimentación Semanal</h1>
-
-  <div class="info-user" id="infoUsuario"></div>
-
-  <div class="semana" id="planAlimentacion"></div>
-
-  <button class="boton-volver" onclick="window.location.href='menu.html'">Volver al Menú</button>
+  <!-- Sección que muestra los datos del usuario -->
+  <div class="user-info" id="datosUsuario">
+    <!-- Aquí se insertarán los datos por JavaScript -->
+  </div>
 
   <script>
-    const usuario = JSON.parse(localStorage.getItem('usuario')) || {};
-    
-    const planBase = [
-      {
-        desayuno: "Avena con plátano y nueces + té verde",
-        almuerzo: "Pechuga de pollo con arroz integral y ensalada",
-        cena: "Sopa de verduras + pan integral con palta"
-      },
-      {
-        desayuno: "Pan integral con palta y huevo + café",
-        almuerzo: "Lentejas con arroz y ensalada",
-        cena: "Tortilla de espinacas + ensalada"
-      },
-      {
-        desayuno: "Yogur natural con frutas + avena",
-        almuerzo: "Pescado al horno con papas cocidas y brócoli",
-        cena: "Crema de zapallo + 1 rebanada de pan integral"
-      },
-      {
-        desayuno: "Smoothie de frutas + tostadas integrales",
-        almuerzo: "Fajitas de pollo con verduras",
-        cena: "Ensalada de atún con huevo y tomate"
-      },
-      {
-        desayuno: "Pan de centeno con queso fresco + té",
-        almuerzo: "Arroz con verduras salteadas y tofu",
-        cena: "Sopa de lentejas + galletas integrales"
-      },
-      {
-        desayuno: "Pan integral con mermelada sin azúcar + leche vegetal",
-        almuerzo: "Pollo al curry con arroz y verduras",
-        cena: "Omelette con champiñones y espinaca"
-      },
-      {
-        desayuno: "Batido de proteínas + fruta fresca",
-        almuerzo: "Cazuela de vacuno con verduras",
-        cena: "Wrap integral de pavo con palta y lechuga"
-      }
-    ];
+    // Recuperar los datos del usuario desde localStorage
+    const nombre = localStorage.getItem("nombre") || "Usuario";
+    const sexo = localStorage.getItem("sexo") || "No definido";
+    const edad = localStorage.getItem("edad") || "No definida";
+    const peso = localStorage.getItem("peso") || "No definido";
+    const altura = localStorage.getItem("altura") || "No definida";
+    const tipoCuerpo = localStorage.getItem("tipoCuerpo") || "No definido";
+    const imc = localStorage.getItem("imc") || "No calculado";
 
-    function generarPlanHTML(plan) {
-      const contenedor = document.getElementById("planAlimentacion");
-      plan.forEach((dia, index) => {
-        contenedor.innerHTML += `
-          <div class="dia">
-            <h3>Día ${index + 1}</h3>
-            <p><strong>Desayuno:</strong> ${dia.desayuno}</p>
-            <p><strong>Almuerzo:</strong> ${dia.almuerzo}</p>
-            <p><strong>Cena:</strong> ${dia.cena}</p>
-          </div>`;
-      });
-    }
-
-    function mostrarInfoUsuario() {
-      const infoDiv = document.getElementById("infoUsuario");
-      if (usuario.nombre && usuario.edad) {
-        infoDiv.innerHTML = `
-          <p><strong>Nombre:</strong> ${usuario.nombre}</p>
-          <p><strong>Sexo:</strong> ${usuario.sexo}</p>
-          <p><strong>Edad:</strong> ${usuario.edad} años</p>
-          <p><strong>Peso:</strong> ${usuario.peso} kg</p>
-          <p><strong>Altura:</strong> ${usuario.altura} m</p>
-          <p><strong>IMC:</strong> ${usuario.imc} (${usuario.clasificacionIMC})</p>
-          <p><strong>Tipo de cuerpo:</strong> ${usuario.tipoCuerpo}</p>
-          <p><strong>Deporte:</strong> ${usuario.deporte}</p>
-          <p><strong>Disciplina:</strong> ${usuario.disciplina}</p>
-        `;
-      } else {
-        infoDiv.innerHTML = "<p>No se encontraron datos del usuario.</p>";
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      generarPlanHTML(planBase);
-      mostrarInfoUsuario();
-    });
+    // Mostrar los datos del usuario en la página
+    const datosDiv = document.getElementById("datosUsuario");
+    datosDiv.innerHTML = `
+      <h2>Datos del Usuario</h2>
+      <p><strong>Nombre:</strong> ${nombre}</p>
+      <p><strong>Sexo:</strong> ${sexo}</p>
+      <p><strong>Edad:</strong> ${edad} años</p>
+      <p><strong>Peso:</strong> ${peso} kg</p>
+      <p><strong>Altura:</strong> ${altura} m</p>
+      <p><strong>Tipo de cuerpo:</strong> ${tipoCuerpo}</p>
+      <p><strong>IMC:</strong> ${imc}</p>
+    `;
   </script>
 
+  <!-- Aquí iría el plan alimenticio que ya tienes generado -->
+  <div class="day">
+    <h3>Día 1</h3>
+    <ul>
+      <li>Desayuno: Avena con fruta y nueces</li>
+      <li>Almuerzo: Pollo a la plancha con arroz integral y ensalada</li>
+      <li>Cena: Sopa de verduras y pan integral</li>
+    </ul>
+  </div>
+
+  <!-- Repite los días 2 al 7 abajo o como tú los tengas -->
+  <!-- ... -->
+
+  <button onclick="window.location.href='menu.html'">Volver al menú</button>
+
+  <p style="margin-top: 40px; font-size: 0.9em; text-align: center;">By: Juan Pablo Cruz</p>
 </body>
 </html>
