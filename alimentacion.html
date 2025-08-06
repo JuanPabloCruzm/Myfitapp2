@@ -7,23 +7,33 @@
   <style>
     body {
       background-color: #121212;
-      color: #eee;
-      font-family: Arial, sans-serif;
+      color: #f0f0f0;
+      font-family: 'Segoe UI', sans-serif;
       margin: 0;
       padding: 20px;
     }
 
     h1 {
-      color: #ccc;
       text-align: center;
-      font-size: 28px;
-      margin-bottom: 20px;
+      font-size: 30px;
+      color: #e0e0e0;
+      margin-bottom: 25px;
     }
 
     .info-user {
+      background-color: #1c1c1c;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      margin: 0 auto 30px auto;
       text-align: center;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+    }
+
+    .info-user p {
+      margin: 6px 0;
+      font-size: 16px;
       color: #ccc;
-      margin-bottom: 30px;
     }
 
     .semana {
@@ -36,43 +46,42 @@
     .dia {
       background-color: #1e1e1e;
       border-radius: 12px;
-      padding: 16px;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
-      text-align: left;
+      padding: 18px;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.04);
     }
 
     .dia h3 {
-      color: #ccc;
-      margin-bottom: 8px;
+      color: #eee;
+      margin-bottom: 10px;
     }
 
     .dia p {
       margin: 6px 0;
       font-size: 15px;
+      color: #d0d0d0;
     }
 
     .boton-volver {
-      margin: 30px auto 0 auto;
+      margin: 40px auto 0 auto;
       display: block;
-      background: #ccc;
-      color: #18191a;
+      background: #444;
+      color: #f0f0f0;
       border: none;
-      border-radius: 7px;
-      padding: 10px 24px;
+      border-radius: 10px;
+      padding: 12px 26px;
       font-size: 16px;
       cursor: pointer;
       transition: background 0.3s ease;
     }
 
     .boton-volver:hover {
-      background: #999;
+      background: #666;
     }
-
   </style>
 </head>
 <body>
 
-  <h1>🍽️ Plan de Alimentación Semanal</h1>
+  <h1>Plan de Alimentación Semanal</h1>
 
   <div class="info-user" id="infoUsuario"></div>
 
@@ -82,6 +91,7 @@
 
   <script>
     const usuario = JSON.parse(localStorage.getItem('usuario')) || {};
+    
     const planBase = [
       {
         desayuno: "Avena con plátano y nueces + té verde",
@@ -123,14 +133,13 @@
     function generarPlanHTML(plan) {
       const contenedor = document.getElementById("planAlimentacion");
       plan.forEach((dia, index) => {
-        const diaHTML = `
+        contenedor.innerHTML += `
           <div class="dia">
             <h3>Día ${index + 1}</h3>
             <p><strong>Desayuno:</strong> ${dia.desayuno}</p>
             <p><strong>Almuerzo:</strong> ${dia.almuerzo}</p>
             <p><strong>Cena:</strong> ${dia.cena}</p>
           </div>`;
-        contenedor.innerHTML += diaHTML;
       });
     }
 
