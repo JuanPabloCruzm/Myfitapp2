@@ -1,180 +1,163 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Plan de Alimentación Deportivo Personalizado</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Plan de Alimentación</title>
+  <link rel="icon" href="favicon.ico" />
   <style>
-    body { background: #18191a; color: #fff; font-family: Arial, sans-serif; padding: 20px;}
-    h1 { color: #00e0ff; text-align: center; }
-    .dia { background: #23272f; border-radius: 10px; padding: 15px; margin-bottom: 14px;}
-    .dia h3 { color: #00e0ff; margin-bottom: 8px;}
-    ul { padding-left: 20px;}
-    .boton-volver { margin: 24px auto 0 auto; display: block; background: #00e0ff; color: #18191a; border: none; border-radius: 7px; padding: 10px 24px; font-size: 16px; cursor: pointer;}
-    .boton-volver:hover { background: #009db6; }
-    footer { text-align: center; color: #888; margin-top: 32px; }
-    .info-user { text-align: center; color: #00e0ff; margin-bottom: 20px; }
+    body {
+      background-color: #121212;
+      color: #eee;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #ccc;
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .info-user {
+      text-align: center;
+      color: #ccc;
+      margin-bottom: 30px;
+    }
+
+    .semana {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      padding: 10px;
+    }
+
+    .dia {
+      background-color: #1e1e1e;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+      text-align: left;
+    }
+
+    .dia h3 {
+      color: #ccc;
+      margin-bottom: 8px;
+    }
+
+    .dia p {
+      margin: 6px 0;
+      font-size: 15px;
+    }
+
+    .boton-volver {
+      margin: 30px auto 0 auto;
+      display: block;
+      background: #ccc;
+      color: #18191a;
+      border: none;
+      border-radius: 7px;
+      padding: 10px 24px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .boton-volver:hover {
+      background: #999;
+    }
+
   </style>
 </head>
 <body>
-  <h1>Tu Plan de Alimentación Semanal</h1>
-  <div id="info" class="info-user"></div>
-  <div id="plan"></div>
-  <button class="boton-volver" onclick="window.location.href='menu.html'">Volver al menú</button>
-  <footer>By: Juan Pablo Cruz</footer>
-<script>
-const disciplina = localStorage.getItem('disciplina') || "Otro";
-const subdisciplina = localStorage.getItem('subdisciplina') || "General";
-const imc = parseFloat(localStorage.getItem('imc')) || 22;
-const edad = parseInt(localStorage.getItem('edad')) || 25;
 
-function obtenerTipoIMC(imc) {
-  if (imc < 18.5) return "bajo";
-  if (imc <= 24.9) return "normal";
-  return "sobrepeso";
-}
-const tipoIMC = obtenerTipoIMC(imc);
+  <h1>🍽️ Plan de Alimentación Semanal</h1>
 
-document.getElementById('info').textContent =
-  `Disciplina: ${disciplina} | Categoría: ${subdisciplina} | IMC: ${tipoIMC} | Edad: ${edad} años`;
+  <div class="info-user" id="infoUsuario"></div>
 
-// --- PLANES GENERADOS AUTOMÁTICAMENTE ---
-// Para cada combinación: disciplina, subdisciplina, IMC
-// Hay variedad real, y puedes ampliar fácilmente con más menús si lo deseas.
-const deportes = {
-  Ciclismo: [
-    "MTB - Cross Country (XC)", "MTB - Enduro", "MTB - Downhill", "MTB - All Mountain",
-    "Ruta - Competencia", "Ruta - Resistencia", "Ruta - Contrarreloj",
-    "Pista - Velocidad", "Pista - Persecución", "Pista - Omnium",
-    "Triatlón"
-  ],
-  Natación: [
-    "Libre", "Espalda", "Mariposa", "Pecho", "Aguas abiertas"
-  ],
-  Atletismo: [
-    "Pista", "Salto", "Lanzamiento", "Fondo", "Velocidad"
-  ],
-  Escalada: [
-    "Boulder", "Deportiva", "Velocidad"
-  ],
-  Buceo: [
-    "Recreativo", "Profundo", "Técnico"
-  ],
-  Fútbol: [
-    "Arquero", "Defensa", "Mediocampo", "Delantero"
-  ],
-  Rugby: [
-    "Forward", "Back"
-  ],
-  Básquetbol: [
-    "Base", "Escolta", "Alero", "Ala-Pívot", "Pívot"
-  ],
-  Gym: [
-    "Fuerza", "Resistencia", "Estética", "Rehabilitación", "Hipertrofia", "Movilidad"
-  ],
-  ArtesMarciales: [
-    "Jiu Jitsu", "Muay Thai", "Boxeo", "Lucha", "MMA"
-  ],
-  Otro: [
-    "General", "Competencia", "Recreativo"
-  ]
-};
-// Plan base para todos
-const baseMenus = {
-  bajo: [
-    { desayuno: "Avena con frutas y nueces", almuerzo: "Pollo a la plancha con papas y ensalada", cena: "Tortilla de espinaca y pan integral" },
-    { desayuno: "Tostadas con palta y tomate", almuerzo: "Pasta con carne y brócoli", cena: "Sopa de verduras y arroz" },
-    { desayuno: "Yogur natural y miel", almuerzo: "Arroz con atún y huevo", cena: "Hamburguesa casera y ensalada" },
-    { desayuno: "Batido de frutas y avena", almuerzo: "Lentejas con arroz y huevo", cena: "Pizza casera de verduras y pollo" },
-    { desayuno: "Panqueques con miel y banana", almuerzo: "Pollo al horno con camote", cena: "Tortilla de zapallo italiano y pan" },
-    { desayuno: "Omelette de jamón y tomate", almuerzo: "Ensalada de garbanzos, huevo y tomate", cena: "Wok de pollo y vegetales" },
-    { desayuno: "Fruta y frutos secos", almuerzo: "Empanadas de pollo y ensalada", cena: "Sopa de zapallo y pan integral" }
-  ],
-  normal: [
-    { desayuno: "Avena con manzana y nueces", almuerzo: "Pechuga de pollo con quinoa y ensalada", cena: "Crema de verduras y pan integral" },
-    { desayuno: "Pan integral con palta", almuerzo: "Arroz integral con pescado y verduras", cena: "Tortilla de espinaca y tomate" },
-    { desayuno: "Smoothie de frutos rojos", almuerzo: "Fideos integrales con salsa de tomate y carne", cena: "Wok de verduras y huevo" },
-    { desayuno: "Yogur natural con granola", almuerzo: "Pollo grillado con papas y ensalada", cena: "Ensalada de garbanzos y huevo" },
-    { desayuno: "Panqueques integrales y fruta", almuerzo: "Hamburguesa de pavo y arroz", cena: "Pizza casera vegetariana" },
-    { desayuno: "Cereal integral con leche y plátano", almuerzo: "Pescado al vapor con puré de papas", cena: "Tortilla de zapallo italiano y ensalada" },
-    { desayuno: "Batido de proteínas y manzana", almuerzo: "Empanadas de pollo y ensalada", cena: "Sopa de verduras y pan integral" }
-  ],
-  sobrepeso: [
-    { desayuno: "Té verde y tostadas integrales con palta", almuerzo: "Ensalada de pollo con quinoa y vegetales", cena: "Sopa de verduras y huevo duro" },
-    { desayuno: "Yogur natural y frutas", almuerzo: "Pollo al vapor con papas y zanahoria", cena: "Tortilla de espinaca y tomate" },
-    { desayuno: "Smoothie verde (espinaca, manzana, pepino)", almuerzo: "Pescado a la plancha y ensalada", cena: "Ensalada de garbanzos y huevo duro" },
-    { desayuno: "Huevos cocidos y tomate", almuerzo: "Hamburguesa de pavo y arroz integral", cena: "Sopa de zapallo y pan integral" },
-    { desayuno: "Pan integral con queso fresco", almuerzo: "Arroz con atún y tomate", cena: "Wok de brócoli y huevo" },
-    { desayuno: "Frutas frescas y nueces", almuerzo: "Pollo a la plancha con camote", cena: "Pizza casera de vegetales" },
-    { desayuno: "Infusión y tostadas integrales", almuerzo: "Cazuela de vacuno y ensalada", cena: "Tortilla de zapallo italiano y tomate" }
-  ]
-};
+  <div class="semana" id="planAlimentacion"></div>
 
-// Menú especial por deporte+dificultad+IMC
-function menuEspecial(disc, subdisc, imcTipo) {
-  // Puedes definir aquí menús únicos para cada disciplina/subdisciplina/imc si lo prefieres.
-  // Ejemplo:
-  if (disc === "Ciclismo" && subdisc === "MTB - Downhill" && imcTipo === "bajo") {
-    return [
-      { desayuno: "Avena alta energía, leche y frutos rojos", almuerzo: "Pollo al horno con arroz integral y zanahoria", cena: "Tortilla de papa con espinaca" },
-      { desayuno: "Pan integral con palta y huevo revuelto", almuerzo: "Lentejas con arroz y tomate", cena: "Pizza casera de verduras" },
-      { desayuno: "Batido de yogur, avena y banana", almuerzo: "Pasta con salsa boloñesa y ensalada", cena: "Sopa de verduras y pan integral" },
-      { desayuno: "Omelette con jamón y champiñón", almuerzo: "Pechuga de pollo con papas", cena: "Ensalada de atún y huevo" },
-      { desayuno: "Panqueques de avena con miel", almuerzo: "Empanadas de carne y ensalada", cena: "Guiso de garbanzos con arroz" },
-      { desayuno: "Cereal con leche y nueces", almuerzo: "Pollo grillado con quinoa y verduras", cena: "Tortilla de zapallo italiano" },
-      { desayuno: "Frutas frescas y frutos secos", almuerzo: "Hamburguesa casera con papas", cena: "Wok de pollo y vegetales" }
+  <button class="boton-volver" onclick="window.location.href='menu.html'">Volver al Menú</button>
+
+  <script>
+    const usuario = JSON.parse(localStorage.getItem('usuario')) || {};
+    const planBase = [
+      {
+        desayuno: "Avena con plátano y nueces + té verde",
+        almuerzo: "Pechuga de pollo con arroz integral y ensalada",
+        cena: "Sopa de verduras + pan integral con palta"
+      },
+      {
+        desayuno: "Pan integral con palta y huevo + café",
+        almuerzo: "Lentejas con arroz y ensalada",
+        cena: "Tortilla de espinacas + ensalada"
+      },
+      {
+        desayuno: "Yogur natural con frutas + avena",
+        almuerzo: "Pescado al horno con papas cocidas y brócoli",
+        cena: "Crema de zapallo + 1 rebanada de pan integral"
+      },
+      {
+        desayuno: "Smoothie de frutas + tostadas integrales",
+        almuerzo: "Fajitas de pollo con verduras",
+        cena: "Ensalada de atún con huevo y tomate"
+      },
+      {
+        desayuno: "Pan de centeno con queso fresco + té",
+        almuerzo: "Arroz con verduras salteadas y tofu",
+        cena: "Sopa de lentejas + galletas integrales"
+      },
+      {
+        desayuno: "Pan integral con mermelada sin azúcar + leche vegetal",
+        almuerzo: "Pollo al curry con arroz y verduras",
+        cena: "Omelette con champiñones y espinaca"
+      },
+      {
+        desayuno: "Batido de proteínas + fruta fresca",
+        almuerzo: "Cazuela de vacuno con verduras",
+        cena: "Wrap integral de pavo con palta y lechuga"
+      }
     ];
-  }
-  // Puedes seguir agregando más combinaciones específicas aquí, o dejar el baseMenus.
-  return null;
-}
 
-// Generador automático para todos los deportes
-function getMenu(disc, subdisc, imcTipo) {
-  // Menú específico si existe
-  const especial = menuEspecial(disc, subdisc, imcTipo);
-  if (especial) return especial;
-  // Menú base si no hay especial
-  return baseMenus[imcTipo];
-}
-
-// Validar subdisciplina
-function subdiscValida(disc, subdisc) {
-  return deportes[disc] && deportes[disc].includes(subdisc);
-}
-
-// Encontrar menú para la combinación del usuario
-let menuFinal;
-if (subdiscValida(disciplina, subdisciplina)) {
-  menuFinal = getMenu(disciplina, subdisciplina, tipoIMC);
-} else {
-  // Busca primero en la disciplina, luego en "Otro"
-  let found = false;
-  for (let d in deportes) {
-    if (deportes[d].includes(subdisciplina)) {
-      menuFinal = getMenu(d, subdisciplina, tipoIMC);
-      found = true;
-      break;
+    function generarPlanHTML(plan) {
+      const contenedor = document.getElementById("planAlimentacion");
+      plan.forEach((dia, index) => {
+        const diaHTML = `
+          <div class="dia">
+            <h3>Día ${index + 1}</h3>
+            <p><strong>Desayuno:</strong> ${dia.desayuno}</p>
+            <p><strong>Almuerzo:</strong> ${dia.almuerzo}</p>
+            <p><strong>Cena:</strong> ${dia.cena}</p>
+          </div>`;
+        contenedor.innerHTML += diaHTML;
+      });
     }
-  }
-  if (!found) menuFinal = baseMenus[tipoIMC];
-}
 
-// Render del plan
-const divPlan = document.getElementById('plan');
-divPlan.innerHTML = "";
-menuFinal.forEach((dia, i) => {
-  divPlan.innerHTML += `
-    <div class="dia">
-      <h3>Día ${i+1}</h3>
-      <ul>
-        <li><strong>Desayuno:</strong> ${dia.desayuno}</li>
-        <li><strong>Almuerzo:</strong> ${dia.almuerzo}</li>
-        <li><strong>Cena:</strong> ${dia.cena}</li>
-      </ul>
-    </div>
-  `;
-});
-</script>
+    function mostrarInfoUsuario() {
+      const infoDiv = document.getElementById("infoUsuario");
+      if (usuario.nombre && usuario.edad) {
+        infoDiv.innerHTML = `
+          <p><strong>Nombre:</strong> ${usuario.nombre}</p>
+          <p><strong>Sexo:</strong> ${usuario.sexo}</p>
+          <p><strong>Edad:</strong> ${usuario.edad} años</p>
+          <p><strong>Peso:</strong> ${usuario.peso} kg</p>
+          <p><strong>Altura:</strong> ${usuario.altura} m</p>
+          <p><strong>IMC:</strong> ${usuario.imc} (${usuario.clasificacionIMC})</p>
+          <p><strong>Tipo de cuerpo:</strong> ${usuario.tipoCuerpo}</p>
+          <p><strong>Deporte:</strong> ${usuario.deporte}</p>
+          <p><strong>Disciplina:</strong> ${usuario.disciplina}</p>
+        `;
+      } else {
+        infoDiv.innerHTML = "<p>No se encontraron datos del usuario.</p>";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      generarPlanHTML(planBase);
+      mostrarInfoUsuario();
+    });
+  </script>
+
 </body>
 </html>
